@@ -2,7 +2,7 @@
 
 组件插槽用于向组件传递一段结构化的 UI 内容（即模板片段），它和属性（attributes）最大的区别在于传递的内容类型不同：属性用于传递数据，而插槽则用于传递界面结构。通过插槽，父组件可以将自定义的 DOM 内容插入到子组件的指定位置，从而实现更高的灵活性和复用性。这使得插槽成为构建布局容器、弹窗、列表渲染等通用组件时不可或缺的机制。
 
-<img src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/slots.png" />
+<img src="/static/medias/slots.png" />
 
 ---
 

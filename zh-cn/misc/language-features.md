@@ -8,7 +8,7 @@ qingkuai 并不在编译器中内建复杂的语法扩展，而是通过基于[L
 
 目前我们仅在 [vscode](https://code.visualstudio.com) 中发布了扩展，你可以在扩展市场中搜索 `QingKuai` 来安装它。
 
-<img src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/extension.png" />
+<img src="/static/medias/extension.png" />
 
 <div class="custom-block tip">
     当你在IDE中遇到的bug时，应该在 qingkuai 的 <a href="https://github.com/qingkuai-js/language-features">language-features</a> 仓库中提交issue。
@@ -42,7 +42,7 @@ input[!type]
 
 qingkuai 语言服务器内置了格式化文档功能，该功能由 [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai) 实现。当组件文件中存在语法错误时格式化可能会失败，这种情况下你可以在 IDE 的 `output` 窗口查看失败信息：
 
-<img src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/format-error.png" />
+<img src="/static/medias/format-error.png" />
 
 ---
 

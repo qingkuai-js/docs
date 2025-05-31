@@ -4,7 +4,7 @@
 
 下面的图片展示了一个博客页面的组件化表示，其中每个区域都表示一个组件，相同颜色的区域表示组件的复用：
 
-<img width="70%" src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/components.png" style="margin-left: 15%;" />
+<img width="70%" src="/static/medias/components.png" style="margin-left: 15%;" />
 
 ---
 

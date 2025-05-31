@@ -150,14 +150,14 @@
     1. 若新列表长度大于旧列表长度则创建新增的列表元素并插入到列表元素结尾；若新列表长度小于旧列表元素则从列表元素结尾删除多余的元素；
     2. 在 qingkuai 调度更新时逐一更新列表元素的属性及 textContent；
 
-    <img class="large-margin" src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/no-key-update.gif" style="width: 90%; margin-left: 5%;">
+    <img class="large-margin" src="/static/medias/no-key-update.gif" style="width: 90%; margin-left: 5%;">
 
 -   可是这样会导致一个问题，若节点本身带有一些状态（通常为表单标签节点），则会导致状态错乱，因为列表的变更并不总是在结尾添加和删除，此时我们就需要使用`#key`指令为列表的每个元素指定一个唯一的键用于区别身份，此时列表变更后更新逻辑就变成了：
 
     1. 判断 key 在新列表中是否存在，存在则将其对应的元素放到正确的位置；
     2. 在 qingkuai 调度更新时逐一更新列表元素的属性及 textContent；
 
-    <img class="large-margin" src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/has-key-update.gif" style="width: 90%; margin-left: 5%;">
+    <img class="large-margin" src="/static/medias/has-key-update.gif" style="width: 90%; margin-left: 5%;">
 
 所以如果列表渲染的元素带有状态的话，推荐为使用 for 指令的元素添加 key 指令：
 

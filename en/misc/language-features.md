@@ -8,7 +8,7 @@ Qingkuai does not have complex syntax extensions built into the compiler. Instea
 
 Currently, we have only released an extension for [vscode](https://code.visualstudio.com). You can search for `QingKuai` in the marketplace to install it.
 
-<img src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/extension.png" />
+<img src="/static/medias/extension.png" />
 
 <div class="custom-block tip">
     When you encounter bugs in your IDE, you should submit an issue in the <a href="https://github.com/qingkuai-js/language-features">language-features</a> repository of qingkuai.
@@ -42,7 +42,7 @@ would create a dynamic attribute:
 
 The document formatting function is built into the qingkuai language server, implemented by [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai). If there are syntax errors in the component file, formatting may fail. In this case, you can view the failure information in the IDE's `output` window:
 
-<img src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/format-error.png" />
+<img src="/static/medias/format-error.png" />
 
 ---
 

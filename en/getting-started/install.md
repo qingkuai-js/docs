@@ -38,7 +38,6 @@ If you want to install the `typescript` version, simply pass the `-ts` option:
 ```
 
 ```shell
-
 # For Yarn (v1+)
 ➜ yarn create qingkuai "your project name" -ts
 

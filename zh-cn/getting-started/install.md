@@ -38,7 +38,6 @@
 ```
 
 ```shell
-
 # For Yarn (v1+)
 ➜ yarn create qingkuai "your project name" -ts
 

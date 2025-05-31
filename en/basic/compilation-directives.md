@@ -150,14 +150,14 @@ If you've used [vue](https://cn.vuejs.org), you might wonder why the `for` direc
     1. If the new list is longer, new elements are created and appended; if shorter, extra elements are removed from the end
     2. During qingkuai's scheduled updates, each list element's attributes and textContent are updated
 
-    <img class="large-margin" src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/no-key-update-en.gif" style="width: 90%; margin-left: 5%;">
+    <img class="large-margin" src="/static/medias/no-key-update-en.gif" style="width: 90%; margin-left: 5%;">
 
 -   This causes an issue: if nodes have their own state (typically form elements), the state may become disordered since list changes don't always just append/remove at the end. The `#key` directive solves this by assigning each element a unique key for identification. The update logic then becomes:
 
     1. Check if keys exist in the new list, and position their corresponding elements correctly
     2. During updates, each element's attributes and textContent are updated
 
-    <img class="large-margin" src="https://qingkuai-js.oss-cn-beijing.aliyuncs.com/docs/has-key-update-en.gif" style="width: 90%; margin-left: 5%;">
+    <img class="large-margin" src="/static/medias/has-key-update-en.gif" style="width: 90%; margin-left: 5%;">
 
 Therefore, when list-rendered elements have state, it's recommended to add the key directive to elements using the for directive:
 
