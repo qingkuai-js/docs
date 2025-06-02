@@ -248,9 +248,14 @@ We can also pass html directive a value specifying which tags to keep escaped, p
 
 ```ts
 type HTMLDirectiveValueType = Partial<{
-    escapeTags: string[] // 需要保持转义的标签列表
-    escapeStyle: boolean // 是否保持转义style标签
-    escapeScript: boolean // 是否保持转义script标签
+    // List of tags that need to be preserved with escaping
+    escapeTags: string[]
+
+    // Whether to preserve escaping for <style> tags
+    escapeStyle: boolean 
+
+    //  Whether to preserve escaping for <script> tags
+    escapeScript: boolean
 }>
 ```
 

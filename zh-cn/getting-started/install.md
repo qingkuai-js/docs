@@ -1,6 +1,6 @@
 # 安装
 
-如果你只是想简单体验一下 qingkuai，可以试试[在线演练场](https://qingkuai.dev)
+如果你只是想简单体验一下 qingkuai，可以试试[在线演练场](https://try.qingkuai.dev)
 
 当然我们更推荐将项目安装在本地以获得最佳的开发体验，通过执行[create-qingkuai](https://www.npmjs.com/package/create-qingkuai)，你可以快速地在本地创建一个项目，仅需在终端执行下面的代码即可：
 

@@ -1,6 +1,6 @@
 # Installation
 
-If you just want to try out qingkuai quickly, you can experiment with the [Online Playground](https://qingkuai.dev).
+If you just want to try out qingkuai quickly, you can experiment with the [Online Playground](https://try.qingkuai.dev).
 
 For the optimal development experience, we strongly recommend installing the project locally. Using [create-qingkuai](https://www.npmjs.com/package/create-qingkuai), you can swiftly set up a local project - just run the following command in your terminal:
 

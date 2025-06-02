@@ -68,7 +68,7 @@ By using error codes to quickly find detailed information, debugging efficiency 
 | Status Code | Description                                                                                          |
 | ----------- | ---------------------------------------------------------------------------------------------------- |
 | 9001        | Extra arguments are passed when using built-in methods; they are ignored                             |
-| 9002        | `$arg` identifier in the top-level scope of an embedded script block is overwritten in inline events |
+| 9002        | `$args` identifier in the top-level scope of an embedded script block is overwritten in inline events |
 | 9003        | Mixing derived reactive state shortcut declarations with `der` built-in method                       |
 | 9004        | Invalid event flags; they are ignored                                                                |
 | 9005        | Events in components do not accept any flags; they are ignored                                       |

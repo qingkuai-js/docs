@@ -80,7 +80,7 @@ const obj = {
     }
 }
 
-let v0 = rea(obj, 0) // 响应深度为0，与stc内建辅助函数等效，v1不具有响应性
+let v0 = rea(obj, 0) // 响应深度为0，与stc内建辅助函数等效，v0不具有响应性
 let v1 = rea(obj, 1) // 响应深度为1，只有修改v1变量本身的值才会触发响应性更新
 let v2 = rea(obj, 2) // 相应深度为2，修改v2变量本身或v2.outter时会触发响应性更新
 let v3 = rea(obj, 3) // 响应深度为3，此时若修改v3.outter.inner[index]不会触发响应性更新

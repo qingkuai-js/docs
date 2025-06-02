@@ -79,17 +79,17 @@ In the above example, the event handler only contains one line of code, so decla
 The second approach's inline handlers are compiled to code like:
 
 ```qk
-<button @click={$arg => count++}>Add Count</button>
+<button @click={$args => count++}>Add Count</button>
 ```
 
-| So we can also access native event objects via `$arg` in inline handlers:
+| So we can also access native event objects via `$args` in inline handlers:
 
 ```qk
-<button @click={$arg => console.log($arg.target)}>Add Count</button>
+<button @click={$args => console.log($args.target)}>Add Count</button>
 ```
 
 <div class="custom-block tip">
-    From a native event perspective, naming <code>$arg</code> as <code>$event</code> might seem more logical. But for semantic consistency, $arg better covers arbitrary parameters passed in <a href="../components/basic.html">component</a> inline handlers we'll introduce later. Thus qingkuai uniformly uses $arg as the default parameter name to reflect its versatility - representing both native events and arbitrary component parameters.
+    From a native event perspective, naming <code>$args</code> as <code>$event</code> might seem more logical. But for semantic consistency, $args better covers arbitrary parameters passed in <a href="../components/basic.html">component</a> inline handlers we'll introduce later. Thus qingkuai uniformly uses $args as the default parameter name to reflect its versatility - representing both native events and arbitrary component parameters.
 </div>
 
 If you call other methods in inline handlers, qingkuai automatically binds their `this` to the current element:
@@ -109,7 +109,7 @@ If you call other methods in inline handlers, qingkuai automatically binds their
 </lang-js>
 
 <p>current count: {count}</p>
-<button @click={handleAddCount($arg)}>Add Count</button>
+<button @click={handleAddCount($args)}>Add Count</button>
 ```
 
 ```qk
@@ -125,11 +125,11 @@ If you call other methods in inline handlers, qingkuai automatically binds their
 </lang-ts>
 
 <p>current count: {count}</p>
-<button @click={handleAddCount($arg)}>Add Count</button>
+<button @click={handleAddCount($args)}>Add Count</button>
 ```
 
 <div class="custom-block tip">
-    If using <a href="https://www.typescriptlang.org">Typescript</a>, <code>$arg</code> is strictly typed - e.g. <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent">KeyboardEvent</a> for <code>@keydown</code>, <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent">MouseEvent</a> for <code>@click</code>, etc.
+    If using <a href="https://www.typescriptlang.org">Typescript</a>, <code>$args</code> is strictly typed - e.g. <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent">KeyboardEvent</a> for <code>@keydown</code>, <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent">MouseEvent</a> for <code>@click</code>, etc.
 </div>
 
 ---

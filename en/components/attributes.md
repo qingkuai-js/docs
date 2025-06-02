@@ -118,7 +118,7 @@ Component events, like other non-ref props, are accessed inside the component th
 
 ```qk
 <!-- Outter.qk -->
-<Inner @someThingHappened={console.log($arg)} />
+<Inner @someThingHappened={console.log($args)} />
 
 <!-- Inner.qk -->
 <lang-js>
@@ -128,7 +128,7 @@ Component events, like other non-ref props, are accessed inside the component th
 
 ```qk
 <!-- Outter.qk -->
-<Inner @someThingHappened={console.log($arg)} />
+<Inner @someThingHappened={console.log($args)} />
 
 <!-- Inner.qk -->
 <lang-ts>

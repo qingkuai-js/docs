@@ -80,7 +80,7 @@ const obj = {
     }
 }
 
-let v0 = rea(obj, 0) // Reactive depth 0, equivalent to stc helper function, v1 is not reactive
+let v0 = rea(obj, 0) // Reactive depth 0, equivalent to stc helper function, v0 is not reactive
 let v1 = rea(obj, 1) // Reactive depth 1, only modifying v1 itself will trigger reactive updates
 let v2 = rea(obj, 2) // Reactive depth 2, modifying v2 itself or v2.outter will trigger reactive updates
 let v3 = rea(obj, 3) // Reactive depth 3, modifying v3.outter.inner[index] won't trigger reactive updates

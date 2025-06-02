@@ -97,7 +97,7 @@ The inputValue is: {inputValue} <br />
 <input
     type="text"
     !value={inputValue}
-    @input={inputValue = $arg.target.value}
+    @input={inputValue = $args.target.value}
 />
 ```
 
@@ -110,7 +110,7 @@ The inputValue is: {inputValue} <br />
 <input
     type="text"
     !value={inputValue}
-    @input={inputValue = ($arg.target as HTMLInputElement).value}
+    @input={inputValue = ($args.target as HTMLInputElement).value}
 />
 ```
 

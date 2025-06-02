@@ -71,17 +71,17 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 第二种方法中的内联事件处理器会被编译器处理为类似下面的代码：
 
 ```qk
-<button @click={$arg => count++}>Add Count</button>
+<button @click={$args => count++}>Add Count</button>
 ```
 
-| 所以我们还可以在内联事件处理器中通过 `$arg` 访问原生事件对象：
+| 所以我们还可以在内联事件处理器中通过 `$args` 访问原生事件对象：
 
 ```qk
-<button @click={$arg => console.log($arg.target)}>Add Count</button>
+<button @click={$args => console.log($args.target)}>Add Count</button>
 ```
 
 <div class="custom-block tip">
-    从原生事件的角度来看，将 <code>$arg</code> 命名为 <code>$event</code> 可能更合理，但从语义一致性的角度出发，使用 $arg 更能涵盖我们之后要介绍到的<a href="../components/basic.html">组件</a>内联事件处理器中所传入的任意参数。因此，在 qingkuai 中我们统一使用 $arg 作为事件处理器的默认参数名，以体现其在组件和原生事件中的通用性——它不仅可以表示原生事件对象，也可以表示组件传入的任意参数。
+    从原生事件的角度来看，将 <code>$args</code> 命名为 <code>$event</code> 可能更合理，但从语义一致性的角度出发，使用 $args 更能涵盖我们之后要介绍到的<a href="../components/basic.html">组件</a>内联事件处理器中所传入的任意参数。因此，在 qingkuai 中我们统一使用 $args 作为事件处理器的默认参数名，以体现其在组件和原生事件中的通用性——它不仅可以表示原生事件对象，也可以表示组件传入的任意参数。
 </div>
 
 如果你在内联事件处理器中调用了其他方法，qingkuai 会自动将这些被调用方法中的 this 绑定为当前元素：
@@ -99,7 +99,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 </lang-js>
 
 <p>current count: {count}</p>
-<button @click={handleAddCount($arg)}>Add Count</button>
+<button @click={handleAddCount($args)}>Add Count</button>
 ```
 
 ```qk
@@ -113,11 +113,11 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 </lang-ts>
 
 <p>current count: {count}</p>
-<button @click={handleAddCount($arg)}>Add Count</button>
+<button @click={handleAddCount($args)}>Add Count</button>
 ```
 
 <div class="custom-block tip">
-    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org">Typescript</a>，<code>$arg</code> 的类型是严格的，例如：对于 <code>@keydown</code> 事件它的类型就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent">KeyboardEvent</a>；对于 <code>@click</code> 事件它的类型就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent">MouseEvent</a> 等等
+    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org">Typescript</a>，<code>$args</code> 的类型是严格的，例如：对于 <code>@keydown</code> 事件它的类型就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent">KeyboardEvent</a>；对于 <code>@click</code> 事件它的类型就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent">MouseEvent</a> 等等
 </div>
 
 ---
