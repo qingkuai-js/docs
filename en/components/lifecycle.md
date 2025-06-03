@@ -16,7 +16,7 @@ To register lifecycle hook callbacks, we first need to import them:
 import { onAfterMount } from "qingkuai"
 
 onAfterMount(() => {
-    console.log("组件挂载完毕")
+    console.log("component is mounted")
 })
 ```
 

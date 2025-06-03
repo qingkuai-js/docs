@@ -22,11 +22,11 @@ It should be noted that the code within the `script` and `style` tags will not b
 
 ```qk
 <style>
-    /* 向HTML中插入同样内容的style标签 */
+    /* Insert a <style> tag with the same content into the HTML. */
 </style>
 
 <script>
-    /* 向HTML中插入同样内容的script标签 */
+    /* Insert a <script> tag with the same content into the HTML. */
 </script>
 ```
 
