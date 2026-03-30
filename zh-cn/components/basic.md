@@ -1,16 +1,12 @@
 # 基础
 
-在 qingkuai 中，组件是构建用户界面的基本单位，每一个组件都代表着一个独立、可复用的界面片段，既可以是一个简单的按钮，也可以是一个复杂的页面。组件天然具有封装性和组合性，使界面开发更加清晰、高效。
-
-下面的图片展示了一个博客页面的组件化表示，其中每个区域都表示一个组件，相同颜色的区域表示组件的复用：
-
-<img width="70%" src="/static/medias/components.png" style="margin-left: 15%;" />
+在 Qingkuai 中，组件是构建用户界面的基本单位。每个组件都代表一个独立、可复用的界面片段，既可以是简单的按钮，也可以是复杂的页面。组件天然具有封装性和组合性，使界面开发更加清晰、高效。
 
 ---
 
 ## 定义及使用
 
-qingkuai 的组件定义采取了与 [vue](https://cn.vuejs.org) 和 [svelte](https://svelte.dev) 相同的方式，即文件级组件定义。每个组件被定义在一个扩展名为 `.qk` 文件中，经编译器处理后，这个文件会被转换为一个具有[默认导出](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules#%E9%BB%98%E8%AE%A4%E5%AF%BC%E5%87%BA%E4%B8%8E%E5%85%B7%E5%90%8D%E5%AF%BC%E5%87%BA)的 [Javascript 模块](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)。
+Qingkuai 的组件定义采取了与 [Vue](https://cn.vuejs.org) 和 [Svelte](https://svelte.dev) 相同的方式，即文件级组件定义。每个组件都定义在一个扩展名为 `.qk` 的文件中，经编译器处理后，该文件会被转换为一个具有 [默认导出](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules#%E9%BB%98%E8%AE%A4%E5%AF%BC%E5%87%BA%E4%B8%8E%E5%85%B7%E5%90%8D%E5%AF%BC%E5%87%BA)的 [JavaScript 模块](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)。
 
 假设我们已经通过 `Component.qk` 文件定义了一个组件，在其他组件文件中，可以通过 [import 语法](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import) 导入，并在模板部分添加与导入标识符名称相同的标签来重复使用它：
 
@@ -32,7 +28,7 @@ qingkuai 的组件定义采取了与 [vue](https://cn.vuejs.org) 和 [svelte](ht
 <my-component />
 ```
 
-默认情况下，格式化组件文件时会将所有组件名称整理为驼峰格式，但你可以向组件文件所在目录或其上级目录中添加 `.prettierrc` 文件并输入以下内容将组将名称偏好修改为 kebab 格式：
+默认情况下，格式化组件文件时会将所有组件名称整理为驼峰格式，但你可以在组件文件所在目录或其上级目录中添加 `.prettierrc` 文件，并输入以下内容将组件名称偏好修改为 kebab 格式：
 
 ```json
 {
@@ -42,4 +38,4 @@ qingkuai 的组件定义采取了与 [vue](https://cn.vuejs.org) 和 [svelte](ht
 }
 ```
 
-<div class="custom-block tip">使用此配置时 qingkuai 语言服务器在提供组件标签的补全建议时也会优先提示串型组件标签。</div>
+<div class="custom-block tip">使用此配置时，Qingkuai 语言服务器在提供组件标签补全建议时，也会优先提示串型组件标签。</div>

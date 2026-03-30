@@ -78,7 +78,7 @@ import Component from "./Component"
 
 ### convenientDerivedDeclaration
 
-该属性用于配置是否启用衍生响应性状态便捷声明，布尔值，默认为 true，组件文件嵌入脚本的顶层作用于中声明的以 `$` 字符开头的标识符会被编译为[衍生响应性状态](../basic/reactivity.html#derived-reactive-state)，修改为 false 可阻止这一行为：
+该属性用于配置是否启用衍生响应式状态便捷声明，布尔值，默认为 true，组件文件嵌入脚本的顶层作用于中声明的以 `$` 字符开头的标识符会被编译为[衍生响应式状态](../basic/reactivity.html#derived-reactive-state)，修改为 false 可阻止这一行为：
 
 ```js
 // Conveniently declare derived reactive state
