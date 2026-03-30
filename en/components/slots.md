@@ -1,6 +1,6 @@
 # Slots
 
-Component slots are used to pass structured UI content (template fragments) to components. Their key difference from attributes lies in the content type they convey: attributes pass data while slots pass interface structures. Through slots, parent components can insert custom DOM content into specified locations of child components, enabling greater flexibility and reusability. This makes slots an essential mechanism for building layout containers, modals, list renderings and other generic components.
+Component slots are used to pass structured UI content, that is, template fragments, into a component. Their biggest difference from attributes lies in the kind of content being passed: attributes pass data, while slots pass interface structure. Through slots, a parent component can insert custom DOM content into specific locations of a child component, enabling greater flexibility and reusability. This makes slots essential when building generic components such as layout containers, modals, and list renderers.
 
 <img src="/static/medias/slots-en.png" />
 
@@ -8,25 +8,29 @@ Component slots are used to pass structured UI content (template fragments) to c
 
 ## Basic Usage
 
-Declare slot positions inside components using the `slot` tag, which gets replaced by child elements passed when using the component:
+Inside a component, use the `slot` tag to declare where slot content should be inserted. This location is called a [slot outlet](../references/terminology.html#slot-outlet):
 
 ```qk
-<!-- Outter.qk -->
-<Inner>...</Inner>
-
 <!-- Inner.qk -->
 <div class="inner-box">
     <slot></slot>
 </div>
 ```
 
-This renders as:
+When using the component, you can provide a child element to fill this slot. That child element is called [slot content](../references/terminology.html#slot-content):
+
+```qk
+<!-- Outer.qk -->
+<Inner>...</Inner>
+```
+
+The rendered result of `Outer` is then:
 
 ```html
 <div class="inner-box">...</div>
 ```
 
-Slot templates aren't limited to text - they can contain elements, components, or any valid template content:
+Slot content is not limited to plain text. It can be any valid template content, including elements and components:
 
 ```qk
 <Inner>
@@ -39,10 +43,10 @@ Slot templates aren't limited to text - they can contain elements, components, o
 
 ## Scope
 
-Slot templates can access data from their component's scope:
+Slot content can access data from the component where it is written:
 
 ```qk
-<!-- The code of the Inner component is the same as above -->
+<!-- The Inner component is the same as above -->
 <lang-js>
     const langs = ["js", "ts", "qk"]
 </lang-js>
@@ -54,7 +58,7 @@ Slot templates can access data from their component's scope:
 </Inner>
 ```
 
-This renders as:
+The rendered result of `Outer` is then:
 
 ```html
 <div class="inner-box">
@@ -68,10 +72,10 @@ This renders as:
 
 ## Default Content
 
-Child elements inside slot tags serve as default content, rendered when no slot content is provided:
+Child elements inside the `slot` tag are treated as the slot's default content. If no slot content is passed from outside, the default content is rendered. This is somewhat similar to default parameter values in JavaScript functions:
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <Inner />
 
 <!-- Inner.qk -->
@@ -80,7 +84,7 @@ Child elements inside slot tags serve as default content, rendered when no slot 
 </div>
 ```
 
-This renders as:
+The rendered result of `Outer` is then:
 
 ```html
 <div class="inner-box">Default content</div>
@@ -90,7 +94,7 @@ This renders as:
 
 ## Named Slots
 
-Components often require multiple slots. When a component has several slots, we distinguish them using the `name` attribute:
+Many components need more than one slot. When a component has multiple slots, use the `name` attribute to distinguish them:
 
 ```qk
 <!-- Article.qk -->
@@ -103,36 +107,36 @@ Components often require multiple slots. When a component has several slots, we 
 ```
 
 <div class="custom-block tip">
-    Slots without <code>name</code> attributes default to <code>default</code>.
+    A slot without a <code>name</code> attribute is named <code>default</code> by default.
 </div>
 
-When using components, specify slot names via the `slot` attribute:
+When using the component, you can specify the slot name through the `slot` [directive](../basic/compilation-directives.html):
 
 ```qk
-<Atricle>
-    <!-- Can be omitted when slot attribute value is "default" -->
-    <div slot="default">Article contents...</div>
-    <p slot="footer">Copyright informations...</p>
+<Article>
+    <!-- The slot name can be omitted when it is default -->
+    <div #slot={"default"}>Article contents...</div>
+    <p #slot={"footer"}>Copyright information...</p>
 </Article>
 ```
 
-For text-only slot content or to avoid extra meaningless tags, use `qk:spread` as a virtual parent element:
+When [slot content](../references/terminology.html#slot-content) consists only of text, or when you want to avoid adding meaningless extra wrapper tags, you can use the `qk:spread` [built-in element](../misc/builtin-elements.html) as a virtual parent element:
 
 ```qk
 <Article>
     <qk:spread>Article contents...</qk:spread>
-    <qk:spread slot="footer">
-        <p>Release informations...</p>
-        <p>Copyright informations...</p>
+    <qk:spread #slot={"footer"}>
+        <p>Release information...</p>
+        <p>Copyright information...</p>
     </qk:spread>
 </Article>
 ```
 
 ---
 
-## Context Passing
+## Passing Context
 
-While our [Scope](#scope) section explained slot content normally only accesses its component's scope data, practical development often requires accessing data from the child component's slot definition side. We expose needed context by adding attributes to the `slot` tag (these get combined into a context object):
+As described in [Scope](#scope), slot content can normally access only the data in the scope where it is written. In real development, however, you often need access to data from inside the child component. To do that, add attributes to the `slot` tag and pass them as context to the [slot content](../references/terminology.html#slot-content):
 
 ```qk
 <!-- Article.qk -->
@@ -144,31 +148,55 @@ While our [Scope](#scope) section explained slot content normally only accesses 
 </article>
 ```
 
-he receiving side can use the `#slot` directive to name and utilize this object:
+<div class="custom-block tip">
+    The <code>name</code> attribute on a <code>slot</code> tag is used only to identify the slot itself. It is not passed into slot content.
+</div>
+
+At the [slot outlet](../references/terminology.html#slot-outlet), you can receive this context object through the `slot` [directive](../basic/compilation-directives.html) and assign it to an identifier:
 
 ```qk
 <Article>
-    <qk:spread #slot={articleInfo}>
+    <qk:spread #slot={articleInfo from "default"}>
         <h1>{articleInfo.title}</h1>
         <p>Published in {articleInfo.time}</p>
     </qk:spread>
 </Article>
 ```
 
-The `#slot` directive supports destructuring syntax:
+You can also destructure the context object directly when receiving it through the `slot` directive:
 
 ```qk
 <Article>
-    <qk:spread
-        #slot={
-            {
-                title,
-                time: publishedTime
-            }
-        }
-    >
+    <qk:spread #slot={{ title, time } from "default"}>
         <h1>{title}</h1>
-        <p>Published in {publishedTime}</p>
+        <p>Published in {time}</p>
     </qk:spread>
 </Article>
+```
+
+<div class="custom-block warning">
+    After destructuring the context object, the destructured values usually lose their reactivity. However, if one of those values is itself a reactive complex structure, reactivity is still preserved when you access its properties. Keep this in mind when using destructuring syntax.
+</div>
+
+---
+
+## Render by Slot Presence
+
+In some cases, a component needs to decide whether to render a part of its structure based on whether a specific slot has been passed. For this, you can use the `slots` compiler intrinsic. `slots` is an object, and accessing a property on it by slot name returns a boolean: if that slot was passed, the result is `true`; otherwise it is `false`.
+
+In the following example, the footer area is rendered only when `footer` slot content is actually passed from outside:
+
+```qk
+<section class="panel">
+    <div class="panel-content">
+        <slot></slot>
+    </div>
+
+    <footer
+        class="panel-footer"
+        #if={slots.footer}
+    >
+        <slot name="footer"></slot>
+    </footer>
+</section>
 ```

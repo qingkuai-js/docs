@@ -1,9 +1,9 @@
 # Terminology Reference
 
-To help you understand and use Qingkuai more efficiently, this section collects common terms and concepts used throughout the documentation. Whether you're a beginner just getting started with the framework or an advanced user diving into the source code, this reference will help clarify terminology and avoid ambiguity and misunderstanding.
+To help you understand and use Qingkuai more efficiently, this section collects common terms used throughout the documentation and gives a short explanation for each one. Whether you are just getting started with the framework or already reading the source code, this reference can help you clarify terminology and reduce misunderstandings.
 
 <div class="custom-block tip">
-    This section aims to explain the common usage of terms rather than strictly define them. In different contexts, some terms may carry slightly different meanings.
+    This section is mainly used to keep terminology and phrasing consistent. Explanations follow the most common meanings used across the documentation.
 </div>
 
 ---
@@ -12,56 +12,172 @@ To help you understand and use Qingkuai more efficiently, this section collects 
 
 A component file is a file with the `.qk` extension. Each component file represents a component declaration.
 
-See: [Introduction](../getting-started/introduction.html#introduction), [Component Basics](../components/basic.html)
+See: [Introduction](../getting-started/introduction.html), [Component Basics](../components/basic.html)
+
+---
+
+## Event
+
+An event is an event attribute declared with the `@` prefix. It is used to bind interaction logic in templates or expose callable callbacks to the outside of a component.
+
+See: [Event Handling](../basic/event-handling.html), [Events](../components/attributes.html#events)
+
+---
+
+## Static Attribute
+
+A static attribute is an attribute whose value does not depend on an interpolation expression when declared in a template. It is usually used to bind plain string data.
+
+See: [Interpolation](../basic/interpolation.html)
+
+---
+
+## Dynamic Attribute
+
+A dynamic attribute is an attribute declared with the `!` prefix whose value is computed from an interpolation expression. It is suitable for binding non-string data such as booleans and objects.
+
+See: [Dynamic Attributes](../basic/interpolation.html#dynamic-attributes)
+
+---
+
+## Reference Attribute
+
+A reference attribute is a writable attribute channel declared with the `&` prefix. It can be used not only on component tags, but also on specific native HTML tags such as `input`, `textarea`, and `select` to establish value synchronization or reference passing. Inside a component, this kind of data is usually accessed and updated through `refs`.
+
+See: [Reference Attributes](../basic/reference-attributes.html), [Form Handling](../basic/forms.html), [Reference Attributes](../components/attributes.html#reference-attributes)
+
+---
+
+## Reactive, Reactivity, and Reactive Values
+
+These three terms are related, but they emphasize different things in the documentation:
+
+- Reactive: a capability or mechanism that allows value changes to be observed and dependency updates to be triggered.
+- Reactivity: an abstract description of that capability itself, often used when discussing system behavior or design characteristics.
+- Reactive value: a concrete unit of data that has reactive capability, such as a value inferred by the compiler or created through a related API.
+
+See: [Reactivity](../basic/reactivity.html)
+
+---
+
+## Watcher
+
+A watcher is a mechanism that listens for changes in reactive values and executes a callback. It is commonly used for side-effect control, state comparison, and cleanup logic.
+
+See: [Watchers](../basic/watchers-and-side-effects.html#watchers)
+
+---
+
+## Side Effect
+
+A side effect is logic that depends on reactive state and runs after that state changes. Typical examples include DOM interaction, asynchronous requests, and synchronization with external systems.
+
+See: [Side Effects](../basic/watchers-and-side-effects.html#side-effects)
+
+---
+
+## Scope
+
+Scope describes the range in a template or script where identifiers can be accessed. It especially affects variable visibility in slot and directive contexts.
+
+See: [Scope](../components/slots.html#scope)
+
+---
+
+## qk:spread
+
+`qk:spread` is a built-in element in Qingkuai. It is commonly used as a virtual mounting point for directives and is not rendered as a real DOM element.
+
+See: [Built-in Elements](../misc/builtin-elements.html)
+
+---
+
+## props
+
+`props` is a compiler intrinsic used to read normal attributes and event attributes passed into a component.
+
+See: [Attributes](../components/attributes.html), [Compiler Intrinsics](./intrinsics.html)
+
+---
+
+## refs
+
+`refs` is a compiler intrinsic used to access reference attributes inside a component and perform writable updates.
+
+See: [Reference Attributes](../components/attributes.html#reference-attributes), [Compiler Intrinsics](./intrinsics.html)
 
 ---
 
 ## Interpolation Attribute
 
-Interpolation attributes refer collectively to a set of special attributes, including `directives`, `dynamic attributes`, `reference attributes`, and `events`.
+Interpolation attributes are a collective term for a group of special attributes, including `directives`, `dynamic attributes`, `reference attributes`, and `events`.
 
-See: [Compilation Directives](../basic/compilation-directives.html), [Dynamic Attributes](../basic/interpolation.html#dynamic-attributes), [Reference Attributes](../basic/reference-attributes.html), [Event Handling](../basic/event-handling.html), [Component Attributes](../components/attributes.html)
+See: [Compilation Directives](../basic/compilation-directives.html), [Dynamic Attributes](../basic/interpolation.html#dynamic-attributes), [Reference Attributes](../basic/reference-attributes.html), [Event Handling](../basic/event-handling.html), [Attributes](../components/attributes.html)
 
 ---
 
 ## Interpolation Block
 
-An interpolation block refers to any place in the template content where JavaScript/TypeScript expressions are embedded within a pair of curly braces. This includes the value parts of all [interpolation attributes](#interpolation-attribute) and the text interpolation sections.
-
-See: [Text Interpolation](../basic/interpolation.html#text-interpolation)
+An interpolation block is any place in a template where a JavaScript or TypeScript expression is embedded inside a pair of curly braces. It includes both the value part of [interpolation attributes](#interpolation-attribute) and [text interpolation](../basic/interpolation.html#text-interpolation).
 
 ---
 
 ## Embedded Script Block
 
-An embedded script block refers to sections enclosed by `lang-js` or `lang-ts` tags. They are used to embed script content that requires compilation.
+An embedded script block is a region wrapped by `lang-js` or `lang-ts` tags, used for writing script content that will be processed by the compiler.
 
-See: [Introduction](../getting-started/introduction.html#introduction), [Design Philosophy](../getting-started/introduction.html#design-philosophy)
+See: [Introduction](../getting-started/introduction.html), [Design Philosophy](../getting-started/introduction.html#design-philosophy)
+
+---
+
+## Embedded Style Block
+
+An embedded style block is a region wrapped by `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, or `lang-postcss` tags inside a component file, used for writing style content that will be processed by the compiler.
+
+See: [Introduction](../getting-started/introduction.html), [Stylesheets](../components/stylesheets.html)
 
 ---
 
 ## Embedded Language Tags
 
-Embedded language tags refer to the following 8 tags: `lang-js`, `lang-ts`, `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, `lang-postcss`. These are used to embed script and style content that needs to be compiled.
+Embedded language tags refer to the eight tags `lang-js`, `lang-ts`, `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, and `lang-postcss`, which are used to embed script and style content that needs compilation.
 
-See: [Introduction](../getting-started/introduction.html#introduction), [Stylesheets](../components/stylesheets.html)
-
----
-
-## Built-in Helper Methods
-
-Built-in helper methods refer to the six identifiers — `rea`, `stc`, `der`, `wat`, `Wat`, `waT` — that can be used directly in component files without prior declaration. The first three are used to create reactive state declarations, and the latter three are used to conveniently register watchers for reactive states. All of them are compile-time markers; the Qingkuai compiler translates them into internal method calls.
-
-See: [Reactive Declarations](../basic/reactivity.html#reactivity-declaration), [Reactivity Depth](../basic/reactivity.html#reactive-depth), [Derived Reactive State](../basic/reactivity.html#derived-reactive-state), [Destructuring Reactive Declarations](../basic/reactivity.html#destructuring-reactive-declarations), [Watchers](../basic/watchers-and-side-effects.html#watchers), [Pre Watchers](../basic/watchers-and-side-effects.html#pre-watchers), [Sync Watchers](../basic/watchers-and-side-effects.html#synchronous-watchers)
-
-<div class="custom-block warning">The identifiers of built-in helper methods cannot be redeclared in the top-level scope of an embedded script block.</div>
+See: [Introduction](../getting-started/introduction.html), [Stylesheets](../components/stylesheets.html)
 
 ---
 
-## Built-in Objects
+## Slot Outlet
 
-Built-in objects refer to the two identifiers — `refs` and `props` — that are accessible without prior declaration in component files. They are used respectively to store and access reference attributes and other property values passed externally to the component.
+A slot outlet is the placeholder location declared with the `slot` tag inside a component. It is used to receive slot content passed in from outside.
 
-See: [Component Attributes](../components/attributes.html)
+See: [Slots](../components/slots.html)
 
-<div class="custom-block warning">The identifiers of built-in objects cannot be redeclared in the top-level scope of an embedded script block.</div>
+---
+
+## Slot Content
+
+Slot content is the child content passed in by the component consumer. It is rendered at the corresponding [slot outlet](#slot-outlet).
+
+See: [Slots](../components/slots.html)
+
+---
+
+## Compiler Intrinsics
+
+Compiler intrinsics are reserved identifiers that do not need to be declared in component files and can be recognized and handled directly by the compiler. They mainly include object-like intrinsics and method-like intrinsics.
+
+Object-like intrinsics include `refs`, `props`, and `slots`.
+
+Method-like intrinsics are the [built-in methods](#built-in-methods).
+
+Among them, `refs` is used to access reference attributes, `props` is used to access normal attributes and event attributes, and `slots` is used to check whether slot content has been passed in.
+
+See: [Attributes](../components/attributes.html), [Slots](../components/slots.html), [Built-in Methods](#built-in-methods), [Compiler Intrinsics](./intrinsics.html)
+
+---
+
+## Built-in Methods
+
+Built-in methods are part of the compiler intrinsics. They refer to the 11 method identifiers that can be used directly in component files: `reactive`, `shallow`, `alias`, `derived`, `derivedExp`, `watchExp`, `preWatchExp`, `postWatchExp`, `syncWatchExp`, `defaultProps`, and `defaultRefs`. They are essentially compile-time markers that are transformed into internal method calls during compilation.
+
+See: [Reactivity Declaration](../basic/reactivity.html#reactivity-declaration), [Watchers](../basic/watchers-and-side-effects.html#watchers), [Compiler Intrinsics](./intrinsics.html)

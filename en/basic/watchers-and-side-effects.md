@@ -1,20 +1,19 @@
 # Watchers and Side Effects
 
-Watchers and Side Effects APIs are part of the framework's reactivity system, used to monitor changes in reactive variables: through preWatch, preEffect, syncWatch, syncEffect, watch, and effect, you can insert monitoring logic at the pre-, mid-, and post-scheduling phases.
+The watcher and side effect APIs are part of Qingkuai's reactivity system. They let you register callbacks at different phases of the update scheduler so that related logic can run when reactive values change. Based on when they are triggered, these APIs can be divided into the following groups:
 
--   syncWatch, syncEffect: Triggered during the scheduling process, suitable for regular side effect logic;
--   watch, effect: Triggered after update task scheduling completes, suitable for processing logic that requires waiting for state stabilization;
--   preWatch, preEffect: Triggered after changes are detected but before update task scheduling begins, suitable for logging, change preprocessing, etc.;
+- `watch`, `effect`: normal registration. Their order relative to the update scheduler is not guaranteed. Earlier registrations run earlier.
+- `syncWatch`, `syncEffect`: triggered immediately after a dependent reactive value changes, before the async update scheduler runs.
+- `preWatch`, `preEffect`: triggered before the update scheduler. They are suitable for logic that needs to run after state changes but before scheduled updates.
+- `postWatch`, `postEffect`: triggered after scheduled updates are complete. They are suitable when you need to wait until state and DOM updates have settled.
 
-<div class="custom-block warning">
-    The Watchers and Side Effects APIs are transitional tools provided for developers familiar with frameworks like <a href="https://cn.vuejs.org">Vue</a>, aiming to lower the learning curve. However, we don't recommend widespread use of these APIs in production projects. The reason is: side effects are typically registered as callbacks, triggered at locations not directly reflected in the call stack, making call relationships non-intuitive and hard to trace. They also make it difficult to use IDE features like jump-to-definition or find-references for effective code review and maintenance. For better maintainability and readability, we recommend prioritizing explicit data flow and function composition to organize reactive logic.
-</div>
+<div class="custom-block warning">The watcher and side effect APIs are mainly intended as transition tools for developers coming from frameworks such as <a href="https://cn.vuejs.org">Vue</a>. They help lower the learning curve during migration. However, we do not recommend using these APIs heavily in production projects. Side effects are usually registered as callbacks, and their trigger locations do not appear directly in the call stack, which makes the call chain less intuitive and harder to trace. This pattern also makes it less convenient to rely on IDE features such as go-to-definition and find references for efficient review and maintenance. If your project values maintainability and readability, prefer explicit data flow and function composition when organizing reactive logic.</div>
 
 ---
 
 ## Watchers
 
-Observe the following code where we register a watcher for the `name` variable. When its value changes, the provided callback method will be invoked with two parameters: the previous value and the new (current) value:
+In the following example, a watcher is registered for the `name` variable. When its value changes, the callback runs. The callback receives two arguments: the previous value and the current value. Because the watcher is registered before the template rendering side effect, the DOM accessed in the callback is still in its pre-update state:
 
 |js|ts|
 
@@ -23,42 +22,42 @@ Observe the following code where we register a watcher for the `name` variable. 
     import { watch } from "qingkuai"
 
     let paragraph
-    let name = "Javascript"
+    let name = "JavaScript"
     watch(
         () => name,
         (pre, cur) => {
-            console.log(pre, cur) // Javascript QingKuai
-            console.log(paragraph.textContent) // name is: QingKuai
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: JavaScript
         }
     )
 </lang-js>
 
 <p &dom={paragraph}>name is: {name}</p>
-<button @click={name = "QingKuai"}>Change Name</button>
+<button @click={name = "Qingkuai"}>Change Name</button>
 ```
 
 ```qk
 <lang-ts>
     import { watch } from "qingkuai"
 
-    let name = "Javascript"
+    let name = "JavaScript"
     let paragraph!: HTMLParagraphElement
     watch(
         () => name,
         (pre, cur) => {
-            console.log(pre, cur) // Javascript QingKuai
-            console.log(paragraph.textContent) // name is: QingKuai
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: JavaScript
         }
     )
 </lang-ts>
 
 <p &dom={paragraph}>name is: {name}</p>
-<button @click={name = "QingKuai"}>Change Name</button>
+<button @click={name = "Qingkuai"}>Change Name</button>
 ```
 
 ### Pre-Watchers
 
-The `watch` callback triggers after update task scheduling completes (after page updates). If you need it to trigger before scheduling, use `preWatch`:
+A watcher registered synchronously through `watch` inside an embedded language tag is registered earlier than the template rendering side effect, so its callback runs before the template updates. If the watcher is registered in async logic, that order is no longer guaranteed. In that case, use `preWatch` to ensure that the callback runs before the template update:
 
 |js|ts|
 
@@ -67,53 +66,95 @@ The `watch` callback triggers after update task scheduling completes (after page
     import { preWatch } from "qingkuai"
 
     let paragraph
-    let name = "Javascript"
+    let name = "JavaScript"
     preWatch(
         () => name,
         (pre, cur) => {
-            console.log(pre, cur) // Javascript QingKuai
-            console.log(paragraph.textContent) // name is: Javascript
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: JavaScript
         }
     )
 </lang-js>
 
 <p &dom={paragraph}>name is: {name}</p>
-<button @click={name = "QingKuai"}>Change Name</button>
+<button @click={name = "Qingkuai"}>Change Name</button>
 ```
 
 ```qk
 <lang-ts>
     import { preWatch } from "qingkuai"
 
-    let name = "Javascript"
+    let name = "JavaScript"
     let paragraph!: HTMLParagraphElement
     preWatch(
         () => name,
         (pre, cur) => {
-            console.log(pre, cur) // Javascript QingKuai
-            console.log(paragraph.textContent) // name is: Javascript
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: JavaScript
         }
     )
 </lang-ts>
 
 <p &dom={paragraph}>name is: {name}</p>
-<button @click={name = "QingKuai"}>Change Name</button>
+<button @click={name = "Qingkuai"}>Change Name</button>
+```
+
+### Post-Watchers
+
+A post-watcher is the opposite of a pre-watcher. It runs after scheduled updates have finished, so it is suitable for logic that needs to wait until the state is stable or the DOM has been updated:
+
+|js|ts|
+
+```qk
+<lang-js>
+    import { postWatch } from "qingkuai"
+
+    let paragraph
+    let name = "JavaScript"
+    postWatch(
+        () => name,
+        (pre, cur) => {
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: Qingkuai
+        }
+    )
+</lang-js>
+
+<p &dom={paragraph}>name is: {name}</p>
+<button @click={name = "Qingkuai"}>Change Name</button>
+```
+
+```qk
+<lang-ts>
+    import { postWatch } from "qingkuai"
+
+    let name = "JavaScript"
+    let paragraph!: HTMLParagraphElement
+    postWatch(
+        () => name,
+        (pre, cur) => {
+            console.log(pre, cur) // JavaScript Qingkuai
+            console.log(paragraph.textContent) // name is: Qingkuai
+        }
+    )
+</lang-ts>
+
+<p &dom={paragraph}>name is: {name}</p>
+<button @click={name = "Qingkuai"}>Change Name</button>
 ```
 
 ### Synchronous Watchers
 
-Both `watch` and `preWatch` callbacks trigger asynchronously. For synchronous triggering, use `syncWatch`:
+The callbacks of `watch`, `preWatch`, and `postWatch` are all triggered asynchronously. If you need synchronous execution, use `syncWatch`:
 
 ```qk
 <lang-js>
     import { syncWatch } from "qingkuai"
 
-    let name = "Javascript"
+    let name = "JavaScript"
 
     function handleChangeName() {
-        name = "QingKuai"
-        console.log("---")
-        // log: Javascript Qingkuai \n ---
+        name = "Qingkuai" // logs: JavaScript Qingkuai
     }
 
     syncWatch(
@@ -130,51 +171,35 @@ Both `watch` and `preWatch` callbacks trigger asynchronously. For synchronous tr
 
 ### Convenience Registration
 
-qingkuai provides three helper functions for convenient watcher registration: wat, Wat, and waT, corresponding to syncWatch, preWatch, and watch respectively. 'wat' is short for watch, while the capitalized letters in the other two indicate trigger timing - capital first means pre-scheduling, capital last means post-scheduling. When using these helpers, you can directly pass the monitoring target as the first parameter, and qingkuai's compiler will convert it to a getter. For example, these pairs are equivalent:
+In standard watcher registration, the first argument must be a getter function that returns the value being observed. This is slightly verbose for simple expressions. To address that, the compiler provides a group of convenience registration methods similar in spirit to [derivedExp](/basic/reactivity.html#derived-reactive-state): `watchExp`, `preWatchExp`, `postWatchExp`, and `syncWatchExp`. The compiler automatically converts the first argument of these methods into a getter function, so you can pass an expression directly:
 
 ```js
-// Register sync watcher
-syncWatch(
-    () => xxx,
-    (p, c) => console.log(p, c)
-)
-wat(xxx, (p, c) => console.log(p, c))
+// Normal watcher registration
+watchExp(identifier, (pre, cur) => {
+    console.log(pre, cur)
+})
 
-// Register pre-scheduler update watcher
-preWatch(
-    () => xxx,
-    (p, c) => console.log(p, c)
-)
-Wat(xxx, (p, c) => console.log(p, c))
+// Register a pre-watcher
+preWatchExp(identifier, (pre, cur) => {
+    console.log(pre, cur)
+})
 
-// Register post-scheduler update watcher
-watch(
-    () => xxx,
-    (p, c) => console.log(p, c)
-)
-waT(xxx, (p, c) => console.log(p, c))
+// Register a post-watcher
+postWatchExp(identifier, (pre, cur) => {
+    console.log(pre, cur)
+})
+
+// Register a synchronous watcher
+syncWatchExp(identifier, (pre, cur) => {
+    console.log(pre, cur)
+})
 ```
 
 ---
 
 ## Side Effects
 
-Unlike watcher APIs, side effect APIs automatically collect dependencies (reactive variables) in callbacks and trigger when these dependencies change:
-
-```qk
-<lang-js>
-    import { effect } from "qingkuai"
-
-    let [n1, n2] = [10, 20]
-    effect(() => console.log(n1, n2))
-</lang-js>
-
-<p>n1: {n1}; n2: {n2}</p>
-<button @click={n1++}>Change n1</button>
-<button @click={n2++}>Change n2</button>
-```
-
-Side effect callbacks execute immediately upon registration for dependency collection. This feature enables many use cases, like fetching user information from an API endpoint:
+Unlike watchers, `effect` only accepts a callback. Dependency collection and reactive logic are combined into one place: the reactive values accessed while the callback runs are collected automatically as dependencies, and the callback runs again whenever any of them changes. In the following example, the `effect` callback accesses `userId`, so every time `userId` changes, a new request is sent and the user information is updated:
 
 |js|ts|
 
@@ -219,33 +244,66 @@ Side effect callbacks execute immediately upon registration for dependency colle
 </qk:spread>
 ```
 
-| effect callbacks trigger after update scheduling. For pre- or synchronous side effects, use `preEffect` and `syncEffect` instead.
+The side effect APIs also provide registration methods for different trigger timings:
+
+```js
+preEffect(() => {})
+postEffect(() => {})
+syncEffect(() => {})
+```
 
 ---
 
 ## Cleaning Up Watchers and Side Effects
 
-Both watcher and side effect registration methods return a cleanup function to remove registered watchers/effects:
+Watcher and side effect registration methods all return a control handle object with the following type:
 
-```js
-const unwatch = watch(
-    () => xxx,
-    () => {}
-)
-const unwat = wat(xxx, () => {})
-const uneffect = effect(() => {})
-
-// Clean up watchers and side effects
-unwat()
-unwatch()
-uneffect()
+```ts
+type EffectHandlers = Record<"stop" | "pause" | "resume", () => void>
 ```
 
-The cleanup function can also accept another function for additional cleanup logic:
+These three methods are used to stop, pause, and resume a watcher or side effect:
 
 ```js
-const unwatch = waT(xxx, () => {})
-unwatch(() => {
-    /* Additional cleanup logic */
+const effectHandlers = effect(() => {
+    // effect logic ...
+})
+effectHandlers.stop() // stop and clean up the side effect
+effectHandlers.pause() // pause the side effect
+effectHandlers.resume() // resume the paused side effect
+
+const watchHandlers = watchExp(identifier, (pre, cur) => {
+    // watch logic ...
+})
+watchHandlers.stop() // stop and clean up the watcher
+watchHandlers.pause() // pause the watcher
+watchHandlers.resume() // resume the paused watcher
+```
+
+In some cases, a watcher or side effect needs to run cleanup logic before it runs again. For example, if it registers a timer, that timer should be cleared before the next trigger to avoid memory leaks or logic errors. In that case, wrap the cleanup logic in a function and return it from the callback:
+
+|js|ts|
+
+```js
+let timer
+
+watchExp(identifier, (pre, cur) => {
+    timer = setTimeout(() => {
+        // do something ...
+    }, 1000)
+
+    return () => clearTimeout(timer) // runs before the watcher triggers again
+})
+```
+
+```ts
+let timer: number
+
+watchExp(identifier, (pre, cur) => {
+    timer = window.setTimeout(() => {
+        // do something ...
+    }, 1000)
+
+    return () => clearTimeout(timer) // runs before the watcher triggers again
 })
 ```

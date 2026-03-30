@@ -1,106 +1,123 @@
 # Error Code Reference
 
-The compiler and runtime of Qingkuai may throw prompt messages with error codes to help developers quickly locate problems. This section lists all built-in error codes and their meanings for easy reference and troubleshooting. Error codes are categorized by function type and follow the following numbering rules:
+The Qingkuai compiler and runtime can emit messages with error codes to help developers locate problems quickly. This section lists the built-in error codes in the current version and explains their meanings for easier lookup and troubleshooting. Error codes are grouped by category, using the following numbering scheme:
 
--   1xxx: Compilation errors, indicating that the code cannot be compiled successfully, usually requiring developers to fix syntax or logic issues;
--   9xxx: Compilation warnings, indicating potential problems or discouraged usages, but will not block compilation;
--   2xxx: Runtime errors, indicating fatal issues occurred during execution, which may cause program interruption;
--   8xxx: Runtime warnings, indicating non-blocking abnormal behaviors during execution, which are recommended to be addressed.
+- 1xxx: compile errors. These mean the code cannot pass compilation and usually require syntax or logic fixes.
+- 9xxx: compile warnings. These indicate potential problems or discouraged usage, but they do not block compilation.
+- 2xxx: runtime errors. These indicate fatal problems during execution and may interrupt the program.
+- 8xxx: runtime warnings. These indicate non-blocking abnormal behavior during execution and should still be reviewed.
 
-By using error codes to quickly find detailed information, debugging efficiency can be improved and framework behavior better understood.
-
----
-
-## Compilation Errors
-
-| Code | Description                                                                                                                                                                             |
-| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1001 | Empty interpolation block                                                                                                                                                               |
-| 1002 | Unexpected character                                                                                                                                                                    |
-| 1003 | Unclosed interpolation block                                                                                                                                                            |
-| 1004 | Invalid identifier format                                                                                                                                                               |
-| 1005 | Unclosed attribute value (e.g., `class="box`)                                                                                                                                           |
-| 1006 | Unclosed HTML tag (e.g., `<div` or `</div`)                                                                                                                                             |
-| 1007 | HTML end tag without a matching start tag (e.g., there is no matching `<div>` for `</div>`)                                                                                             |
-| 1008 | Interpolation attribute without a name (e.g., only using `!`, `@`, `#`, or `&` as the attribute name)                                                                                   |
-| 1009 | Embedded language tag exceeds limit (a component file can have at most one embedded script language tag)                                                                                |
-| 1010 | Tag cannot be used as a self-closing tag (e.g., `<div />`)                                                                                                                              |
-| 1011 | Tag using `#key` directive does not have `#for` directive                                                                                                                               |
-| 1012 | `#slot` directive is not used on a top-level child tag of a component                                                                                                                   |
-| 1013 | Multiple top-level child tags in a component have the same `slot` attribute value                                                                                                       |
-| 1014 | A regular element tag received an unacceptable reference attribute                                                                                                                      |
-| 1015 | Directive requires explicit assignment but no value was provided (e.g., `<Test #await />`)                                                                                              |
-| 1016 | Value part of an interpolation attribute is not wrapped in braces (e.g., `!attr="xxx"`)                                                                                                 |
-| 1017 | Value part of a regular attribute is not enclosed in quotes (e.g., `class=box`)                                                                                                         |
-| 1018 | Incompatible directives are used together on the same tag (e.g., both `#if` and `#else`)                                                                                                |
-| 1019 | Dynamic `name` attribute is not allowed on `slot` tag                                                                                                                                   |
-| 1020 | Duplicate identifier is registered in the top-level scope of an embedded script block (e.g., `rea`, `props`, etc.)                                                                      |
-| 1021 | Duplicate attribute (e.g., both `!id` and `id` attributes on the same tag)                                                                                                              |
-| 1022 | Missing starting directive (e.g., previous sibling tag of a tag using `#elif` does not use `#if`)                                                                                       |
-| 1023 | Built-in reactivity declaration methods are used outside the top-level scope of an embedded script block                                                                                |
-| 1024 | An `input` tag with dynamic `type` attribute or a `select` tag with dynamic `multiple` attribute can only accept `&dom` as a reference attribute                                        |
-| 1025 | Built-in reactivity declaration methods are used outside variable declaration statements                                                                                                |
-| 1026 | Unknown directive (see: [Compilation Directives](../basic/compilation-directives.html))                                                                                                 |
-| 1027 | Identifier format is forbidden (e.g., `__c__`, `__s1__`, etc.)                                                                                                                          |
-| 1028 | No argument is passed to built-in methods when destructuring reactive declarations (`undefined` cannot be destructed)                                                                   |
-| 1029 | Invalid reference attribute value (constant or non-targetable value, see: [Valid Values for Reference Attributes](../basic/reference-attributes.html#valid-reference-attribute-values)) |
-| 1030 | Reference attributes are not accepted on regular tags (see: [Reference Attributes](../basic/reference-attributes.html))                                                                 |
-| 1031 | Invalid `slot` attribute (e.g., `!slot` or `&slot`)                                                                                                                                     |
-| 1032 | Multiple `slot` tags have the same `name` attribute                                                                                                                                     |
-| 1033 | Identifiers in template context (usually created by directives) cannot be used as targets for reference attributes (because they are constants)                                         |
-| 1034 | No matching end tag found (e.g., no corresponding `</div>` for a `<div>`)                                                                                                               |
-| 1035 | Embedded language tag is used as a child element                                                                                                                                        |
-| 1036 | Invalid `#for` directive value (see: [List Rendering](../basic/compilation-directives.html#list-rendering))                                                                             |
-| 1037 | Mixing derived reactive state shortcut declarations with non-`der` built-in helper methods (see: [Derived Reactive State](../basic/reactivity.html#derived-reactive-state))             |
-| 1038 | Required parameters are missing when using built-in watcher registration helper methods (minimum two parameters required)                                                               |
-| 1039 | `slot` tag does not accept any events                                                                                                                                                   |
-| 1040 | [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) related syntax is not allowed inside embedded script blocks                               |
-| 1041 | Format of directive value that produces context identifiers is invalid (e.g., values like `#then`, `#catch` must be valid identifiers or object/array literal expressions)              |
-| 1042 | Tag using `#html` directive has child elements (they can only accept a single text node child)                                                                                          |
-| 1043 | `#html` directive is used on an unsupported tag (e.g., self-closing tag, component, or `slot` tag)                                                                                      |
-| 1044 | `&dom` reference attribute is used on an unsupported tag (e.g., component or `slot` tag)                                                                                                |
-| 1045 | Top-level [await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) syntax is not supported inside embedded script blocks                              |
+Looking up messages by code can improve debugging efficiency and help you understand framework behavior more clearly.
 
 ---
 
-## Compilation Warnings
+## Compile Errors
 
-| Code | Description                                                                                           |
-| ---- | ----------------------------------------------------------------------------------------------------- |
-| 9001 | Extra arguments are passed when using built-in methods; they are ignored                              |
-| 9002 | `$args` identifier in the top-level scope of an embedded script block is overwritten in inline events |
-| 9003 | Mixing derived reactive state shortcut declarations with `der` built-in method                        |
-| 9004 | Invalid event flags; they are ignored                                                                 |
-| 9005 | Events in components do not accept any flags; they are ignored                                        |
-| 9006 | Adding `compose` flag to non-`input` events; it will be ignored                                       |
-| 9007 | Using keyboard-related flags on non-keyboard-related events; they are ignored                         |
-| 9008 | Duplicate event flags                                                                                 |
-| 9009 | Redundant directive value (e.g., `#else={ok}`); this value will be omitted                            |
-| 9010 | `slot` tag's `name` attribute is empty; defaults to `default`                                         |
-| 9011 | `slot` attribute of a component's top-level child is empty; defaults to `default`                     |
+| Code | Description |
+| ---- | ----------- |
+| 1001 | Empty interpolation block |
+| 1002 | Unexpected character |
+| 1003 | Unclosed interpolation block |
+| 1004 | Starts with an end tag, such as `</div>` without a matching opening `<div>` before it |
+| 1005 | Interpolation attribute is missing a name, for example writing only `!`, `@`, `#`, or `&` |
+| 1006 | Static attribute value is not wrapped in single or double quotes |
+| 1007 | Interpolation attribute value is not wrapped in curly braces |
+| 1008 | Static attribute value is not closed |
+| 1009 | Tag is not closed, including start tags, end tags, or comment tags |
+| 1010 | Embedded language tags are not used at template top level |
+| 1011 | Too many embedded script blocks, only one is allowed per component file |
+| 1012 | Tag is missing a matching end tag |
+| 1013 | Tag cannot be used as a self-closing tag, such as `<div />` |
+| 1014 | A tag not allowed in component files was used |
+| 1015 | Illegal template structure, such as nesting `<div>` inside `<p>` |
+| 1016 | Invalid attribute format |
+| 1017 | Uses a framework-reserved identifier format, identifiers starting with `__qk__` |
+| 1018 | Unsupported top-level `await` expression |
+| 1019 | `export`-related syntax is not supported in embedded script blocks |
+| 1020 | Compiler intrinsic is redeclared in top-level scope |
+| 1021 | Compiler built-in method is used in an invalid position or call form |
+| 1022 | Identifier cannot be redeclared because it conflicts with alias or derived value markers |
+| 1023 | Reactive marker styles conflict, such as mixing `$` shorthand with other marker styles |
+| 1024 | Invalid arguments for the `alias` built-in method; it must receive exactly one writable target |
+| 1025 | Alias destructuring declaration contains a disallowed pattern |
+| 1026 | Directive conflict; they cannot coexist on the same tag |
+| 1027 | Directive is missing a required value |
+| 1028 | Duplicate attributes or attributes that conflict after parsing, including conflicts among static, dynamic, event, and reference attributes |
+| 1029 | Invalid expression |
+| 1030 | Tag does not accept the current attribute type, such as an invalid reference attribute or event attribute |
+| 1031 | Missing prerequisite directive, such as `#elif`, `#else`, `#then`, or `#catch` |
+| 1032 | Invalid context pattern |
+| 1033 | Unrecognized directive |
+| 1034 | Empty context pattern with no binding identifiers declared |
+| 1035 | A `#html` directive tag must contain exactly one text child node |
+| 1036 | `#slot` is used in an invalid position; it is allowed only on first-level child elements of a component node |
+| 1037 | Too many directive binding patterns, such as on `#for` or `#then` |
+| 1038 | `#slot` is missing a valid slot name; the value after `from` must be a string literal |
+| 1039 | The `name` attribute of `<slot>` must be a static value |
+| 1040 | `#target` is used in an invalid position; using it on a first-level child of a component causes target ambiguity |
+| 1041 | Expected an expression |
+| 1042 | Expected a string literal |
+| 1043 | `#key` can only be used together with `#for` |
+| 1044 | Expected an event flag name |
+| 1045 | Unrecognized event flag |
+| 1046 | Event flags conflict |
+| 1047 | Invalid reference attribute on this tag; it is not in the allowed list |
+| 1048 | Invalid reference attribute value; it must be an identifier or member expression |
+| 1049 | Invalid special attribute name in omitted form; it cannot be converted into a legal identifier |
+| 1050 | Duplicate `name` attribute on `<slot>` |
+| 1051 | Duplicate assignment to the same slot name within one component |
+| 1052 | TypeScript namespace declarations are not supported in embedded script blocks |
+| 1053 | `alias` cannot be used to alias a standalone identifier |
+| 1054 | Compiler built-in methods cannot be used in `using` or `await using` declarations |
+| 1055 | Nested `<slot>` tags are not allowed |
+| 1056 | Duplicate `#then` or `#catch` directives in a promise block |
+| 1057 | Invalid component name; it cannot be converted into a valid JavaScript identifier or member expression |
+| 1058 | `#html` cannot be used on components or `<slot>` tags |
+| 1059 | The specified built-in method does not support spread arguments |
+| 1060 | Invalid element tag name |
+| 1061 | Compiler built-in methods cannot be used in templates |
+| 1062 | Reactivity modes conflict; the same tag declares both `reactive` and `shallow` |
+
+---
+
+## Compile Warnings
+
+| Code | Description |
+| ---- | ----------- |
+| 9001 | Value never changes, so the reactive marker is redundant and the value will be treated as raw |
+| 9002 | A top-level scope identifier may be shadowed in a specific scope |
+| 9003 | Two declaration syntaxes for derived reactive values are mixed, which is discouraged |
+| 9004 | Derived reactive values are read-only, so using a mutable declaration is redundant; `const` is recommended |
+| 9005 | Applying `raw` to a literal `const` is redundant |
+| 9006 | The directive does not need a value, so the provided value will be ignored |
+| 9007 | A boolean attribute is given a redundant value, which will be ignored |
+| 9008 | `#html` has no practical effect when it has no value and the content is static |
+| 9009 | Event flags on a component event listener are invalid and will be ignored |
+| 9010 | Keyboard event flags are invalid on non-keyboard events and will be ignored |
+| 9011 | Duplicate event flags will be ignored |
+| 9012 | Using `&dom` on a component will not produce a DOM element reference and will fall back to a normal reference attribute |
+| 9013 | Duplicate default value definitions; the later one overrides the earlier one |
+| 9014 | Unnecessary `qk:spread` tag that does not serve its intended purpose |
+| 9016 | Built-in method received more arguments than expected; extra arguments will be ignored |
 
 ---
 
 ## Runtime Errors
 
-| Code | Description                                                                                                                |
-| ---- | -------------------------------------------------------------------------------------------------------------------------- |
-| 2001 | Assigning value to a constant reactive state                                                                               |
-| 2002 | Duplicate values in `#key` directive                                                                                       |
-| 2003 | Component class cannot be manually instantiated                                                                            |
-| 2004 | Invalid reactivity depth (less than 0)                                                                                     |
-| 2005 | `#for` directive value is not iterable (see [List Rendering](../basic/compilation-directives.html#list-rendering))         |
-| 2006 | `#await` directive value is not a `Promise` (see: [Async Handling](../basic/compilation-directives.html#async-processing)) |
-| 2007 | Mount target selector given by `mountApp` or `#target` directive cannot be found                                           |
+| Code | Description |
+| ---- | ----------- |
+| 2001 | The received value for a specific usage, such as `#await`, is not a `Promise` |
+| 2002 | The value of `#for` is not iterable |
+| 2003 | The value of `#key` contains duplicates |
+| 2004 | Maximum recursive update depth exceeded, commonly caused by recursive updates in async side effects or watchers |
+| 2005 | Invalid target element; it is not a valid `Element`, or it cannot be obtained through the selector |
+| 2006 | The specified property value must be an array or `Set` |
 
 ---
 
 ## Runtime Warnings
 
-| Code | Description                                                                                               |
-| ---- | --------------------------------------------------------------------------------------------------------- |
-| 8001 | Assigning value to property of built-in `props` object (invalid operation; assigning to getter fails)     |
-| 8002 | Assigning value to derived reactive state (invalid operation; assigning to getter fails)                  |
-| 8003 | Target of watcher registration or method of side effect registration contains no reactive state           |
-| 8004 | Derived reactive state does not depend on any other reactive states (can be declared as regular variable) |
-| 8005 | `#target` directive value is neither a string (selector) nor a valid HTML element                         |
+| Code | Description |
+| ---- | ----------- |
+| 8001 | No reactive dependencies were collected when executing a side effect or watcher, so the side effect will be destroyed |
+| 8002 | An assignment was performed on a read-only or invalid target, and the assignment will be ignored |

@@ -1,159 +1,180 @@
 # Reactivity
 
-In frontend development, <b>Reactivity</b> is a mechanism that keeps data state and interface automatically synchronized. Its core idea is: when data changes, the interface updates automatically without manual DOM manipulation.
-
-In the past, developers needed to explicitly manipulate page elements in business logic to reflect data changes, which was not only tedious but also error-prone. The reactivity system, through "dependency tracking" and "automatic updates," significantly improves development efficiency and code maintainability.
-
-Mainstream frontend frameworks (such as Vue, React, Svelte, etc.) have all implemented reactivity mechanisms at different levels. The reactivity system adopted by qingkuai further emphasizes performance and minimal update granularity, enabling updates to be precise down to the smallest unit of the DOM, resulting in faster rendering speeds and lower runtime overhead.
+In frontend development, <b>Reactivity</b> is a mechanism that keeps data state and the interface automatically in sync. Its core idea is simple: when data changes, the interface updates automatically without manual DOM operations. In the past, developers had to manipulate page elements explicitly in business logic to reflect data changes. That approach was tedious and error-prone. A reactivity system improves development efficiency and maintainability by tracking dependencies and updating automatically.
 
 ---
 
 ## Reactivity Declaration
 
-In qingkuai, there's no need to manually declare reactive variables. As long as a variable is accessed in the template, the compiler will automatically recognize it and transform it into a reactive declaration during the compilation phase. The name variable in the following code is reactive:
+In Qingkuai, you do not need to declare reactive variables manually. The compiler attaches reactive capability to identifiers according to the [reactivity inference rules](/references/reactivity-infer-rules.html). In the following example, `progress` is changed from `"pending"` to `"completed"` inside the script, and the template updates automatically. This is a simple example of reactivity:
 
 ```qk
 <lang-js>
-    let name = "world"
+    let progress = "pending"
 
     setTimeout(() => {
-        name = "QingKuai"
+        progress = "completed"
     }, 1000)
 </lang-js>
 
-<h1>Hello {name}!</h1>
+<h1>Task status: {progress}</h1>
 ```
 
-However, in certain cases, you may want to prevent this default behavior. In such scenarios, you can use the built-in `stc` (short for static) helper function to mark variables as static, thereby avoiding their treatment as reactive variables. In this case, changes to name will not trigger page updates:
+In some cases, however, you may want to prevent this default behavior. In that case, you can use the compiler built-in `raw` method to mark the identifier as static so that reactive capability is not added. In the following example, changing `progress` does not update the page:
 
 ```qk
 <lang-js>
-    let name = stc("world")
+    let progress = raw("pending")
 
     setTimeout(() => {
-        name = "QingKuai"
+        progress = "completed"
     }, 1000)
 </lang-js>
 
-<h1>Hello {name}!</h1>
+<h1>Task status: {progress}</h1>
 ```
 
-For variables not accessed in templates, you can also call `rea` (short for react) to manually add reactivity to them:
+For identifiers that are not accessed in the template, you can also mark them manually with the compiler built-ins `reactive` or `shallow` if they should still have reactive capability:
 
 ```js
-let name = rea("world") // reactive
+let progress = reactive("pending") // reactive
 ```
 
-<div class="custom-block tip">
-    Generally we don't recommend doing this, as you likely just want to use the reactivity system separately in scripts. However, qingkuai's design philosophy is: the reactivity system should only be used for scenarios requiring automatic page updates. In scripts, we should try to use function composition and other methods to organize side effect logic, rather than over-relying on reactivity mechanisms. Because reactivity change flows in scripts are often not intuitive enough - they neither clearly express execution logic nor facilitate code review through methods like code jumping.
+<div class="custom-block warning">
+    In general, we do not recommend doing this, because in most cases you probably only want reactive capability inside script logic. Qingkuai is designed around the idea that reactivity is mainly for scenarios where the page needs to update automatically. In scripts, it is usually better to organize logic with function composition and similar patterns instead of relying too heavily on reactivity. In addition, operating on reactive data introduces some overhead. Overusing it often makes change flows less intuitive, harder to express clearly in code, and less convenient to inspect through IDE navigation or code review.
 </div>
 
 ---
 
-## Reactive Depth
+## Reactive Aliases
 
-For variables of complex types, the default reactive depth is `Infinity`, meaning every level of nested objects / arrays / Sets / Maps will be reactive. The following code will update the page content after a one-second delay:
+Alias binding in Qingkuai provides a concise way to read from and write to reactive targets. For deeply nested properties, you can create a shorter identifier alias with the compiler built-in `alias`, which simplifies reactive access code:
 
 ```qk
 <lang-js>
-    const languages = {
-        qk: {
-            age: 1,
-            name: "QingKuai"
-        }
-    }
+    let name = alias(refs.userInfo.detail.information.name)
 
+    // name -> refs.userInfo.detail.information.name
+    // Writing to name is reactive and equivalent to writing to refs.userInfo.detail.information.name
     setTimeout(() => {
-        languages.qk.age++
+        name = "Unknown"
     }, 1000)
 </lang-js>
 
-<h1>qk: name is {languages.qk.name}, and released in {2025 - languages.qk.age}.</h1>
+<!-- name -> refs.userInfo.detail.information.name -->
+<!-- Reading name is reactive and equivalent to reading refs.userInfo.detail.information.name -->
+<p>User name is: {name}</p>
 ```
 
-However, when dealing with large complex objects, this reactivity conversion pattern may cause some performance overhead. In such cases, we can manually control the reactive depth by calling the built-in `rea` helper function and passing a second parameter:
+In behavior, alias binding is very similar to [pass-by-reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing) in some languages, but it is not exactly the same as the traditional notion of passing by reference. Internally, the compiler rewrites reads and writes to the alias identifier into reads and writes to the original target, which provides reactive access. This also has something in common with the [reference attributes](../basic/reference-attributes.html) introduced later.
 
-```js
-const obj = {
-    outter: {
-        inner: [1, 2, 3]
-    }
+<div class="custom-block warning">
+    Alias binding can also be used with non-reactive values, but it should not be overused. It is designed primarily to simplify reactive access to deeply nested properties, so it is best used in that kind of scenario. As a best practice, prefer using it with component <a href="../components/attributes.html">props</a> and <a href="../components/attributes.html#reference-attributes">refs</a>. For other scenarios, evaluate the trade-offs carefully before using it.
+</div>
+
+---
+
+## Reactivity Mode
+
+Qingkuai supports two reactivity modes: deep reactivity and shallow reactivity. By default, the compiler attaches deep reactive capability to identifiers. That means even if a property is a complex type such as an object or array, reactive capability is added recursively. With shallow reactivity, only the identifier itself is reactive, and complex properties are not made reactive.
+
+To change the default reactivity mode, add a `.qingkuairc` configuration file in the current directory or a parent directory and set:
+
+```json
+{
+    "reactivityMode": "shallow"
 }
+```
 
-let v0 = rea(obj, 0) // Reactive depth 0, equivalent to stc helper function, v0 is not reactive
-let v1 = rea(obj, 1) // Reactive depth 1, only modifying v1 itself will trigger reactive updates
-let v2 = rea(obj, 2) // Reactive depth 2, modifying v2 itself or v2.outter will trigger reactive updates
-let v3 = rea(obj, 3) // Reactive depth 3, modifying v3.outter.inner[index] won't trigger reactive updates
-let v4 = rea(obj, 4) // Reactive depth 4, modifying any property at any path of v4 will trigger reactive updates, higher depths follow the same pattern...
+A reactivity mode configured through a file takes effect for the current directory and all of its subdirectories until another configuration file is encountered. If you want to use a different reactivity mode in a single component file, you can override the default by adding a `reactive` or `shallow` attribute to the embedded script tag:
+
+```qk
+<lang-js shallow>
+    // The compiler infers whether identifiers have shallow reactivity
+</lang-js>
+
+<lang-js reactive>
+    // The compiler infers whether identifiers have deep reactivity
+</lang-js>
 ```
 
 ---
 
 ## Getting Raw Values
 
-When a complex object is converted into a reactive declaration by the compiler, if any of its properties are also complex types (like objects or arrays), each access to that property will return a new [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) wrapper. This behavior may lead to some unexpected issues or peculiar phenomena:
+When an identifier of a complex type is inferred as reactive, its properties are also inferred as reactive recursively. This means that when you access that value or its properties, you usually get a reactive proxy object wrapped by the compiler rather than the raw value. In some scenarios, you may need the raw value for comparison or other operations. In that case, use the `toRaw` method exported from `qingkuai`:
 
 ```js
-const obj = rea({
-    inner: {}
-})
-consle.log(obj.inner == obj.inner) // false
+import { toRaw } from "qingkuai"
+
+const inner = {}
+const outer = reactive({ inner })
+console.log(outer.inner === inner) // false
+console.log(toRaw(outer.inner) === inner) // true
+console.log(toRaw(outer).inner === inner) // true
 ```
 
-To get the expected result, we can use the `raw` method exported from the qingkuai package to obtain its raw value for comparison:
+---
+
+## Getting Reactive Values
+
+Qingkuai also provides `toReactive` and `toShallowReactive` to obtain the reactive proxy object corresponding to a value:
 
 ```js
-import { raw } from "qingkuai"
+import { toReactive } from "qingkuai"
 
-const obj = rea({
-    inner: {}
-})
-console.log(raw(obj).inner === raw(obj).inner) // true
+const obj = { count: 0 }
+const reactiveObj = toReactive(obj)
 ```
+
+<div class="custom-block warning">
+    Note that <code>toReactive</code> does not add new reactive capability to the passed value. It only returns that value's reactive proxy object. If the value itself was not inferred or explicitly marked as reactive by the compiler, the proxy returned by <code>toReactive</code> does not become reactive either.
+</div>
 
 ---
 
 ## Derived Reactive State
 
-Derived reactive state refers to computational processes that depend on other reactive values. When these dependent reactive values change, the related computations automatically re-execute to produce the latest results. In qingkuai, we provide two ways to declare derived reactive state:
+Derived reactive state refers to computations that depend on other reactive values. When those reactive dependencies change, the related computation runs again automatically to produce the latest result. In Qingkuai, there are two ways to declare derived reactive state:
 
-1. Using variable identifiers prefixed with `$`;
-2. Using the built-in `der` (short for derived) helper function;
+1. Use a variable identifier that starts with `$`.
+2. Use the compiler built-in `derived` or `derivedExp`.
 
 ```js
 let number = 10
 const $double = number * 2
-const double = der(number * 2)
+const double = derived(() => number * 2)
 ```
 
-For complex computational processes, you can use functions as state initial values or parameters for the `der` method:
+When using the shorthand declaration form, meaning an identifier starting with `$`, you can also set the initial value to a function expression if the logic is complex. The compiler automatically treats the return value of that function expression as derived reactive state:
 
 ```js
-let number = 10
-
 const $result = () => {
     const double = number * 2
     return isSpecial(double) ? Math.abs(double) : double
 }
-
-const result = der(() => {
-    const triple = (number * 3).toString()
-    return triple.length >= 4 ? triple : triple.padStart(4, "0")
-})
 ```
 
-In actual development, we often need to write JS/TS expressions in template interpolation blocks, some of which contain relatively complex logic. If templates are filled with numerous complex expressions, it often leads to code clutter and reduced readability. In such cases, using derived reactive state to extract and represent these complex expressions would be a clearer and more efficient approach:
+Unlike `derived`, `derivedExp` allows you to pass an expression directly to declare derived reactive state. This behaves similarly to a shorthand declaration whose initial value is not a function. For simple logic, this form is more concise:
+
+```js
+const double = derivedExp(number * 2)
+```
+
+In real development, template interpolation blocks often contain JS or TS expressions, and some of them become fairly complex. If a template is filled with complex expressions, the code quickly becomes messy and hard to read. In such cases, using derived reactive state to extract and represent those expressions is often a clearer and more efficient approach:
 
 ```qk
 <lang-js>
-    const number = -1
-    const $result = (number < 0 ? Math.abs(number) : number) * 2
+    const $result = () => {
+        const normalized = number < 0 ? Math.abs(number) : number
+        return normalized * 2
+    }
 </lang-js>
 
 <p>the calculation result is: {$result}</p>
 ```
 
-If you don't need the convenience declaration feature of derived reactive state (through variable identifiers prefixed with `$`), you can add a `.qingkuairc` configuration file in the current or parent directory and modify its content to:
+If you do not want to use shorthand declarations for derived reactive state, add a `.qingkuairc` configuration file in the current directory or a parent directory and write:
 
 ```json
 {
@@ -163,9 +184,9 @@ If you don't need the convenience declaration feature of derived reactive state 
 
 ---
 
-## Reactive State store
+## Reactive State Store
 
-Often we need to declare reactive variables not just inside components, but also outside them, and may even need to share them across multiple components. In such cases, we can use qingkuai's reactive state store API to create reactive variables externally and
+In many cases, you need to declare reactive variables not only inside a component, but also outside components, or even share them among multiple components. In that case, you can use Qingkuai's reactive state store API to create and export reactive variables externally:
 
 ```js
 // store.js
@@ -178,7 +199,7 @@ export const store = createStore({
 })
 ```
 
-Importing it across multiple components allows sharing reactive state:
+Importing it in multiple components lets them share the same reactive state:
 
 ```qk
 <!-- Header.qk -->
@@ -197,7 +218,7 @@ Importing it across multiple components allows sharing reactive state:
     >
         Login
     </button>
-    <p #else>Hello {store.userInfo.name}<p>
+    <p #else>Hello {store.userInfo.name}</p>
 </header>
 ```
 
@@ -213,21 +234,33 @@ Importing it across multiple components allows sharing reactive state:
 </qk:spread>
 ```
 
+<div class="custom-block tip">
+    The <a href="../basic/compilation-directives.html#conditional-rendering">#if</a> used here is a <a href="../basic/compilation-directives.html">compilation directive</a>. It controls whether an element is rendered based on a condition. In the example above, it is used to render different content based on login status.
+</div>
+
 ---
 
 ## Destructuring Reactive Declarations
 
-Besides the state store API and the convenient declaration syntax for derived reactive state, other reactive declarations support destructuring. The following declaration statements in this example will all be compiled into reactive declarations:
+When you need to extract multiple properties from a reactive object, destructuring assignment is a natural way to simplify the code. In Qingkuai, if you destructure a reactive object and want the destructured variables to keep reactive capability, you can use normal JavaScript destructuring syntax directly, and the compiler adds reactive capability to the destructured variables automatically:
 
 ```js
+// Destructuring reactive declarations inferred by the compiler
 const { code, msg } = obj
-const { code, msg } = rea(obj)
-
 const [start, end] = range
-const [start, end] = der(range.map(Math.ceil))
+
+// Destructuring reactive declarations marked explicitly
+const { code, msg } = reactive(obj)
+const [start, end] = derivedExp(range.map(Math.ceil))
 ```
 
-Note, the convenient declaration of derived reactive state does not support destructuring syntax:
+In addition, `alias` also supports destructuring syntax:
+
+```js
+const { code, msg } = alias(refs.response)
+```
+
+Note that shorthand declarations of derived reactive state do not support destructuring syntax:
 
 ```js
 const { $code } = obj

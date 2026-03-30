@@ -114,7 +114,7 @@
 
 ```qk
 <!-- Outer.qk -->
-<Inner @someThingHappened={console.log($args)} />
+<Inner @someThingHappened={console.log($arg)} />
 
 <!-- Inner.qk -->
 <lang-js>
@@ -127,7 +127,7 @@
 
 ```qk
 <!-- Outer.qk -->
-<Inner @someThingHappened={console.log($args)} />
+<Inner @someThingHappened={console.log($arg)} />
 
 <!-- Inner.qk -->
 <lang-ts>

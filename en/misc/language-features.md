@@ -1,24 +1,24 @@
 # Language Features
 
-Qingkuai does not have complex syntax extensions built into the compiler. Instead, it provides rich language feature support through a Language Server based on the [LSP](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/) (Language Server Protocol). These features include type inference, intelligent completion, error hints, quick navigation, semantic highlighting, etc., covering framework features such as component properties, slots, scoped styles, directive systems, and reference passing. With LSP, qingkuai significantly enhances development experience and type safety while maintaining simple syntax.
+Qingkuai does not rely on complex syntax extensions in the compiler. Instead, it provides rich editor support through a Language Server based on the [LSP](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/) (Language Server Protocol). These features include type inference, intelligent completion, diagnostics, code navigation, and semantic highlighting, covering framework capabilities such as component attributes, slots, scoped styles, directives, and reference attributes. With LSP, Qingkuai keeps syntax simple while significantly improving development experience and type safety.
 
 ---
 
 ## IDE Extensions
 
-Currently, we have only released an extension for [vscode](https://code.visualstudio.com). You can search for `QingKuai` in the marketplace to install it.
+Currently, the extension is available for [VS Code](https://code.visualstudio.com). You can search for `Qingkuai` in the marketplace to install it.
 
 <img src="/static/medias/extension.png" />
 
 <div class="custom-block tip">
-    When you encounter bugs in your IDE, you should submit an issue in the <a href="https://github.com/qingkuai-js/language-features">language-features</a> repository of qingkuai.
+    If you encounter IDE-related issues, please submit an issue in Qingkuai's <a href="https://github.com/qingkuai-js/language-features">language-features</a> repository.
 </div>
 
 ---
 
 ## Emmet
 
-The qingkuai language server provides good [Emmet](https://emmet.io) support. However, due to conflicts between dynamic attributes and the Emmet syntax for removing attributes, the `-` character is used instead to remove attributes in component files. The following example code demonstrates how to create an input tag without the type attribute using Emmet syntax in component files:
+The Qingkuai language server provides good [Emmet](https://emmet.io) support. However, dynamic attributes conflict with Emmet's default attribute-removal syntax, so component files use `-` to remove attributes. The following example creates an `input` tag without the `type` attribute:
 
 ```txt
 input[-type]
@@ -40,7 +40,7 @@ would create a dynamic attribute:
 
 ## Formatting
 
-The document formatting function is built into the qingkuai language server, implemented by [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai). If there are syntax errors in the component file, formatting may fail. In this case, you can view the failure information in the IDE's `output` window:
+Document formatting is built into the Qingkuai language server and implemented by [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai). If a component file contains syntax errors, formatting may fail. In that case, check the IDE `output` panel:
 
 <img src="/static/medias/format-error.png" />
 

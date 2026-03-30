@@ -1,44 +1,44 @@
 # TypeScript Support
 
-Qingkuai warmly embraces [TypeScript](https://www.typescriptlang.org/). The framework itself is written in TypeScript and fully considers type system compatibility at the design level. Whether it's component attributes, directives, lifecycle functions, or global APIs, Qingkuai provides comprehensive type hints and inference capabilities to help developers achieve better auto-completion, error detection, and development experience. For projects pursuing type safety and maintainability, TypeScript and Qingkuai make an ideal pair.
+Qingkuai provides full [TypeScript](https://www.typescriptlang.org/) support. The framework itself is written in TypeScript, and compatibility with the type system is fully considered in its design. Whether you are working with component attributes, directives, lifecycle hooks, or global APIs, Qingkuai provides solid type hints and inference so that you get better auto-completion, error checking, and an overall better development experience. For projects that value type safety and maintainability, TypeScript and Qingkuai are a strong combination.
 
 <div class="custom-block tip">
-    Qingkuai has zero intrusion on TypeScript configurations, allowing you to freely configure tsconfig.json as you would in a pure TypeScript project. Projects created with <a href="https://www.npmjs.com/package/create-qingkuai">create-qingkuai</a> already come with the necessary TypeScript configuration items.
+    Qingkuai is zero-intrusive with respect to TypeScript configuration. You can configure tsconfig.json just as you would in a plain TypeScript project. Projects created with <a href="https://www.npmjs.com/package/create-qingkuai">create-qingkuai</a> already include the necessary TypeScript configuration.
 </div>
 
 ---
 
 ## Component Attribute Types
 
-In component files, the type names `Refs` and `Props` are reserved. Declaring these two types will mark the types for the component's reference attributes and other attributes:
+In component files, `Refs` and `Props` are reserved type names. Declaring these two types lets you specify types for component reference attributes and other attributes:
 
 ```ts
 interface Refs {
-    /* ... */
+    // ...
 }
 
 interface Props<T> {
-    /* ... */
+    // ...
 }
 ```
 
-Using the `type` keyword to declare type aliases is also possible:
+You can also declare them with the `type` keyword:
 
 ```ts
 type Refs<T> = {
-    /* ... */
+    // ...
 }
 type Props = Record<string, any>
 ```
 
-It also supports importing types from external files:
+Importing the types from external files is also supported:
 
 ```ts
 import type Refs from "./ref-types/Component"
 import type { ComponentProps as Props } from "./types"
 ```
 
-On the language feature level, the `Props` type will be wrapped with an additional `Readonly`, because component attributes do not support direct modification. However, if an attribute value is a reference type, you can modify its property values:
+At the language-service level, the `Props` type is wrapped in `Readonly`, because component props cannot be modified directly:
 
 ```ts
 interface Props {
@@ -48,22 +48,23 @@ interface Props {
 
 // Cannot assign to 'name' because it is a read-only property.ts(2540)
 props.name = "..."
-
-// ok
-props.list[0] = "..."
 ```
 
 <div class="custom-block tip">
-    If your embedded script language is TypeScript but you haven't declared these two types, the corresponding built-in variables' types will be an empty object type.
+    If your embedded script language is TypeScript but you do not declare these two types, the corresponding built-in variables are typed as empty object types.
 </div>
 
-If your embedded script language is JavaScript, you can add type declarations for component attributes through [jsDoc](https://jsdoc.app):
+If your embedded script language is JavaScript, you can use [JSDoc](https://jsdoc.app) to add type declarations for component attributes:
 
 ```js
 /**
  * @typedef {{ name: string }} Refs
  */
+```
 
+Or:
+
+```js
 /**
  * @typedef {Object} Props
  * @property {string} name
@@ -72,9 +73,9 @@ If your embedded script language is JavaScript, you can add type declarations fo
 
 ---
 
-## Event Type Inference Mechanism
+## Event Type Inference
 
-In Qingkuai components, events, like other non-reference type attributes, are accessed through the built-in `props` object. This means that within component tags, the prefixes `@` and `!` before attribute names are interchangeable; `@` mainly serves as a semantic identifier indicating that the attribute is a callable method. When adding attributes to a component, typing `@` triggers auto-completion of some attribute names, which are inferred as event attributes. As long as an attribute in the component's `Props` type is of function type, Qingkuai's language server marks it as an event candidate and provides corresponding attribute name completion suggestions when you input `@`. Both attributes of Props in the following code will be inferred as events:
+In Qingkuai components, events are accessed through the built-in `props` object just like other non-reference attributes. In other words, on component tags, the `@` and `!` prefixes before an attribute name can be used interchangeably. The `@` prefix mainly serves as a semantic marker to indicate that the attribute is callable. When you add an attribute to a component, typing `@` triggers attribute-name completion, and the suggested names are exactly the attributes inferred as events. As long as a property in the component's `Props` type has a function type, the Qingkuai language server treats it as an event candidate and offers it in attribute completion after `@` is typed. In the following code, both properties in `Props` are inferred as events:
 
 ```ts
 interface Props {

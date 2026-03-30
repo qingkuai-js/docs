@@ -1,6 +1,6 @@
 # Compilation Directives
 
-Directives are core components of qingkuai, represented as special attributes prefixed with `#` that instruct the qingkuai compiler how to generate corresponding JavaScript code. qingkuai provides a rich set of built-in directives covering multiple aspects including flow control, rendering control, and asynchronous processing:
+Directives are core parts of Qingkuai. They are special attributes prefixed with `#` that tell the Qingkuai compiler how to generate JavaScript code. Qingkuai provides a rich built-in directive system that covers flow control, rendering control, and asynchronous processing:
 
 -   Rendering control directives: target, html, show - control content insertion position and display
 -   Flow control directives: for, if, el-if, else - control structural rendering logic
@@ -12,11 +12,11 @@ Additionally, there's a `slot` directive for receiving component slot parameters
 
 ## Conditional Rendering
 
-In qingkuai, we implement conditional rendering logic by combining if, elif and else directives, similar to Javascript's if, else if and else keywords. Consider this scenario: showing login prompts when users aren't logged in, and displaying user information after login - a very common frontend requirement. We can easily implement this logic using qingkuai's conditional rendering:
+In Qingkuai, conditional rendering is implemented by combining `if`, `elif`, and `else`, similar to `if`, `else if`, and `else` in JavaScript. Consider a common scenario: show a login prompt when the user is not logged in, and show user information after login:
 
 ```qk
-<qk:spread #if={userInfo}>
-    <p>View after logging in.</p>
+<qk:spread #if={!userInfo}>
+    <p>Please log in first.</p>
     <button
         class="login-btn"
         @click={handleLogin}
@@ -34,17 +34,17 @@ In qingkuai, we implement conditional rendering logic by combining if, elif and 
 We can also insert `elif` directives between `if` and `else` as branch nodes:
 
 ```qk
-<p #if={language === "qk"}>QingKuai</p>
-<p #elif={language === "js"}>Javascrip</p>
-<p #elif={language === "ts"}>Typescrip</p>
-<p #else>Language is not Qingkuai, Javascript, or Typescript.</p>
+<p #if={language === "qk"}>Qingkuai</p>
+<p #elif={language === "js"}>JavaScript</p>
+<p #elif={language === "ts"}>TypeScript</p>
+<p #else>Language is not Qingkuai, JavaScript, or TypeScript.</p>
 ```
 
 Alternatively, we can use the `show` directive to control element visibility. Unlike the three directives mentioned above, show doesn't unmount elements from the page - it simply controls whether to add the `display: none;` style rule. Therefore, for elements requiring frequent visibility toggling, the show directive is preferable due to its lower overhead:
 
 ```qk
-<div #show={visiable}>
-    <!-- some contents> -->
+<div #show={visible}>
+    <!-- some contents -->
 </div>
 ```
 
@@ -52,10 +52,10 @@ Alternatively, we can use the `show` directive to control element visibility. Un
 
 ## List Rendering
 
-List rendering is very convenient in qingkuai. Here's a basic usage example, commonly used during development testing to quickly create list rendering:
+List rendering is straightforward in Qingkuai. Here is a basic example:
 
 ```qk
-<p #for={3}>Paragraph in list rendering.<p>
+<p #for={3}>Paragraph in list rendering.</p>
 ```
 
 | This will render three consecutive p tags:
@@ -86,8 +86,8 @@ List rendering with Map:
 <lang-js>
     const languages = new Map([
         ["qk", "Qingkuai"],
-        ["js", "Javascript"],
-        ["ts", "Typescript"]
+        ["js", "JavaScript"],
+        ["ts", "TypeScript"]
     ])
 </lang-js>
 
@@ -97,9 +97,9 @@ List rendering with Map:
 | The rendered result will be:
 
 ```html
-<p>qk: QingKuai</p>
-<p>js: Javascript</p>
-<p>ts: Typescript</p>
+<p>qk: Qingkuai</p>
+<p>js: JavaScript</p>
+<p>ts: TypeScript</p>
 ```
 
 When naming for directive iteration items and indexes, you can also use [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring) syntax at the item or index identifier name:
@@ -109,15 +109,15 @@ When naming for directive iteration items and indexes, you can also use [destruc
     const languageInfos = {
         qk: {
             age: 1,
-            name: "QingKuai"
+            name: "Qingkuai"
         },
         js: {
             age: 30,
-            name: "Javascript"
+            name: "JavaScript"
         },
         ts: {
             age: 13,
-            name: "Typescript"
+            name: "TypeScript"
         }
     }
 </lang-js>
@@ -130,12 +130,12 @@ When naming for directive iteration items and indexes, you can also use [destruc
 | The rendered result will be:
 
 ```html
-<p>QingKuai: file extension is qk, released in 2024.</p>
-<p>Javascript: file extension is js, released in 1995.</p>
-<p>Typescript: file extension is ts, released in 2012.</p>
+<p>Qingkuai: file extension is qk, released in 2024.</p>
+<p>JavaScript: file extension is js, released in 1995.</p>
+<p>TypeScript: file extension is ts, released in 2012.</p>
 ```
 
-If you've used [vue](https://cn.vuejs.org), you might wonder why the `for` directive uses `of` rather than `in` as the iteration keyword. This is because the in keyword can appear in Javascript expressions while of cannot. For example, if we used in, cases like this would be hard to handle:
+If you've used [Vue](https://cn.vuejs.org), you might wonder why Qingkuai uses `of` instead of `in` in the `for` directive. The reason is that `in` can appear inside JavaScript expressions, while `of` cannot, which avoids ambiguity. For example:
 
 ```qk
 <p #for={prop in obj ? 3 : 2}>...</p>
@@ -148,7 +148,7 @@ If you've used [vue](https://cn.vuejs.org), you might wonder why the `for` direc
 -   When using the `for` directive to create list rendering, if the directive's dependent reactive variable changes, the list updates with this logic:
 
     1. If the new list is longer, new elements are created and appended; if shorter, extra elements are removed from the end
-    2. During qingkuai's scheduled updates, each list element's attributes and textContent are updated
+    2. During Qingkuai's scheduled updates, each list element's attributes and textContent are updated
 
     <img class="large-margin" src="/static/medias/no-key-update-en.gif" style="width: 90%; margin-left: 5%;">
 
@@ -173,14 +173,14 @@ Therefore, when list-rendered elements have state, it's recommended to add the k
 ```
 
 <div class="custom-block warning">
-    qingkuai runtime converts key directive interpolations to strings via <code>"" + [Interpolation expression]</code>, and checks for duplicate key values in the list - duplicates will throw runtime errors! Each item's key directive value should be unique within a single list.
+    Qingkuai runtime converts key directive interpolations to strings via <code>"" + [Interpolation expression]</code>, and checks for duplicate key values in the list - duplicates throw runtime errors. Each item's key value must be unique within a single list.
 </div>
 
 ---
 
 ## Async Processing
 
-In some scenarios, you may need to asynchronously wait for a state in embedded scripts before rendering. qingkuai's async processing directives make this easy. The await directive accepts a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) - after resolution, then and catch directives can render different content for success/failure cases:
+In some scenarios, you may need to wait for asynchronous state in embedded scripts before rendering. Qingkuai's async directives make this straightforward. The `await` directive accepts a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). After it settles, `then` and `catch` can render different content for success and failure:
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -188,7 +188,7 @@ In some scenarios, you may need to asynchronously wait for a state in embedded s
 <p #catch>pms is rejected.</p>
 ```
 
-To access Promise resolution/rejection values, simply set the then/catch directive value to a Javascript identifier:
+To access Promise resolution/rejection values, simply set the then/catch directive value to a JavaScript identifier:
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -208,7 +208,7 @@ then/catch directive values also support [destructuring](https://developer.mozil
         }
     }
 >
-    pms is resolved and user id is {userId}, user name is {userName}.
+    pms is resolved and the user id is {userId}, user name is {userName}.
 </p>
 <p #catch={{msg, code}}>pms is rejected and the error code is {code}, msg: {msg}.</p>
 ```
@@ -225,7 +225,7 @@ If no rendering is needed during waiting, just write await with then/catch direc
 ```
 
 <div class="custom-block tip">
-    qingkuai's <a href="../components/async-components.html">async components</a> are also implemented using these three directives.
+    Qingkuai's <a href="../components/async-components.html">async components</a> are also implemented using these three directives.
 </div>
 
 ---
@@ -244,7 +244,7 @@ While the above code works, the outer element isn't always necessary. To avoid m
 <qk:spread #html>{htmlStr}</qk:spread>
 ```
 
-We can also pass html directive a value specifying which tags to keep escaped, preventing [xss](https://en.wikipedia.org/wiki/Cross-site_scripting) attacks when handling untrusted HTML fragments. The html directive value type is:
+You can also pass the `html` directive a value to control which tags remain escaped, which helps prevent [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) when handling untrusted HTML fragments. The value type is:
 
 ```ts
 type HTMLDirectiveValueType = Partial<{
@@ -263,6 +263,7 @@ We recommend this pattern for handling semi-trusted content:
 
 ```qk
 <lang-js>
+    // Equivalent to the DESTRUCT_HTML constant exported from the qingkuai package
     const htmlDireciveConf = {
         escapeStyle: true,
         escapeScript: true,

@@ -1,83 +1,79 @@
 # Attributes
 
-In qingkuai, we can also add attributes to component tags just like regular HTML tags to pass in parameters. This behavior is called component prop passing and is used to provide external data or configuration to a component. With component props, we can make a component behave differently or look different in different scenarios, enhancing its reusability and flexibility.
+In Qingkuai, you can add attributes to component tags just as you do with normal HTML tags to pass parameters. This is called passing component attributes, and it is used to pass external data or configuration into a component. Through component attributes, a component can behave differently or present itself differently in different scenarios, which improves both reusability and flexibility.
 
 ---
 
-## Normal Attributes
+## Static Attributes
 
-Normal attributes are passed to components as strings and accessed within the component via the built-in `props` object:
+Static attributes are passed to components as strings. Inside the component, external attribute values are accessed through the built-in `props` identifier:
 
 |js|ts|
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <Inner attr="value" >
 
 <!-- Inner.qk -->
 <lang-js>
-    console.log(props.attr) // value
+    console.log(props.attr) // logs: value
 </lang-js>
 ```
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <Inner attr="value" >
 
 <!-- Inner.qk -->
-<lang-js>
+<lang-ts>
     interface Props {
         attr: string
     }
-    console.log(props.attr) // value
-</lang-js>
+    console.log(props.attr) // logs: value
+</lang-ts>
 ```
 
 <div class="custom-block tip">
-    If your embedded script language is TypeScript or if you want component prop autocomplete, please first read <a href="../misc/typescript.html">TypeScript Support</a> before continuing with this section.
+    If your embedded script language is TypeScript, or if you want component attribute completion suggestions, it is recommended to read <a href="../misc/typescript.html">TypeScript Support</a> before continuing with this section.
 </div>
 
-If you add an attribute name to the component tag without assigning it a value, the component receives a boolean `true` internally:
+If you add an attribute name to a component tag without giving it a value, the component receives the boolean value `true` internally:
 
 |js|ts|
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <Inner attr />
 
 <!-- Inner.qk -->
 <lang-js>
-    console.log(props.attr) // true
+    console.log(props.attr) // logs: true
 </lang-js>
 ```
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <Inner attr />
 
 <!-- Inner.qk -->
-<lang-js>
-    interface Props{
+<lang-ts>
+    interface Props {
         attr?: boolean
     }
-    console.log(props.attr) // true
-</lang-js>
+    console.log(props.attr) // logs: true
+</lang-ts>
 ```
-
-<div class="custom-block tip">
-    In the TypeScript type system, such valueless props are also considered as boolean.
-</div>
 
 ---
 
-## Dynamic Aattributes
+## Dynamic Attributes
 
-Dynamic attributes passed to components are also accessed internally through the `props` built-in object. However, dynamic attributes can carry various data types beyond just strings. Moreover, when the data source changes, DOM elements using that attribute inside the component will be updated accordingly:
+Dynamic attributes passed to a component are also accessed through the built-in `props` identifier. Unlike static attributes, however, dynamic attributes can pass more than just strings. They can pass booleans, objects, and other kinds of data. When the data source changes, DOM elements inside the component that use that attribute are updated accordingly:
 
 |js|ts|
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <lang-js>
     const list = ["js", "ts", "qk"]
     setTimeout(list.pop, 1000)
@@ -90,7 +86,7 @@ Dynamic attributes passed to components are also accessed internally through the
 ```
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <lang-ts>
     const list = ["js", "ts", "qk"]
     setTimeout(list.pop, 1000)
@@ -112,47 +108,60 @@ Dynamic attributes passed to components are also accessed internally through the
 
 ## Events
 
-Component events, like other non-ref props, are accessed inside the component through the built-in `props` object:
+Component events are accessed through the built-in `props` identifier inside a component, just like other non-reference attributes:
 
 |js|ts|
 
 ```qk
-<!-- Outter.qk -->
-<Inner @someThingHappened={console.log($args)} />
+<!-- Outer.qk -->
+<Inner @someThingHappened={console.log($arg)} />
 
 <!-- Inner.qk -->
 <lang-js>
-    setTimeout(() => props.someThingHappened("event is triggered."), 1000)
+    setTimeout(() => {
+        props.someThingHappened("event is triggered.")
+        // logs: event is triggered.
+    }, 1000)
 </lang-js>
 ```
 
 ```qk
-<!-- Outter.qk -->
-<Inner @someThingHappened={console.log($args)} />
+<!-- Outer.qk -->
+<Inner @someThingHappened={console.log($arg)} />
 
 <!-- Inner.qk -->
 <lang-ts>
     interface Props {
         someThingHappened: (msg: string) => void
     }
-    setTimeout(() => props.someThingHappened("event is triggered."), 1000)
+    setTimeout(() => {
+        props.someThingHappened("event is triggered.")
+        // logs: event is triggered.
+    }, 1000)
 </lang-ts>
 ```
+
+<div class="custom-block tip">
+    In terms of passing and usage, component events are no different from other non-reference attributes. The difference is semantic: component events usually represent actions or state changes that happen inside the component, while component attributes are more often used as configuration or data input. For that reason, when designing a component interface, we recommend naming callback-like component attributes as events and marking them with the `@` prefix so that their purpose is clearer.
+</div>
+<div class="custom-block tip">
+    When Qingkuai's language server provides completion suggestions, only attributes whose values are function types are suggested as events.
+</div>
 
 ---
 
 ## Reference Attributes
 
-Reference attributes are a very important feature in components. They allow the component to modify values passed in from outside. Since properties in the `props` object are actually read-only getters, their values cannot be modified directly. At this point, you need to use the reference-passing mechanism provided by ref attributes to achieve this. In qingkuai, the component file has a built-in `refs` object for accessing ref attributes passed from outside. By modifying properties on `refs`, you can not only update external data but also trigger its reactive updates. Here's a simple example:
+Reference attributes are an important capability in components because they allow a component to modify values passed in from outside. Since the properties on the `props` object are essentially read-only getters, they cannot be modified directly. In that case, the reference-passing mechanism provided by reference attributes is required. Qingkuai provides the built-in `refs` identifier inside component files for accessing externally passed reference attributes. By modifying properties on `refs`, you can synchronize changes back to external data and trigger its reactive updates. Here is a simple example:
 
 |js|ts|
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <lang-js>
     import Inner from "./Inner.qk"
 
-    let name = "Javascript"
+    let name = "JavaScript"
 </lang-js>
 
 <p>name is: {name}</p>
@@ -160,15 +169,15 @@ Reference attributes are a very important feature in components. They allow the 
 
 <!-- Inner.qk -->
 <p>refs.attr is: {refs.attr}</p>
-<button @click={refs.attr = "QingKuai"}>Change refs.attr</button>
+<button @click={refs.attr = "Qingkuai"}>Change refs.attr</button>
 ```
 
 ```qk
-<!-- Outter.qk -->
+<!-- Outer.qk -->
 <lang-ts>
     import Inner from "./Inner.qk"
 
-    let name = "Javascript"
+    let name = "JavaScript"
 </lang-ts>
 
 <p>name is: {name}</p>
@@ -182,46 +191,69 @@ Reference attributes are a very important feature in components. They allow the 
 </lang-ts>
 
 <p>refs.attr is: {refs.attr}</p>
-<button @click={refs.attr = "QingKuai"}>Change refs.attr</button>
+<button @click={refs.attr = "Qingkuai"}>Change refs.attr</button>
 ```
 
-<div class="custom-block tip">
-    If a value in <code>props</code> is itself a reference type (such as an object or array), you can modify its internal properties. For example, when <code>props.obj</code> is an object, <code>props.obj.xxx</code> can be modified.
+<div class="custom-block warning">
+    If a value inside <code>props</code> is itself a complex type such as an object or array, its internal data can still be modified technically. For example, when <code>props.userInfo</code> is an object, <code>props.userInfo.name</code> can still be reassigned. However, this is not recommended, because it makes component state harder to track and maintain.
 </div>
 
 ---
 
-## Destructure Built-in Objects
+## Attribute Destructuring
 
-Values obtained by directly destructuring the `props` or `refs` built-in objects are not themselves reactive. This is because accessing built-in object properties triggers the `getter` to collect reactive dependencies:
+Values obtained by destructuring the built-in `props` or `refs` objects directly do not have reactive capability themselves. In the following example, access to `str` is not reactive, because this does not trigger the getter on the `props` property access:
 
 ```js
 const { str } = props
 ```
 
-To destructure built-in objects properly, you need to use the [reactive destructure declaration](../basic/reactivity.html#destructuring-reactive-declarations) syntax we introduced earlier:
+If you need to destructure component attributes while preserving reactivity, use the compiler built-in `alias` together with destructuring:
 
 ```js
-const { value } = der(refs)
-const { str, arr } = der(props)
+const { str } = alias(props)
+
+// Accessing str is reactive and equivalent to accessing props.str
 ```
 
-<div class="custom-block tip">
-    When destructuring <code>refs</code>, if the destructured property is a primitive (such as a string, number, or boolean), modifying it will not affect the original ref value. This is because what you get is a value copy, not a reference to the original — which is consistent with JavaScript's default behavior.
-</div>
+Likewise, values obtained by destructuring the built-in `refs` object with `alias` are also reactive:
+
+```js
+let { str } = alias(refs)
+
+// Accessing or writing str is reactive and equivalent to accessing or writing refs.str
+```
+
+---
+
+## Specifying Default Values
+
+Component attributes support default values. When a parent component does not pass a certain attribute, the component can specify a default value internally to ensure that it still works correctly. Through the compiler built-ins `defaultProps` and `defaultRefs`, you can declare default values for component attributes:
+
+```js
+defaultRefs({
+    checked: false
+})
+
+defaultProps({
+    age: 0,
+    name: "Unknown",
+    description: "This is a default user info."
+})
+```
 
 ---
 
 ## Attribute Name Format
 
-Component attribute names in qingkuai, just like component names, support both kebab-case and camelCase. The following usages are equivalent:
+Just like component names, Qingkuai component attribute names support both kebab-case and camelCase. The following two forms are equivalent:
 
 ```qk
 <Component myAttr />
 <Component my-attr />
 ```
 
-By default, when formatting component files, all kebab-case component attribute or event names will be converted to camelCase. However, you can add a `.prettierrc` file to the component file's directory or its parent directories and include the following content to change the preference to kebab-case:
+By default, formatting a component file rewrites kebab-case component attribute and event names into camelCase. However, you can add a `.prettierrc` file in the component file's directory or one of its parent directories and use the following content to change the preferred format to kebab-case:
 
 ```json
 {
@@ -231,4 +263,6 @@ By default, when formatting component files, all kebab-case component attribute 
 }
 ```
 
-<div class="custom-block tip">When using this configuration, the qingkuai language server will also prioritize suggesting kebab-case attribute names during autocomplete.</div>
+<div class="custom-block tip">
+    With this configuration enabled, the Qingkuai language server also prefers kebab-case names in component attribute completion suggestions.
+</div>

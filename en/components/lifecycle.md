@@ -1,26 +1,26 @@
 # Lifecycle
 
-In component-based development, lifecycle is key to understanding component behavior and mastering component timing. Each component goes through a series of lifecycle phases from creation, mounting, updating to unmounting. To better control these processes, qingkuai provides multiple lifecycle hook functions. These hooks allow developers to insert logic at appropriate times for tasks like data initialization, event binding, and cleanup operations, making components more robust and maintainable:
+In component-based development, lifecycle is the key to understanding component behavior and controlling execution timing. Every component goes through a series of lifecycle phases, from creation to mounting, updating, and unmounting. To give developers better control over these phases, Qingkuai provides a number of lifecycle hook functions. Through these hooks, you can insert logic at the right time for data initialization, event binding, cleanup, and more, making components more robust and easier to maintain:
 
--   Mounting: onBeforeMount (preparing to mount), onAfterMount (mounting completed);
--   Unmounting: onBeforeDestroy (preparing to unmount), onAfterDestroy (unmounting completed);
--   Updating: onBeforeUpdate (before each reactive update scheduling), onAfterUpdate (after update scheduling completes);
+- Mounting: `onBeforeMount` (before the component is mounted), `onAfterMount` (after the component is mounted)
+- Unmounting: `onBeforeDestroy` (before the component is unmounted), `onAfterDestroy` (after the component is unmounted)
+- Updating: `onBeforeUpdate` (before each update scheduling), `onAfterUpdate` (after update scheduling is complete)
 
 ---
 
-## Registering Hook Callbacks
+## Registering Callbacks
 
-To register lifecycle hook callbacks, we first need to import them:
+To register a lifecycle callback, first import the corresponding hook function:
 
 ```js
 import { onAfterMount } from "qingkuai"
 
 onAfterMount(() => {
-    console.log("component is mounted")
+    console.log("component mounted")
 })
 ```
 
-qingkuai synchronously records the currently mounted component instance during rendering, so lifecycle hook callbacks cannot be registered in async logic. Avoid doing this:
+During rendering, Qingkuai records the currently mounting component instance synchronously. Because of that, you cannot register lifecycle callbacks in async logic. Do not do this:
 
 ```js
 import { onBeforeMount } from "qingkuai"
@@ -30,22 +30,22 @@ setTimeout(() => {
 })
 ```
 
-But you can register lifecycle hook callbacks in external logic, for example:
+However, you can register lifecycle callbacks inside external encapsulated logic, for example:
 
 ```js
 // util.js
 import { onBeforeUpdate } from "qingkuai"
 
-export function updatePreMiddleWare() {
+export function useUpdatePreMiddleWare() {
     console.log("before update")
 }
 ```
 
 ```qk
 <lang-js>
-    import { updatePreMiddleWare } from "./util"
+    import { useUpdatePreMiddleWare } from "./util"
 
-    updatePreMiddleWare()
+    useUpdatePreMiddleWare()
     // other logics...
 </lang-js>
 ```

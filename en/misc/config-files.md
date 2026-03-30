@@ -1,12 +1,12 @@
 # Configuration Files
 
-When building applications with qingkuai, you typically don't need complex configurations to get an out-of-the-box development experience. However, in real-world projects, to accommodate different development needs or customize behaviors, qingkuai provides a flexible configuration file mechanism that helps you control its behavior more precisely. A unified configuration system not only improves project consistency but also facilitates smoother collaboration among teams, forming an important foundation for building maintainable applications.
+When building applications with Qingkuai, you usually do not need complicated setup to get an out-of-the-box development experience. In real projects, however, Qingkuai provides a flexible configuration system so that you can adapt its behavior to different development needs and customization requirements. A unified configuration mechanism improves project consistency, makes team collaboration smoother, and provides a solid foundation for maintainable applications.
 
 ---
 
 ## Runtime Configuration
 
-Qingkuai's runtime configuration is modified through the `.qingkuairc` file. Component files are affected by the configuration file in the current directory or the nearest parent directory. For example, in the following directory structure, the Hello component file will be influenced by the configuration file within its own directory, while the App component will be affected by the configuration file at the project root:
+Qingkuai runtime behavior can be configured through the `.qingkuairc` file. Component files are affected by the runtime configuration file in the current directory or the nearest parent directory. For example, in the following directory structure, the `Hello` component is affected by the configuration file in its own directory, while `App` is affected by the configuration file in the project root:
 
 ```txt
 qingkuai-app
@@ -18,78 +18,53 @@ qingkuai-app
 └── .qingkuairc
 ```
 
-### insertTipComments
+### reactivityMode
 
-This property configures whether to insert tip comments into the compilation output. It is a boolean value and defaults to `true`. For instance, the comments in the following compiled output are all tip comments:
+This property configures which reactivity constructor Qingkuai uses by default. It is a string whose allowed values are `reactive` and `shallow`, and its default value is `reactive`:
 
-```js
-scts([
-    [
-        "h1",
-        _ => {
-            return "" + "Hello " + __w__target.$ + "!"
-        }
-    ],
-    [
-        "label",
-        "",
-        NIL,
-        NIL,
-        [/* cache id */ 0, "" + "Say hello to:"],
-        [
-            /* input */ __s0__,
-            "",
-            ["spellcheck", "false"],
-            [
-                ...withReference(
-                    /* input */ __s0__,
-                    "value",
-                    _ => {
-                        return __w__target.$
-                    },
-                    v => (__w__target.$ = v)
-                )
-            ]
-        ]
-    ]
-])
-```
+- `reactive`: uses deep reactivity, so nested objects and arrays are also tracked automatically.
+- `shallow`: uses shallow reactivity, so only top-level value changes are tracked automatically.
 
-### exposeDestructions
+### whitespace
 
-This property configures whether to expose component destruction methods on the component instance. It is a boolean value. The default value is `true` in development mode and `false` in production mode.
+This property configures how whitespace in templates is handled. It is a string whose allowed values are `preserve`, `trim`, `collapse`, and `trim-collapse`, and its default value is `trim-collapse`:
 
-### exposeDependencies
+- `preserve`: keeps all whitespace in the template unchanged.
+- `trim`: trims extra whitespace at element boundaries.
+- `collapse`: collapses consecutive whitespace characters into a single space.
+- `trim-collapse`: applies both `trim` and `collapse` rules at the same time. This is the default behavior.
 
-This property configures whether to expose reactive dependency data on the component instance. It is a boolean value. The default value is `true` in development mode and `false` in production mode.
+### preserveHtmlComments
 
-### reserveHtmlComments
-
-This property configures whether to preserve HTML comment nodes. It accepts a string with possible values: `never`, `all`, `development`, `production`. The default value is `development`.
+This property configures whether HTML comment nodes are preserved. It is a string whose allowed values are `never`, `always`, `development`, and `production`, and its default value is `development`.
 
 ### resolveImportExtension
 
-This property configures whether the `.qk` extension can be omitted in import statements within component files. It is a boolean value, and the default is `true`:
+This property configures whether the `.qk` extension may be omitted in import statements inside component files. It is a boolean value and defaults to `true`:
 
 ```js
 // Resolved as ./Component.qk
 import Component from "./Component"
 ```
 
-### convenientDerivedDeclaration
+### shorthandDerivedDeclaration
 
-该属性用于配置是否启用衍生响应式状态便捷声明，布尔值，默认为 true，组件文件嵌入脚本的顶层作用于中声明的以 `$` 字符开头的标识符会被编译为[衍生响应式状态](../basic/reactivity.html#derived-reactive-state)，修改为 false 可阻止这一行为：
+This property configures whether shorthand declarations for derived reactive state are enabled. It is a boolean value and defaults to `true`. When enabled, identifiers that start with `$` in the top-level scope of an embedded script block are automatically compiled into [derived reactive state](../basic/reactivity.html#derived-reactive-state). Setting it to `false` disables this behavior:
 
 ```js
-// Conveniently declare derived reactive state
+// Shorthand declaration of derived reactive state
 const $double = number * 2
 ```
+
+### interpretiveComments
+
+This property configures whether interpretive comments are inserted into compilation output. It is a boolean value and defaults to `true`.
 
 ---
 
 ## Formatting Configuration
 
-The formatting functionality of the qingkuai language service is built upon [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai), which is a Prettier plugin. Therefore, formatting for component files follows the standard [Prettier configuration](https://prettier.io/docs/en/options). In addition to the standard configuration options, there are some additional ones that only apply to component files. These extra options should be placed under the `qingkuai` property (which is a property inside the standard Prettier configuration). For example, in a `.prettierrc` file:
+Formatting support in the Qingkuai language service is implemented through [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai), which is a Prettier plugin. Formatting for component files therefore follows standard [Prettier configuration](https://prettier.io/docs/options). Some additional options only apply to component files. These options must be placed under the `qingkuai` object in your Prettier configuration file, for example:
 
 ```json
 {
@@ -103,7 +78,7 @@ The formatting functionality of the qingkuai language service is built upon [pre
 
 ### spaceAroundInterpolation
 
-This property configures whether to insert spaces around interpolation blocks. It is a boolean value and defaults to `false`. When set to `true`, the formatting style changes as follows:
+This property configures whether spaces are inserted at the beginning and end of interpolation blocks. It is a boolean value and defaults to `false`. When set to `true`, formatting becomes:
 
 ```qk
 <div #for={ item, index of 3 }>{ index }: { item }</div>
@@ -111,8 +86,8 @@ This property configures whether to insert spaces around interpolation blocks. I
 
 ### componentTagFormatPreference
 
-This property configures the preferred format style for component tags. It accepts a string with possible values: `camel`, `kebab`. The default value is `camel`. Changing this affects the format of component tag suggestions provided by the qingkuai language server.
+This property configures the preferred style of component tags. It is a string whose allowed values are `camel` and `kebab`, and its default value is `camel`. Changing it affects the format of component tag completion suggestions provided by the Qingkuai language server.
 
 ### componentAttributeFormatPreference
 
-This property configures the preferred format style for component attributes. It accepts a string with possible values: `camel`, `kebab`. The default value is `camel`. Changing this affects the format of component attribute suggestions provided by the qingkuai language server.
+This property configures the preferred style of component attributes. It is a string whose allowed values are `camel` and `kebab`, and its default value is `camel`. Changing it affects the format of component attribute completion suggestions provided by the Qingkuai language server.

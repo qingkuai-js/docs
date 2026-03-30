@@ -1,42 +1,52 @@
 # Introduction
 
-QingKuai is the pinyin for the Chinese word “轻快”. This name was chosen because it reflects the core characteristics of being `lightweight`, `fast` in response, and offering a more `easily` development experience. It is a framework for building web interfaces and interactive features, it provides a programming model with reactive variables and component-based UI, and uses a compiler to transform `.qk` source files into minimal, efficient, and strictly optimized JavaScript code.
+Qingkuai is the pinyin of the Chinese word "轻快", conveying the framework's focus on being `lightweight`, `fast` to respond, and offering a more `nimble` development experience. It is a framework for building web interfaces and interactive features. It provides a programming model based on reactive variables and componentized interfaces, and uses a compiler to transform `.qk` source files into minimal, efficient, and strictly optimized `JavaScript` code.
 
-When writing components, scripts and styles can be placed inside embedded language tags. Script language tags include lang-js and lang-ts, and style language tags include lang-css, lang-scss, lang-less, lang-stylus, and lang-postcss. All other areas are for writing HTML template code. Below is a basic usage example:
+When writing components, component scripts can be placed in embedded language tags. These tags all begin with `lang-`, such as `lang-js`. Content outside those tags is used to write the HTML template. Here is a simple component example:
 
 ```qk
 <lang-js>
-    const name = "World"
+    let count = 1
+    let name = "World"
+
+    setTimeout(() => {
+        name = "Qingkuai"
+    }, 1000)
 </lang-js>
 
-<h1>Hello {name}!</h1>
+<h1> Hello {name}! </h1>
 
-<lang-css>
-    h1 {
-        color: red;
-    }
-</lang-css>
+<button
+    class="btn"
+    @click={count++}
+>
+    You have clicked {count} times.
+</button>
+
+<lang-scss>
+    // Add styles for the HTML elements in the component here...
+</lang-scss>
 ```
 
-It should be noted that the code within the `script` and `style` tags will not be affected by the compiler - their original content will be preserved and inserted into the page (i.e., behaving the same as in regular HTML):
+Available embedded language tags include `js`, `ts`, `css`, `scss`, `sass`, `less`, `postcss`, and `stylus`. Note that code inside `script` and `style` tags is not processed by the compiler. Their raw content is preserved and inserted into the page exactly as in normal HTML:
 
 ```qk
-<style>
-    /* Insert a <style> tag with the same content into the HTML. */
-</style>
-
 <script>
-    /* Insert a <script> tag with the same content into the HTML. */
+    // Insert a script tag with the same content into HTML
 </script>
+
+<style>
+    /* Insert a style tag with the same content into HTML */
+</style>
 ```
 
 ---
 
 ## Design Philosophy
 
-qingkuai's design philosophy is to minimize the creation of new syntax and prioritize adopting the syntactic conventions of existing mainstream frameworks. Adjustments are only made when current designs exhibit clear unreasonable aspects. This approach aims to significantly reduce the learning curve, enabling developers to quickly get started and focus on the business logic itself.
+Qingkuai's syntax design philosophy is to introduce as little new syntax as possible and prioritize syntax habits already familiar from mainstream frameworks. Only when an existing design has clearly unreasonable parts does Qingkuai make necessary adjustments. This philosophy is intended to keep the learning curve low, so developers can get started quickly and focus on their actual work.
 
-The decision to avoid using `script` and `style` tags as embedded language tags isn't merely for qingkuai's distinctive branding, but stems from practical compatibility considerations: when these tags contain multiple attributes and line breaks, they cause syntax highlighting failures in [Textmate](https://macromates.com)-based systems:
+The choice not to use `script` and `style` as embedded language tags is not simply to make the framework feel unique. It is mainly for practical compatibility reasons: when those tags contain multiple attributes and line breaks, syntax highlighting based on [Textmate](https://macromates.com) breaks:
 
 <!-- prettier-ignore -->
 ```html
@@ -49,37 +59,42 @@ The decision to avoid using `script` and `style` tags as embedded language tags 
 ```
 
 <div class="custom-block tip">
-    If you have used <a href="https://vuejs.org">Vue</a> or <a href="https://svelte.dev">Svelte</a>, you'll find that qingkuai's template syntax is similar to them in many aspects — this was intentionally preserved during design to reduce the learning curve. However, behind this syntactic similarity, qingkuai's compilation output and runtime implementation are fundamentally different from other frameworks.
+    If you have used <a href="https://cn.vuejs.org">Vue</a> or <a href="https://svelte.dev">Svelte</a>, you will notice that Qingkuai's template syntax is similar to theirs in many ways. This similarity is intentional and meant to reduce the learning curve. However, behind that familiar syntax, its design trade-offs and implementation path still differ in meaningful ways.
 </div>
 
 ---
 
-## Why Choose QingKuai?
+## Why Choose Qingkuai?
 
-Compared with currently popular front-end frameworks, qingkuai has several core advantages:
+Compared with today's popular frontend frameworks, Qingkuai has the following core advantages:
 
--   Bundle size: qingkuai's runtime is extremely lightweight (approximately 8~20 KB, gzip: 5~11KB) and supports advanced [Tree-Shaking](https://developer.mozilla.org/zh-CN/docs/Glossary/Tree_shaking) optimization. Meanwhile, the qingkuai compiler performs deep optimization of output file size, with final compilation results being just 20% to 50% of other frameworks';
+- Bundle size: the runtime is very small, around 8 to 20 KB, or 5 to 11 KB after gzip, and supports a high degree of [Tree-Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). The compiler also deeply optimizes generated output, and the final compiled result is often only 20% to 50% of that of other frameworks.
 
--   Reactivity: By default, if a top-level scoped variable is accessed in the template, it will be marked as reactive by the compiler. You only need to manually intervene when you want to modify this default behavior, as demonstrated in the following code example:
+- Reactivity: the compiler infers reactivity based on how top-level scope identifiers are accessed and written. As a result, when you write code in embedded script blocks, the experience stays very close to native JS or TS. The following example helps illustrate the idea:
 
     ```qk
     <lang-js>
+        // The compiler infers that person needs reactive capability
         const person = {
             age: 30,
             name: "javascript"
         }
 
-        // When person changes, the h1 element will be updated
-        setTimeout(()=>{
+        // person's properties are reactive, so modifying them updates the h1 element
+        setTimeout(() => {
             person.age = 1
-            persion.name= "QingKuai"
+            person.name = "Qingkuai"
         }, 1000)
     </lang-js>
 
     <h1>My name is {person.name}, I'm {person.age} years old.</h1>
     ```
 
--   Update granularity: qingkuai doesn't use a `Virtual DOM`. Changes to reactive variables are directly mapped to native `DOM API` calls. This mechanism enables node-level update granularity, achieving more efficient reactivity updates. Observe the following code:
+- TypeScript: the framework supports [TypeScript](https://www.typescriptlang.org/) out of the box with no extra configuration. This helps avoid many potential bugs during development. In addition, the language server handles many details of type hints and inference for component files, such as automatically inferring the types of component and slot context identifiers.
+
+- Debugging experience: the compiler does a significant amount of work to improve debugging. For example, in development mode it avoids noise from reactive declarations and adds matching declarations for context identifiers declared by directives such as [for](/basic/compilation-directives.html#list-rendering) and [slot](/components/slots.html#passing-context).
+
+- Update granularity: Qingkuai does not use a `Virtual DOM`. Changes to reactive variables are mapped directly to native `DOM API` calls. This removes the `diff` overhead of a virtual DOM. Consider the following example:
 
     ```qk
     <lang-js>
@@ -90,10 +105,10 @@ Compared with currently popular front-end frameworks, qingkuai has several core 
     <button @click={count++}>Add Count</button>
     ```
 
-    | After the button is clicked, qingkuai asynchronously schedules page updates. During this process, it only executes a single piece of pseudocode similar to the following, without performing any redundant operations:
+    After the button is clicked, the framework schedules a page update asynchronously, during which it runs a piece of pseudocode similar to this:
 
     ```js
     pElement.textContent = `You clicked ${count} times.`
     ```
 
-    <div class="custom-block tip"><code>@click</code> serves to add a click event listener to the button element. When the button is clicked, it executes the JavaScript expression <code>count++</code>. We'll provide more detailed explanations about event listeners and other template syntax later.</div>
+<div class="custom-block tip"><code>@click</code> adds a click event listener to the button element, and when the button is clicked it executes the JavaScript expression <code>count++</code>. More template syntax, including event listeners, will be introduced later.</div>

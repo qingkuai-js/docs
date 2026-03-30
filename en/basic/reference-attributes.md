@@ -1,8 +1,8 @@
 # Reference Attributes
 
-In qingkuai, reference attributes are a syntax for passing variable references by prefixing attribute names with `&` (e.g., &value). They allow you to establish reference relationships between attributes and external variables in templates, enabling direct read/write access to attribute values from outside, thus achieving flexible data linkage and state transfer.
+In Qingkuai, reference attributes are a syntax for passing variable references by prefixing attribute names with `&` (for example, `&value`). They allow you to establish reference relationships between attributes and external variables in templates, enabling direct read and write access to attribute values from outside and therefore achieving flexible data linkage and state transfer.
 
-JavaScript itself doesn't support [pass-by-reference](https://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value), but qingkuai implements a mechanism similar to references (pointers) in languages like C, C++, and Go. Using reference attributes, variables can be explicitly "passed by reference" into elements or components, allowing you to share and manipulate the same state source across multiple contexts. This mechanism is concise yet powerful, enhancing expressiveness and control in template state management. Observe this pseudocode to understand the difference between pass-by-reference and pass-by-value:
+JavaScript itself does not support [pass-by-reference](https://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value), but Qingkuai implements a mechanism similar to passing references, or pointers, in languages such as C, C++, and Go. By using reference attributes, variables can be explicitly "passed by reference" into an element or component, allowing the same state source to be shared and manipulated across multiple contexts. This mechanism is concise yet powerful and improves both expressiveness and control in template state management. The following pseudocode helps illustrate the difference between pass-by-reference and pass-by-value:
 
 ```js
 let number = 10
@@ -62,11 +62,11 @@ When you need to access the DOM element corresponding to a regular tag in templa
 ```
 
 <div class="custom-block tip">
-    <code>onAfterMount</code> is qingkuai's callback method after component mounting and rendering completes, part of the <a href="">component lifecycle</a>.
+    <code>onAfterMount</code> is Qingkuai's callback method that runs after a component has finished mounting and rendering. It is part of the <a href="../components/lifecycle.html">component lifecycle</a>.
 </div>
 
 <div class="custom-block tip">
-    If using <a href="https://www.typescriptlang.org/">Typescript</a>, <code>&dom</code> attribute values are strictly typed - e.g. <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLDivElement">HTMLDivElement</a> for <code>div</code> tags, <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a> for <code>p</code> elements. You can also use the base class <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a>.
+    If your embedded script language is <a href="https://www.typescriptlang.org/">TypeScript</a>, the value of the <code>&dom</code> attribute is strictly typed. For example, a <code>div</code> tag maps to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLDivElement">HTMLDivElement</a>, and a <code>p</code> element maps to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>. You can also use the base class <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a>.
 </div>
 
 Like dynamic attributes, when reference attribute names match variable names, the interpolation block can be omitted, making these two syntaxes equivalent:
@@ -97,7 +97,7 @@ The inputValue is: {inputValue} <br />
 <input
     type="text"
     !value={inputValue}
-    @input={inputValue = $args.target.value}
+    @input={inputValue = $arg.target.value}
 />
 ```
 
@@ -110,7 +110,7 @@ The inputValue is: {inputValue} <br />
 <input
     type="text"
     !value={inputValue}
-    @input={inputValue = ($args.target as HTMLInputElement).value}
+    @input={inputValue = ($arg.target as HTMLInputElement).value}
 />
 ```
 
@@ -129,7 +129,7 @@ The inputValue is: {inputValue} <br />
 ```
 
 <div class="custom-block tip">
-    This briefly introduces reference attributes for form handling. More details will be covered in the <a href="">Form Handling</a> section.
+    This is only a brief introduction to using reference attributes in form input scenarios. More details are covered in the <a href="./forms.html">Form Handling</a> section.
 </div>
 
 ---
