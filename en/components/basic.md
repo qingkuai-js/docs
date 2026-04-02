@@ -4,8 +4,6 @@ In Qingkuai, components are the basic units for building user interfaces. Each c
 
 The image below shows a component-based representation of a blog page, where each area represents a component. Areas with the same color indicate component reuse:
 
-<img width="70%" src="/static/medias/components.png" style="margin-left: 15%;" />
-
 ---
 
 ## Definition and Usage

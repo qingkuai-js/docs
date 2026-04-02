@@ -40,12 +40,14 @@ When you need to access the DOM element corresponding to a regular tag in templa
 |js|ts|
 
 ```qk
-<lang-ts>
+<lang-js>
     import { onAfterMount } from "qingkuai"
 
-    let div!: HTMLDivElement
-    onAfterMount(() => console.log(div))
-</lang-ts>
+    let div = null
+    onAfterMount(() => {
+        console.log(div)
+    })
+</lang-js>
 
 <div &dom={div}></div>
 ```
@@ -54,8 +56,10 @@ When you need to access the DOM element corresponding to a regular tag in templa
 <lang-ts>
     import { onAfterMount } from "qingkuai"
 
-    let div: HTMLDivElement
-    onAfterMount(() => console.log(div!))
+    let div: HTMLDivElement | null = null
+    onAfterMount(() => {
+        console.log(div!)
+    })
 </lang-ts>
 
 <div &dom={div}></div>
@@ -93,12 +97,15 @@ For forms, we often need to synchronize input field contents with corresponding 
     let inputValue = "Initial value"
 </lang-js>
 
-The inputValue is: {inputValue} <br />
-<input
-    type="text"
-    !value={inputValue}
-    @input={inputValue = $arg.target.value}
-/>
+The inputValue is: {inputValue}
+
+<div>
+    <input
+        type="text"
+        !value={inputValue}
+        @input={inputValue = $arg.target.value}
+    />
+</div>
 ```
 
 ```qk
@@ -106,12 +113,15 @@ The inputValue is: {inputValue} <br />
     let inputValue = "Initial value"
 </lang-ts>
 
-The inputValue is: {inputValue} <br />
-<input
-    type="text"
-    !value={inputValue}
-    @input={inputValue = ($arg.target as HTMLInputElement).value}
-/>
+The inputValue is: {inputValue}
+
+<div>
+    <input
+        type="text"
+        !value={inputValue}
+        @input={inputValue = ($arg.target as HTMLInputElement).value}
+    />
+</div>
 ```
 
 Instead of the somewhat cumbersome approach above, we can achieve this more concisely using `&value` reference attributes:
@@ -121,11 +131,14 @@ Instead of the somewhat cumbersome approach above, we can achieve this more conc
     let inputValue = "Initial value"
 </lang-js>
 
-The inputValue is: {inputValue} <br />
-<input
-    type="text"
-    &value={inputValue}
-/>
+The inputValue is: {inputValue}
+
+<div>
+    <input
+        type="text"
+        &value={inputValue}
+    />
+</div>
 ```
 
 <div class="custom-block tip">

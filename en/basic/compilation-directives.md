@@ -1,22 +1,22 @@
 # Compilation Directives
 
-Directives are core parts of Qingkuai. They are special attributes prefixed with `#` that tell the Qingkuai compiler how to generate JavaScript code. Qingkuai provides a rich built-in directive system that covers flow control, rendering control, and asynchronous processing:
+Directives are a core part of Qingkuai. They are special attributes prefixed with `#`, used to tell the compiler how to generate corresponding JavaScript code. Qingkuai provides a rich built-in directive system that covers flow control, rendering control, and asynchronous processing:
 
--   Rendering control directives: target, html, show - control content insertion position and display
--   Flow control directives: for, if, el-if, else - control structural rendering logic
--   Async processing directives: await, then, catch - respond to asynchronous data changes
+- Rendering control directives: `target`, `html`, `show` for controlling insertion targets and visibility;
+- Flow control directives: `for`, `if`, `el-if`, `else` for structural rendering logic;
+- Async directives: `await`, `then`, `catch` for reacting to asynchronous state;
 
-Additionally, there's a `slot` directive for receiving component slot parameters, which we'll introduce after explaining the [component](../components/basic.html) concept.
+In addition, there is a `slot` directive for receiving slot context in components. We will introduce it after discussing [components](../components/basic.html) and [slots](../components/slots.html).
 
 ---
 
 ## Conditional Rendering
 
-In Qingkuai, conditional rendering is implemented by combining `if`, `elif`, and `else`, similar to `if`, `else if`, and `else` in JavaScript. Consider a common scenario: show a login prompt when the user is not logged in, and show user information after login:
+In Qingkuai, you can combine `if`, `elif`, and `else` to implement conditional rendering, which is similar to JavaScript's `if`, `else if`, and `else`. Consider this common scenario: show a login prompt before the user logs in, and show user information after login:
 
 ```qk
-<qk:spread #if={!userInfo}>
-    <p>Please log in first.</p>
+<qk:spread #if={userInfo}>
+    <p>View after logging in.</p>
     <button
         class="login-btn"
         @click={handleLogin}
@@ -28,10 +28,10 @@ In Qingkuai, conditional rendering is implemented by combining `if`, `elif`, and
 ```
 
 <div class="custom-block tip">
-    In the example above, the <code>qk:spread</code> tag serves as a virtual mounting point for directives. It won't be rendered to the page - you can understand that directives on this element will be applied to all child nodes. This design avoids introducing unnecessary meaningless elements, and also makes it possible to add directives to text nodes. We'll explain more usage details in <a href="../components/builtin-elements.html">Built-in Elements</a>.
+    The <code>qk:spread</code> tag above acts as a virtual mounting point for directives. It is not rendered to the page. You can treat it as a container whose directives are applied to all child nodes. This design avoids unnecessary wrapper elements and also makes it possible to apply directives to text nodes. More details are covered in <a href="../misc/builtin-elements.html">Built-in Elements</a>.
 </div>
 
-We can also insert `elif` directives between `if` and `else` as branch nodes:
+You can also insert `elif` branches between `if` and `else`:
 
 ```qk
 <p #if={language === "qk"}>Qingkuai</p>
@@ -40,19 +40,11 @@ We can also insert `elif` directives between `if` and `else` as branch nodes:
 <p #else>Language is not Qingkuai, JavaScript, or TypeScript.</p>
 ```
 
-Alternatively, we can use the `show` directive to control element visibility. Unlike the three directives mentioned above, show doesn't unmount elements from the page - it simply controls whether to add the `display: none;` style rule. Therefore, for elements requiring frequent visibility toggling, the show directive is preferable due to its lower overhead:
-
-```qk
-<div #show={visible}>
-    <!-- some contents -->
-</div>
-```
-
 ---
 
 ## List Rendering
 
-List rendering is straightforward in Qingkuai. Here is a basic example:
+Qingkuai makes list rendering straightforward. Here is a basic example often used in quick testing:
 
 ```qk
 <p #for={3}>Paragraph in list rendering.</p>
@@ -66,7 +58,7 @@ List rendering is straightforward in Qingkuai. Here is a basic example:
 <p>Paragraph in list rendering.</p>
 ```
 
-The `for` directive's value can be not just a number, but also arrays, objects, strings, Sets ([Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)), Maps ([Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)), or expressions evaluating to these types. Additionally, you can use `for...of`-like syntax to name each iteration's item and index.
+The value of `for` can be not only a number, but also an array, object, string, [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), or an expression that evaluates to one of these. You can also use `for...of`-like syntax to name each iteration item and index.
 
 ```qk
 <p #for={item, index of [1, 2 , 3]}>{index}: {item}</p>
@@ -135,7 +127,10 @@ When naming for directive iteration items and indexes, you can also use [destruc
 <p>TypeScript: file extension is ts, released in 2012.</p>
 ```
 
-If you've used [Vue](https://cn.vuejs.org), you might wonder why Qingkuai uses `of` instead of `in` in the `for` directive. The reason is that `in` can appear inside JavaScript expressions, while `of` cannot, which avoids ambiguity. For example:
+If you have used [Vue](https://cn.vuejs.org), you may wonder why Qingkuai uses `of` instead of `in` in the `for` directive. The reason is that `in` can appear in JavaScript expressions, while `of` cannot. Using `in` would introduce ambiguity:
+
+- `prop` could be interpreted as a context identifier, with the expression after `in` as the data source;
+- Or the entire directive value could be interpreted as one JavaScript expression that contains `in`.
 
 ```qk
 <p #for={prop in obj ? 3 : 2}>...</p>
@@ -145,19 +140,9 @@ If you've used [Vue](https://cn.vuejs.org), you might wonder why Qingkuai uses `
 
 ## key Directive
 
--   When using the `for` directive to create list rendering, if the directive's dependent reactive variable changes, the list updates with this logic:
+When a list rendered by `for` changes, the framework updates the corresponding DOM nodes. By default, it matches old and new nodes by position (index). This works well when items are only appended to or removed from the end. But when items are inserted, removed, or reordered in the middle, node-local DOM state (such as form input values) may be associated with the wrong data item.
 
-    1. If the new list is longer, new elements are created and appended; if shorter, extra elements are removed from the end
-    2. During Qingkuai's scheduled updates, each list element's attributes and textContent are updated
-
-    <img class="large-margin" src="/static/medias/no-key-update-en.gif" style="width: 90%; margin-left: 5%;">
-
--   This causes an issue: if nodes have their own state (typically form elements), the state may become disordered since list changes don't always just append/remove at the end. The `#key` directive solves this by assigning each element a unique key for identification. The update logic then becomes:
-
-    1. Check if keys exist in the new list, and position their corresponding elements correctly
-    2. During updates, each element's attributes and textContent are updated
-
-    <img class="large-margin" src="/static/medias/has-key-update-en.gif" style="width: 90%; margin-left: 5%;">
+To solve this, use `#key` to provide a unique identity for each rendered node. The framework can then track nodes by key so that state stays with the correct data item even when the list is reordered, inserted, or deleted. Therefore, when list items have local state, adding `#key` is strongly recommended:
 
 Therefore, when list-rendered elements have state, it's recommended to add the key directive to elements using the for directive:
 
@@ -173,14 +158,14 @@ Therefore, when list-rendered elements have state, it's recommended to add the k
 ```
 
 <div class="custom-block warning">
-    Qingkuai runtime converts key directive interpolations to strings via <code>"" + [Interpolation expression]</code>, and checks for duplicate key values in the list - duplicates throw runtime errors. Each item's key value must be unique within a single list.
+    At runtime, key values are converted to strings and checked for duplicates within the same list. Duplicate keys cause a runtime error. Each item's key must be unique within that list.
 </div>
 
 ---
 
 ## Async Processing
 
-In some scenarios, you may need to wait for asynchronous state in embedded scripts before rendering. Qingkuai's async directives make this straightforward. The `await` directive accepts a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). After it settles, `then` and `catch` can render different content for success and failure:
+In some cases, you may need to wait for asynchronous state in embedded scripts and render only after it is resolved. Qingkuai provides async directives for this. The `await` directive accepts a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). After the promise settles, `then` and `catch` can render different content for success and failure:
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -188,7 +173,7 @@ In some scenarios, you may need to wait for asynchronous state in embedded scrip
 <p #catch>pms is rejected.</p>
 ```
 
-To access Promise resolution/rejection values, simply set the then/catch directive value to a JavaScript identifier:
+To access resolved/rejected values, set the `then`/`catch` directive value to a JavaScript identifier:
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -196,7 +181,7 @@ To access Promise resolution/rejection values, simply set the then/catch directi
 <p #catch={err}>pms is rejected and received {err}.</p>
 ```
 
-then/catch directive values also support [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring) syntax:
+`then`/`catch` context also supports [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring):
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -213,7 +198,7 @@ then/catch directive values also support [destructuring](https://developer.mozil
 <p #catch={{msg, code}}>pms is rejected and the error code is {code}, msg: {msg}.</p>
 ```
 
-If no rendering is needed during waiting, just write await with then/catch directives on the same tag:
+If you do not need intermediate UI during waiting, place `await` and `then`/`catch` on the same tag:
 
 ```qk
 <p
@@ -225,41 +210,36 @@ If no rendering is needed during waiting, just write await with then/catch direc
 ```
 
 <div class="custom-block tip">
-    Qingkuai's <a href="../components/async-components.html">async components</a> are also implemented using these three directives.
+    Qingkuai <a href="../components/async-components.html">async components</a> are also implemented by combining these async directives.
 </div>
 
 ---
 
 ## html Directive
 
-Sometimes we need to render text as HTML fragments, while regular interpolation only modifies textContent and escapes HTML. The html directive fulfills this need:
+Sometimes you need to render text as an HTML fragment. Regular interpolation only updates `textContent` and escapes HTML, so it cannot achieve that behavior. In this case, use the `html` directive:
 
 ```qk
 <div class="dynamic-html-content" #html>{htmlStr}</div>
 ```
 
-While the above code works, the outer element isn't always necessary. To avoid meaningless elements, use `qk:spread` as a virtual mounting point:
+The wrapper element in the example above is not always necessary. To avoid extra meaningless elements, use the `qk:spread` built-in element as a virtual mounting point:
 
 ```qk
 <qk:spread #html>{htmlStr}</qk:spread>
 ```
 
-You can also pass the `html` directive a value to control which tags remain escaped, which helps prevent [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) when handling untrusted HTML fragments. The value type is:
+You can also pass a config object to `html` to define which tags should stay escaped. This helps prevent [XSS](https://en.wikipedia.org/wiki/Cross-site_scripting) when handling partially trusted HTML. The `html` directive value type is:
 
 ```ts
 type HTMLDirectiveValueType = Partial<{
-    // List of tags that need to be preserved with escaping
-    escapeTags: string[]
-
-    // Whether to preserve escaping for <style> tags
-    escapeStyle: boolean 
-
-    //  Whether to preserve escaping for <script> tags
-    escapeScript: boolean
+    escapeTags: string[] // List of tags that should remain escaped
+    escapeStyle: boolean // Whether to keep escaping for style tags
+    escapeScript: boolean // Whether to keep escaping for script tags
 }>
 ```
 
-We recommend this pattern for handling semi-trusted content:
+For partially trusted content, this usage is recommended:
 
 ```qk
 <lang-js>
@@ -275,14 +255,14 @@ We recommend this pattern for handling semi-trusted content:
 ```
 
 <div class="custom-block warning">
-    Tags using the html directive can only accept one text child node - otherwise a compiler fatal error occurs.
+    A tag using the `html` directive can only contain one text child node. Otherwise, the compiler throws a fatal error.
 </div>
 
 ---
 
 ## target Directive
 
-Some scenarios require manually controlling an element's parent, like full-screen modals. The target directive handles this easily, accepting either a CSS selector string or [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement). Both examples below mount the div to the body:
+In some scenarios, you may need to manually control the parent element where a node is mounted, such as full-screen modals. The `target` directive supports this. Its value can be a CSS selector string or an [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement). The following examples both mount the `div` into `body`:
 
 ```qk
 <div
