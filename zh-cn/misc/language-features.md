@@ -1,24 +1,24 @@
 # 语言功能
 
-Qingkuai 并不在编译器中内建复杂的语法扩展，而是通过基于[LSP](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)（语言服务协议）的语言服务器，提供了丰富的语言功能支持。这些功能包括类型推导、智能补全、错误提示、快速跳转、语义高亮等，覆盖组件属性、插槽、样式作用域、指令系统、引用传递等框架特性。借助 LSP，Qingkuai 在保持语法简洁的同时，显著提升了开发体验与类型安全。
+Qingkuai 并不在编译器中内建复杂的语法扩展，而是通过基于 [LSP](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)（语言服务协议）的语言服务，提供了丰富的语言功能支持。这些功能包括类型推导、智能补全、诊断提示、快速跳转、语义高亮等，覆盖组件属性、插槽、样式作用域、指令系统、引用传递等框架特性。借助 LSP，Qingkuai 在保持语法简洁的同时，显著提升了开发体验与类型安全。
 
 ---
 
 ## IDE 扩展
 
-目前我们仅在 [VS Code](https://code.visualstudio.com) 中发布了扩展，你可以在扩展市场中搜索 `QingKuai` 来安装它。
+目前我们仅在 [VS Code](https://code.visualstudio.com) 中发布了扩展，你可以在扩展市场中搜索 `Qingkuai` 来安装。
 
-<img src="/static/medias/extension.png" />
+<img src="/static/medias/extension.png" alt="VS Code 扩展" />
 
 <div class="custom-block tip">
-    当你在 IDE 中遇到 bug 时，应该在 Qingkuai 的 <a href="https://github.com/qingkuai-js/language-features">language-features</a> 仓库中提交 issue。
+    当你在 IDE 中遇到问题时，可以在 Qingkuai 的 <a href="https://github.com/qingkuai-js/language-features">language-features</a> 仓库提交 issue。
 </div>
 
 ---
 
 ## Emmet
 
-Qingkuai 语言服务器提供了良好的 [Emmet](https://emmet.io) 支持，但由于动态属性和 Emmet 去除属性的语法存在冲突，所以在组件文件中改用 `-` 字符来去除属性。下面的示例代码用于在组件文件中通过 Emmet 语法创建一个不带 type 属性的 input 标签：
+Qingkuai 语言服务提供了良好的 [Emmet](https://emmet.io) 支持，但由于动态属性与 Emmet 的移除属性语法存在冲突，因此在组件文件中改用 `-` 字符移除属性。下面的示例会在组件文件中通过 Emmet 语法创建一个不带 type 属性的 input 标签：
 
 ```txt
 input[-type]
@@ -40,9 +40,16 @@ input[!type]
 
 ## 格式化
 
-Qingkuai 语言服务器内置了格式化文档功能，该功能由 [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai) 实现。当组件文件中存在语法错误时格式化可能会失败，这种情况下你可以在 IDE 的 `output` 窗口查看失败信息：
+Qingkuai 语言服务内置了文档格式化功能，该功能由 [prettier-plugin-qingkuai](https://www.npmjs.com/package/prettier-plugin-qingkuai) 实现。当组件文件中存在语法错误时，格式化可能会失败。这种情况下你可以在 IDE 的 `output` 窗口查看失败信息：
 
-<img src="/static/medias/format-error.png" />
+<img src="/static/medias/format-error.png" alt="格式化错误" />
+
+---
+
+## 重启语言服务
+
+当你遇到语言服务异常时，可以唤出 VS Code 的命令面板（快捷键 `Ctrl+Shift+P` 或 `Cmd+Shift+P`），然后执行 `Qingkuai: Restart Language Server` 命令来重启语言服务：
+<img src="/static/medias/restart-language-server.png" alt="重启语言服务" />
 
 ---
 
@@ -50,7 +57,7 @@ Qingkuai 语言服务器内置了格式化文档功能，该功能由 [prettier-
 
 代码跳转是开发时经常需要用到的功能，这项功能在组件文件中有一些特有用法：
 
--   查找插槽定义：按住 meta 键并在组件一级子元素的 slot 属性上单击鼠标左键；
--   查找组件定义：按住 meta 键并在组件标签或嵌入脚本中的组件标识符上单击鼠标左键；
--   查找插槽引用：在 slot 标签上单击鼠标右键并选择 “Go to References”，或开启 “代码镜头” 功能；
--   查找组件引用：在嵌入语言标签上单击鼠标右键并选择 “Go to references”，或开启 “代码镜头” 功能；
+- 查找插槽定义：按住 meta 键并在组件一级子元素的 slot 属性上单击鼠标左键；
+- 查找组件定义：按住 meta 键并在组件标签或嵌入脚本中的组件标识符上单击鼠标左键；
+- 查找插槽引用：在 slot 标签上单击鼠标右键并选择 “Go to References”，或开启 “代码镜头” 功能；
+- 查找组件引用：在嵌入语言标签上单击鼠标右键并选择 “Go to References”，或开启 “代码镜头” 功能；

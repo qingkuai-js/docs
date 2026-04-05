@@ -17,7 +17,7 @@ interface Refs {
     // ...
 }
 
-interface Props<T> {
+interface Props {
     // ...
 }
 ```
@@ -25,7 +25,7 @@ interface Props<T> {
 You can also declare them with the `type` keyword:
 
 ```ts
-type Refs<T> = {
+type Refs = {
     // ...
 }
 type Props = Record<string, any>
@@ -69,6 +69,107 @@ Or:
  * @typedef {Object} Props
  * @property {string} name
  */
+```
+
+---
+
+## Generic Parameters
+
+Qingkuai components support generic type parameters. You can define the generics you need directly in the `Props` or `Refs` type declarations:
+
+```ts
+type Refs<T> = {
+    value: T
+}
+
+interface Props<T> {
+    list: T[]
+}
+```
+
+If your embedded script language is JavaScript, you can also declare generic types through JSDoc:
+
+```js
+/**
+ * @template T
+ * @typedef {Object} Props
+ * @property {T[]} list
+ */
+```
+
+Qingkuai language services infer generic parameter types from component attributes. For example, in the code below, the `list` attribute of `Inner` in `Outer.qk` is inferred as `string[]`, so `T` is inferred as `string`:
+
+```qk
+<!-- Inner.qk -->
+<lang-ts>
+    interface Props<T> {
+        list: T[]
+    }
+</lang-ts>
+
+<!-- Outer.qk -->
+<Inner !list={["a", "b", "c"]} />
+```
+
+You can also specify generic arguments manually to constrain attribute types:
+
+```qk
+<!-- list must be an array of numbers -->
+<Inner<number> !list={[1, 2, 3]} />
+
+<!-- list must be an array of strings -->
+<Inner<string> !list={["a", "b", "c"]} />
+```
+
+When an external type includes generic parameters, you cannot import it directly as a global type declaration, because generic arguments must be provided when using that type. This is consistent with standard TypeScript restrictions. In this case, redeclare the global type in the component file and pass the required generic arguments, for example:
+
+```ts
+import type { ComponentProps } from "./types"
+
+type Props = ComponentProps<string>
+
+// Or
+interface Props extends ComponentProps<string> {
+    // ...
+}
+```
+
+---
+
+## Slot Context
+
+In component files, you do not need to declare slot context types manually. Qingkuai language services infer slot context types automatically from the `slot` tag:
+
+```qk
+<!-- DataList.qk -->
+<lang-ts>
+    const rows = [
+        {
+            id: 1,
+            name: "Row 1"
+        },
+        {
+            id: 2,
+            name: "Row 2"
+        }
+    ]
+</lang-ts>
+
+<qk:spread #for={row of rows}>
+    <slot !row>
+        <!-- default content -->
+    </slot>
+</qk:spread>
+```
+
+When using the component above, the type of `row` is correctly inferred as `{ id: number, name: string }`:
+
+```qk
+<DataList>
+    <p #slot={row from "default"}>
+        {row.id}: {row.name}
+    </p>
+</DataList>
 ```
 
 ---
