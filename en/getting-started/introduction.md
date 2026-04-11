@@ -68,7 +68,7 @@ The choice not to use `script` and `style` as embedded language tags is not simp
 
 Compared with today's popular frontend frameworks, Qingkuai has the following core advantages:
 
-- Bundle size: the runtime is very small, around 8 to 20 KB, or 5 to 11 KB after gzip, and supports a high degree of [Tree-Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). The compiler also deeply optimizes generated output, and the final compiled result is often only 20% to 50% of that of other frameworks.
+- Bundle size: the runtime is very small, around 8 to 24 KB, or 5 to 11 KB after gzip, and supports a high degree of [Tree-Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). The compiler also deeply optimizes generated output; in common business scenarios with default build settings, the compiled result is typically around 20% to 80% of that of other frameworks, with the actual ratio depending on component complexity and dependency scale.
 
 - Reactivity: the compiler infers reactivity based on how top-level scope identifiers are accessed and written. As a result, when you write code in embedded script blocks, the experience stays very close to native JS or TS. The following example helps illustrate the idea:
 
