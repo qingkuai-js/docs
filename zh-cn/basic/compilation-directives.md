@@ -2,9 +2,9 @@
 
 指令是 Qingkuai 的核心组成部分，它们是以 `#` 开头的特殊属性，用于指示编译器如何生成对应的 JavaScript 代码。Qingkuai 提供了一套功能丰富的内置指令系统，涵盖流程控制、渲染控制和异步处理等多个方面：
 
-- 渲染控制指令：target、html、show 用于控制内容的插入位置与显示；
-- 流程控制指令：for 、if、 el-if 、else 用于控制结构性渲染逻辑；
-- 异步处理指令：await、then、catch 用于响应异步数据的变化；
+- 渲染控制指令：`target`、`html` 用于控制内容的插入位置与显示；
+- 流程控制指令：`for`、`if`、`el-if`、`else` 用于控制结构性渲染逻辑；
+- 异步处理指令：`await`、`then`、`catch` 用于响应异步数据的变化；
 
 另外还有一个用于接收组件插槽上下文的指令 `slot`，我们会在引申出[组件](../components/basic.html)以及[插槽](../components/slots.html)的概念之后进行介绍。
 
@@ -12,7 +12,7 @@
 
 ## 条件渲染
 
-在 Qingkuai 中，通过结合使用 if、elif 和 else 指令来编写条件渲染逻辑，这与 JavaScript 中的 if、else if 以及 else 关键字非常类似。设想这样一个场景：当用户未登录时显示登录提示，登录后展示用户信息 —— 这是前端开发中非常常见的需求，借助条件渲染可以轻松实现：
+在 Qingkuai 中，通过结合使用 `if`、`elif` 和 `else` 指令来编写条件渲染逻辑，这与 JavaScript 中的 `if`、`else if` 以及 `else` 关键字非常类似。设想这样一个场景：当用户未登录时显示登录提示，登录后展示用户信息 —— 这是前端开发中非常常见的需求，借助条件渲染可以轻松实现：
 
 ```qk
 <qk:spread #if={userInfo}>

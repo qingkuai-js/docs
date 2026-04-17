@@ -2,7 +2,7 @@
 
 Directives are a core part of Qingkuai. They are special attributes prefixed with `#`, used to tell the compiler how to generate corresponding JavaScript code. Qingkuai provides a rich built-in directive system that covers flow control, rendering control, and asynchronous processing:
 
-- Rendering control directives: `target`, `html`, `show` for controlling insertion targets and visibility;
+- Rendering control directives: `target`, `html` for controlling insertion targets and visibility;
 - Flow control directives: `for`, `if`, `el-if`, `else` for structural rendering logic;
 - Async directives: `await`, `then`, `catch` for reacting to asynchronous state;
 
