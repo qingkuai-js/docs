@@ -18,7 +18,6 @@ The runtime package exports APIs for component lifecycle hooks, reactive side ef
 
 ### Lifecycle
 
-- `onBeforeMount`
 - `onAfterMount`
 - `onBeforeUpdate`
 - `onAfterUpdate`
