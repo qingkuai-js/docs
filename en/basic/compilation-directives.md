@@ -3,10 +3,10 @@
 Directives are a core part of Qingkuai. They are special attributes prefixed with `#`, used to tell the compiler how to generate corresponding JavaScript code. Qingkuai provides a rich built-in directive system that covers flow control, rendering control, and asynchronous processing:
 
 - Rendering control directives: `target`, `html` for controlling insertion targets and visibility;
-- Flow control directives: `for`, `if`, `el-if`, `else` for structural rendering logic;
+- Flow control directives: `for`, `if`, `elif`, `else` for structural rendering logic;
 - Async directives: `await`, `then`, `catch` for reacting to asynchronous state;
 
-In addition, there is a `slot` directive for receiving slot context in components. We will introduce it after discussing [components](../components/basic.html) and [slots](../components/slots.html).
+In addition, there is a `slot` directive for receiving slot context in components. We will introduce it after covering the concepts of [components](../components/basic.html) and [slots](../components/slots.html).
 
 ---
 
@@ -15,8 +15,8 @@ In addition, there is a `slot` directive for receiving slot context in component
 In Qingkuai, you can combine `if`, `elif`, and `else` to implement conditional rendering, which is similar to JavaScript's `if`, `else if`, and `else`. Consider this common scenario: show a login prompt before the user logs in, and show user information after login:
 
 ```qk
-<qk:spread #if={userInfo}>
-    <p>View after logging in.</p>
+<qk:spread #if={!userInfo}>
+    <p>Please log in first.</p>
     <button
         class="login-btn"
         @click={handleLogin}
@@ -50,7 +50,7 @@ Qingkuai makes list rendering straightforward. Here is a basic example often use
 <p #for={3}>Paragraph in list rendering.</p>
 ```
 
-| This will render three consecutive p tags:
+This will render three consecutive p tags:
 
 ```html
 <p>Paragraph in list rendering.</p>
@@ -61,10 +61,10 @@ Qingkuai makes list rendering straightforward. Here is a basic example often use
 The value of `for` can be not only a number, but also an array, object, string, [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), or an expression that evaluates to one of these. You can also use `for...of`-like syntax to name each iteration item and index.
 
 ```qk
-<p #for={item, index of [1, 2 , 3]}>{index}: {item}</p>
+<p #for={item, index of [1, 2, 3]}>{index}: {item}</p>
 ```
 
-| The rendered result will be:
+The rendered result will be:
 
 ```html
 <p>0: 1</p>
@@ -86,7 +86,7 @@ List rendering with Map:
 <p #for={item, index of languages}>{index}: {item}</p>
 ```
 
-| The rendered result will be:
+The rendered result will be:
 
 ```html
 <p>qk: Qingkuai</p>
@@ -119,7 +119,7 @@ When naming for directive iteration items and indexes, you can also use [destruc
 </p>
 ```
 
-| The rendered result will be:
+The rendered result will be:
 
 ```html
 <p>Qingkuai: file extension is qk, released in 2024.</p>
@@ -142,9 +142,7 @@ If you have used [Vue](https://cn.vuejs.org), you may wonder why Qingkuai uses `
 
 When a list rendered by `for` changes, the framework updates the corresponding DOM nodes. By default, it matches old and new nodes by position (index). This works well when items are only appended to or removed from the end. But when items are inserted, removed, or reordered in the middle, node-local DOM state (such as form input values) may be associated with the wrong data item.
 
-To solve this, use `#key` to provide a unique identity for each rendered node. The framework can then track nodes by key so that state stays with the correct data item even when the list is reordered, inserted, or deleted. Therefore, when list items have local state, adding `#key` is strongly recommended:
-
-Therefore, when list-rendered elements have state, it's recommended to add the key directive to elements using the for directive:
+To solve this, use `#key` to provide a unique identity for each rendered node. The framework can then track nodes by key so that state stays with the correct data item even when the list is reordered, inserted, or deleted. Therefore, when list-rendered elements have local state, adding `#key` is strongly recommended:
 
 ```qk
 <form>
@@ -244,14 +242,14 @@ For partially trusted content, this usage is recommended:
 ```qk
 <lang-js>
     // Equivalent to the DESTRUCT_HTML constant exported from the qingkuai package
-    const htmlDireciveConf = {
+    const htmlDirectiveConf = {
         escapeStyle: true,
         escapeScript: true,
         escapeTags: ["link", "iframe", "form"]
     }
 </lang-js>
 
-<p #html={htmlDireciveConf}>{htmlStr}</p>
+<p #html={htmlDirectiveConf}>{htmlStr}</p>
 ```
 
 <div class="custom-block warning">
@@ -277,3 +275,42 @@ In some scenarios, you may need to manually control the parent element where a n
     #target={document.body}
 ></div>
 ```
+
+---
+
+## Directive Priority
+
+When multiple directives appear on the same element, the compiler processes them in a fixed priority order to ensure correct rendering. For example, if `if` and `for` are used together on the same tag, `if` is processed first to determine whether the element should render, and `for` runs only when that condition passes:
+
+```qk
+<p
+    #if={showList}
+    #for={item of items}
+>
+    {item}
+</p>
+```
+
+If you need different behavior, wrap the inner tag with an outer tag that uses a higher-priority directive, for example:
+
+```qk
+<div #for={item of items}>
+    <p #if={showList}>{item}</p>
+</div>
+```
+
+The code above introduces a meaningless `div` element. To avoid that, you can use the `qk:spread` [built-in element](../misc/builtin-elements.html) as a virtual mounting point for directives, so no extra wrapper element is created:
+
+```qk
+<qk:spread #for={item of items}>
+    <p #if={showList}>{item}</p>
+</qk:spread>
+```
+
+The default directive priority in Qingkuai, from high to low, is:
+
+`slot` > `await/then/catch` > `if/elif/else` > `target` > `for/key` > `html`
+
+<div class="custom-block tip">
+    Any directives not listed above have the same priority as <code>html</code>, which is the lowest. When priorities are equal, processing order follows their appearance order in the tag.
+</div>

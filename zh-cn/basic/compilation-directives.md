@@ -3,41 +3,43 @@
 指令是 Qingkuai 的核心组成部分，它们是以 `#` 开头的特殊属性，用于指示编译器如何生成对应的 JavaScript 代码。Qingkuai 提供了一套功能丰富的内置指令系统，涵盖流程控制、渲染控制和异步处理等多个方面：
 
 - 渲染控制指令：`target`、`html` 用于控制内容的插入位置与显示；
-- 流程控制指令：`for`、`if`、`el-if`、`else` 用于控制结构性渲染逻辑；
+- 流程控制指令：`for`、`if`、`elif`、`else` 用于控制结构性渲染逻辑；
 - 异步处理指令：`await`、`then`、`catch` 用于响应异步数据的变化；
 
-另外还有一个用于接收组件插槽上下文的指令 `slot`，我们会在引申出[组件](../components/basic.html)以及[插槽](../components/slots.html)的概念之后进行介绍。
+另外还有一个用于接收组件插槽上下文的指令 `slot`，我们会在引出 [组件](../components/basic.html) 和 [插槽](../components/slots.html) 的概念后再介绍。
 
 ---
 
 ## 条件渲染
 
-在 Qingkuai 中，通过结合使用 `if`、`elif` 和 `else` 指令来编写条件渲染逻辑，这与 JavaScript 中的 `if`、`else if` 以及 `else` 关键字非常类似。设想这样一个场景：当用户未登录时显示登录提示，登录后展示用户信息 —— 这是前端开发中非常常见的需求，借助条件渲染可以轻松实现：
+在 Qingkuai 中，通过结合使用 `if`、`elif` 和 `else` 指令来编写条件渲染逻辑，这与 JavaScript 中的 `if`、`else if` 和 `else` 关键字非常类似。设想这样一个场景：当用户未登录时显示登录提示，登录后展示用户信息。这是前端开发中非常常见的需求，借助条件渲染可以轻松实现：
 
 ```qk
-<qk:spread #if={userInfo}>
-    <p>View after logging in.</p>
-    <button
-        class="login-btn"
-        @click={handleLogin}
-    >
-        Login
-    </button>
+<qk:spread #if={!userInfo}>
+    <p>
+        Please log in first.
+    </p>
+     <button
+         class="login-btn"
+         @click={handleLogin}
+     >
+         Login
+     </button>
 </qk:spread>
 <p #else>Hello {userInfo.name}!</p>
 ```
 
 <div class="custom-block tip">
-    这里使用的 <code>qk:spread</code> 标签用来作为指令的虚拟挂载点，它不会被渲染到页面中，可以理解为此元素具有的指令会被一一应用到所有子节点上。这样设计的目的是为了避免引入多余的无意义元素，当然这也使得我们为文本节点添加指令变得可能。关于它的更多用法以及使用细节我们会在<a href="../components/builtin-elements.html">内置元素</a>中介绍。
+    这里使用的 <code>qk:spread</code> 标签是指令的虚拟挂载点，它不会被渲染到页面中。你可以将其理解为：该元素上的指令会依次应用到所有子节点。这样设计既能避免引入无意义的额外元素，也让文本节点使用指令成为可能。关于它的更多用法和细节，我们会在 <a href="../misc/builtin-elements.html">内置元素</a> 中介绍。
 </div>
 
 当然我们还可以在 `if` 和 `else` 之间插入一些 `elif` 指令作为分支节点：
 
 ```qk
-<p #if={language === "qk"}>QingKuai</p>
-<p #elif={language === "js"}>Javascrip</p>
-<p #elif={language === "ts"}>Typescrip</p>
-<p #else>Language is not Qingkuai, Javascript, or Typescript.</p>
+<p #if={language === "qk"}>Qingkuai</p>
+<p #elif={language === "js"}>JavaScript</p>
+<p #elif={language === "ts"}>TypeScript</p>
+<p #else>Language is not Qingkuai, JavaScript, or TypeScript.</p>
 ```
 
 ---
@@ -50,7 +52,7 @@
 <p #for={3}>Paragraph in list rendering.</p>
 ```
 
-| 这会被渲染为三个连续的 p 标签：
+这会被渲染为三个连续的 p 标签：
 
 ```html
 <p>Paragraph in list rendering.</p>
@@ -61,10 +63,10 @@
 当然，for 指令的值不仅可以是一个数字，还可以是数组、对象、字符串、集合（[Set](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)）以及映射（[Map](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map)），或是计算结果为这些类型的表达式。此外，还可以使用类似 `for...of` 的语法，为每次遍历的项和索引指定名称。
 
 ```qk
-<p #for={item, index of [1, 2 , 3]}>{index}: {item}</p>
+<p #for={item, index of [1, 2, 3]}>{index}: {item}</p>
 ```
 
-| 此时得到的渲染结果是：
+此时得到的渲染结果是：
 
 ```html
 <p>0: 1</p>
@@ -78,38 +80,38 @@
 <lang-js>
     const languages = new Map([
         ["qk", "Qingkuai"],
-        ["js", "Javascript"],
-        ["ts", "Typescript"]
+        ["js", "JavaScript"],
+        ["ts", "TypeScript"]
     ])
 </lang-js>
 
 <p #for={item, index of languages}>{index}: {item}</p>
 ```
 
-| 此时得到的渲染结果是：
+此时得到的渲染结果是：
 
 ```html
-<p>qk: QingKuai</p>
-<p>js: Javascript</p>
-<p>ts: Typescript</p>
+<p>qk: Qingkuai</p>
+<p>js: JavaScript</p>
+<p>ts: TypeScript</p>
 ```
 
-为 for 指令的遍历项和索引指定名称时，还可以在遍历项或索引标识符名称处使用[解构](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring)语法：
+为 for 指令的遍历项和索引指定名称时，还可以在遍历项或索引标识符位置使用 [解构](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring) 语法：
 
 ```qk
 <lang-js>
     const languageInfos = {
         qk: {
             age: 1,
-            name: "QingKuai"
+            name: "Qingkuai"
         },
         js: {
             age: 30,
-            name: "Javascript"
+            name: "JavaScript"
         },
         ts: {
             age: 13,
-            name: "Typescript"
+            name: "TypeScript"
         }
     }
 </lang-js>
@@ -119,12 +121,12 @@
 </p>
 ```
 
-| 此时得到的渲染结果是：
+此时得到的渲染结果是：
 
 ```html
-<p>QingKuai: file extension is qk, released in 2024.</p>
-<p>Javascript: file extension is js, released in 1995.</p>
-<p>Typescript: file extension is ts, released in 2012.</p>
+<p>Qingkuai: file extension is qk, released in 2024.</p>
+<p>JavaScript: file extension is js, released in 1995.</p>
+<p>TypeScript: file extension is ts, released in 2012.</p>
 ```
 
 如果你使用过 [Vue](https://cn.vuejs.org)，可能会问为什么 `for` 指令中使用 `of` 作为迭代关键词而非 `in`，这是因为 `in` 关键字可以出现在 JavaScript 表达式中，而 `of` 则不行。例如，如果使用 `in`，下面这种情况就变得难以处理，因为它具有二义性：
@@ -179,7 +181,7 @@
 <p #catch={err}>pms is rejected and received {err}.</p>
 ```
 
-当然，then 和 catch 指令的上下文也支持[解构](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring)语法：
+当然，then 和 catch 指令的上下文也支持 [解构](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring) 语法：
 
 ```qk
 <p #await={pms}>waiting...</p>
@@ -208,7 +210,7 @@
 ```
 
 <div class="custom-block tip">
-    qingkuai 的<a href="../components/async-components.html">异步组件</a>也是基于异步处理指令组合实现的。
+    Qingkuai 的 <a href="../components/async-components.html">异步组件</a> 也是基于异步处理指令组合实现的。
 </div>
 
 ---
@@ -221,7 +223,7 @@
 <div class="dynamic-html-content" #html>{htmlStr}</div>
 ```
 
-外部元素可能不总是必须的，为防止引入多余的无意义元素，可使用 `qk:spread` [内置元素](../components/builtin-elements.html) 作为指令的虚拟挂载点：
+外部元素不总是必须的。为避免引入无意义的多余元素，可使用 `qk:spread` [内置元素](../misc/builtin-elements.html) 作为指令的虚拟挂载点：
 
 ```qk
 <qk:spread #html>{htmlStr}</qk:spread>
@@ -242,14 +244,14 @@ type HTMLDirectiveValueType = Partial<{
 ```qk
 <lang-js>
     // 与 qingkuai 包中导出的 DESTRUCT_HTML 常量一致
-    const htmlDireciveConf = {
+    const htmlDirectiveConf = {
         escapeStyle: true,
         escapeScript: true,
         escapeTags: ["link", "iframe", "form"]
     }
 </lang-js>
 
-<p #html={htmlDireciveConf}>{htmlStr}</p>
+<p #html={htmlDirectiveConf}>{htmlStr}</p>
 ```
 
 <div class="custom-block warning">
@@ -275,3 +277,42 @@ type HTMLDirectiveValueType = Partial<{
     #target={document.body}
 ></div>
 ```
+
+---
+
+## 指令优先级
+
+当一个元素上存在多个指令时，编译器会按照一定的优先级顺序来处理这些指令，以确保正确的渲染结果。例如，在同一个标签上搭配使用 `if` 和 `for` 指令时，会先处理 `if` 指令来判断是否渲染该元素，如果条件满足才会继续处理 `for` 指令进行列表渲染：
+
+```qk
+<p
+    #if={showList}
+    #for={item of items}
+>
+    {item}
+</p>
+```
+
+当需要改变这一行为时，你需要在外层标签使用优先级更高的指令来包裹内层标签，例如：
+
+```qk
+<div #for={item of items}>
+    <p #if={showList}>{item}</p>
+</div>
+```
+
+上面的代码会引入一个无意义的 `div` 元素。要避免这种情况，你可以使用 `qk:spread` [内置元素](../misc/builtin-elements.html) 作为指令的虚拟挂载点，避免创建多余元素：
+
+```qk
+<qk:spread #for={item of items}>
+    <p #if={showList}>{item}</p>
+</qk:spread>
+```
+
+以下是 Qingkuai 中指令默认的优先级列表，从高到低：
+
+`slot` > `await/then/catch` > `if/elif/else` > `target` > `for/key` > `html`
+
+<div class="custom-block tip">
+    其他未被列出的指令的优先级与 <code>html</code> 指令相同，均为最低优先级，且在标签中出现的顺序决定了它们的处理顺序（即先出现的先处理）。
+</div>
