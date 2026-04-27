@@ -7,15 +7,15 @@
 |npm|pnpm|yarn|
 
 ```shell
-➜ npm create qingkuai -- "your project name"
+➜ npm create qingkuai -- my-app
 ```
 
 ```shell
-➜ pnpm create qingkuai@latest "your project name"
+➜ pnpm create qingkuai@latest my-app
 ```
 
 ```shell
-➜ yarn dlx create-qingkuai@latest "your project name"
+➜ yarn dlx create-qingkuai@latest my-app
 ```
 
 如果你希望创建 TypeScript 版本，只需添加 `-ts` 选项：
@@ -23,15 +23,15 @@
 |npm|pnpm|yarn|
 
 ```shell
-➜ npm create qingkuai -- "your project name" -ts
+➜ npm create qingkuai -- my-app -ts
 ```
 
 ```shell
-➜ pnpm create qingkuai@latest "your project name" -ts
+➜ pnpm create qingkuai@latest my-app -ts
 ```
 
 ```shell
-➜ yarn dlx create-qingkuai@latest "your project name" -ts
+➜ yarn dlx create-qingkuai@latest my-app -ts
 ```
 
 项目创建完成后，进入项目目录并安装依赖，然后在本地启动开发服务器：

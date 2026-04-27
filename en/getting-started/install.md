@@ -7,15 +7,15 @@ For the full development experience, creating a local project is recommended. Wi
 |npm|pnpm|yarn|
 
 ```shell
-➜ npm create qingkuai -- "your project name"
+➜ npm create qingkuai -- my-app
 ```
 
 ```shell
-➜ pnpm create qingkuai@latest "your project name"
+➜ pnpm create qingkuai@latest my-app
 ```
 
 ```shell
-➜ yarn dlx create-qingkuai@latest "your project name"
+➜ yarn dlx create-qingkuai@latest my-app
 ```
 
 If you want to create a TypeScript version, just add the `-ts` option:
@@ -23,15 +23,15 @@ If you want to create a TypeScript version, just add the `-ts` option:
 |npm|pnpm|yarn|
 
 ```shell
-➜ npm create qingkuai -- "your project name" -ts
+➜ npm create qingkuai -- my-app -ts
 ```
 
 ```shell
-➜ pnpm create qingkuai@latest "your project name" -ts
+➜ pnpm create qingkuai@latest my-app -ts
 ```
 
 ```shell
-➜ yarn dlx create-qingkuai@latest "your project name" -ts
+➜ yarn dlx create-qingkuai@latest my-app -ts
 ```
 
 After the project is created, enter the project directory, install dependencies, and start the local development server:
