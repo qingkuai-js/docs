@@ -103,6 +103,18 @@
 <button @click={increment}>{ b }</button>
 ```
 
+### 引用属性
+
+对于通过 `let` 或 `var` 声明的可变标识符，当其被用于引用属性（如 `&value`、`&dom`）时，编译器会将该标识符视为存在可达修改路径。即便脚本中没有显式赋值或自增等修改语句，仍会推导为具有响应性。
+
+```qk
+<lang-ts>
+    let inputValue = "Initial value"
+</lang-ts>
+
+<input type="text" &value={inputValue} />
+```
+
 ### 其他声明形式
 
 对于 `class` 声明、`function` 声明、TypeScript `enum` 声明等非变量声明，编译器在隐式推导阶段将其视作可变声明处理。

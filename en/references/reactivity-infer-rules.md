@@ -103,6 +103,18 @@ If an identifier is accessed in the template and is declared with `let` or `var`
 <button @click={increment}>{ b }</button>
 ```
 
+### Reference Attributes
+
+For mutable identifiers declared with `let` or `var`, when they are used by reference attributes (such as `&value` and `&dom`), the compiler treats those identifiers as having a reachable mutation path. Even if there is no explicit assignment, increment, or other mutation statement in the script, they are still inferred as reactive.
+
+```qk
+<lang-ts>
+    let inputValue = "Initial value"
+</lang-ts>
+
+<input type="text" &value={inputValue} />
+```
+
 ### Other Declaration Forms
 
 For non-variable declarations such as `class` declarations, `function` declarations, and TypeScript `enum` declarations, the compiler treats them as mutable declarations during implicit inference.
