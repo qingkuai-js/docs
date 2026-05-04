@@ -6,7 +6,7 @@ Qingkuai 并不在编译器中内建复杂的语法扩展，而是通过基于 [
 
 ## IDE 扩展
 
-目前我们仅在 [VS Code](https://code.visualstudio.com) 中发布了扩展，你可以在扩展市场中搜索 `Qingkuai` 来安装。
+目前我们仅在 [VS Code](https://code.visualstudio.com) 中发布了扩展，你可以在 [VS Code 扩展市场](https://marketplace.visualstudio.com/items?itemName=qingkuai-tools.qingkuai-language-features) 或在 VS Code 扩展中搜索 `Qingkuai` 来安装它。
 
 <img src="/static/medias/extension.png" alt="VS Code 扩展" />
 
@@ -61,3 +61,11 @@ Qingkuai 语言服务内置了文档格式化功能，该功能由 [prettier-plu
 - 查找组件定义：按住 meta 键并在组件标签或嵌入脚本中的组件标识符上单击鼠标左键；
 - 查找插槽引用：在 slot 标签上单击鼠标右键并选择 “Go to References”，或开启 “代码镜头” 功能；
 - 查找组件引用：在嵌入语言标签上单击鼠标右键并选择 “Go to References”，或开启 “代码镜头” 功能；
+
+---
+
+## AI 代理
+
+在 Qingkuai 项目中，人工智能可以作为开发辅助能力，帮助你更快完成组件搭建、代码补全、问题排查与文档理解。它并不替代编译器和语言服务本身，而是与现有工具链协同工作，降低重复劳动并提升开发效率。
+
+Qingkuai 的 MCP 服务器由 [qingkuai-mcp-server](https://www.npmjs.com/package/qingkuai-mcp-server) 提供。它主要用于提升 Agent 的响应速度与稳定性，以及对 DSL 语法和组件文件的理解与生成能力。如果你安装了 [VS Code 扩展](./language-features.html#ide-扩展)，在组件文件中使用 AI 功能时会自动连接到 MCP 服务器，无需额外配置。如果你希望在其他环境中使用或集成其 AI 能力，也可以直接接入该服务。
