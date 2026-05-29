@@ -128,6 +128,8 @@
 
 如果安装了 Qingkuai [VS Code 扩展](../misc/language-features.html#ide-扩展)，将鼠标指针悬停在顶层作用域的标识符上时，语言服务器会在提示中显示编译器推导出的响应性类型：
 
-<img src="/static/medias/inferred-raw.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
-<img src="/static/medias/inferred-reactive.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
-<img src="/static/medias/inferred-alias.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-raw-never-mutated.png" alt="inferred-raw-never-mutated.png" style="width:60%; margin-left:20%;"  />
+<img src="/static/medias/inferred-reactive.png" alt="inferred-reactive.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-alias.png" alt="inferred-alias.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-derived.png" alt="inferred-derived.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-downgraded.png" alt="inferred-downgraded.png" style="width:60%; margin-left:20%;" />

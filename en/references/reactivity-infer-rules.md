@@ -128,6 +128,8 @@ For non-variable declarations such as `class` declarations, `function` declarati
 
 If the Qingkuai [VS Code extension](../misc/language-features.html#ide-extensions) is installed, hovering over an identifier in top-level scope shows the reactivity type inferred by the compiler in the language server tooltip:
 
-<img src="/static/medias/inferred-raw.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
-<img src="/static/medias/inferred-reactive.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
-<img src="/static/medias/inferred-alias.png" alt="vscode-hover" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-raw-never-mutated.png" alt="inferred-raw-never-mutated.png" style="width:60%; margin-left:20%;"  />
+<img src="/static/medias/inferred-reactive.png" alt="inferred-reactive.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-alias.png" alt="inferred-alias.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-derived.png" alt="inferred-derived.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-downgraded.png" alt="inferred-downgraded.png" style="width:60%; margin-left:20%;" />
