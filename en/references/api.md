@@ -63,6 +63,7 @@ See: [Watchers and Side Effects](../basic/watchers-and-side-effects.html)
 
 ### Other Exports
 
+- `version`
 - `DESTRUCT_HTML`
 
 ---
@@ -113,7 +114,6 @@ The compiler package is used to parse and compile component source code. It is m
 - `PositionFlag`
 - `isCompileError`
 - `isCompileWarning`
-- `parseComponentTag`
 - `parseDirectiveValue`
 - `parseEventFlag`
 - `parseTemplate`

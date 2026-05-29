@@ -35,7 +35,7 @@ console.log(num) // 11
 
 ## 获取 DOM 元素
 
-当你需要获取模板中某个普通标签对应的 DOM 元素时，可以通过为该元素添加 `&dom` 属性来实现：
+当你需要获取模板中某个普通标签对应的 DOM 元素时，可以通过为该元素添加 `&handle` 属性来实现：
 
 |js|ts|
 
@@ -44,25 +44,27 @@ console.log(num) // 11
     import { onAfterMount } from "qingkuai"
 
     let div = null
+
     onAfterMount(() => {
         console.log(div)
     })
 </lang-js>
 
-<div &dom={div}></div>
+<div &handle={div}></div>
 ```
 
 ```qk
 <lang-ts>
     import { onAfterMount } from "qingkuai"
 
-    let div: HTMLDivElement | null = null
+    let div!: HTMLDivElement | null = null
+
     onAfterMount(() => {
-        console.log(div!)
+        console.log(div)
     })
 </lang-ts>
 
-<div &dom={div}></div>
+<div &handle={div}></div>
 ```
 
 <div class="custom-block tip">
@@ -70,14 +72,54 @@ console.log(num) // 11
 </div>
 
 <div class="custom-block tip">
-    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org/">TypeScript</a>，<code>&dom</code> 属性值是严格类型的。例如：对于 <code>div</code> 标签，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement">HTMLDivElement</a>；对于 <code>p</code> 元素，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>。当然，你也可以将接收者类型定义为元素的基类 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement">HTMLElement</a>。
+    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org/">TypeScript</a>，<code>&handle</code> 属性值是严格类型的。例如：对于 <code>div</code> 标签，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement">HTMLDivElement</a>；对于 <code>p</code> 元素，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>。当然，你也可以将接收者类型定义为元素的基类 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement">HTMLElement</a>。
 </div>
+
+当元素被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用：
+
+|js|ts|
+
+```qk
+<lang-js>
+    import { onAfterMount, nextTick } from "qingkuai"
+
+    let div = null
+    let show = true
+
+    function handleDestroyDiv() {
+        show = false
+        nextTick(() => {
+            console.log(div) // null
+        })
+    }
+</lang-js>
+<div #if={show} &handle={div}></div>
+<button @click={handleDestroyDiv}>Destroy Div</button>
+```
+
+```qk
+<lang-ts>
+    import { onAfterMount, nextTick } from "qingkuai"
+
+    let show = true
+    let div: HTMLDivElement | null = null
+
+    function handleDestroyDiv() {
+        show = false
+        nextTick(() => {
+            console.log(div) // null
+        })
+    }
+</lang-ts>
+<div #if={show} &handle={div}></div>
+<button @click={handleDestroyDiv}>Destroy Div</button>
+```
 
 与动态属性一样，当引用属性和变量名称一致时可省略插值块，所以下面两种写法是等效的：
 
 ```qk
-<div &dom></div>
-<div &dom={dom}></div>
+<div &handle></div>
+<div &handle={handle}></div>
 ```
 
 <div class="custom-block warning">

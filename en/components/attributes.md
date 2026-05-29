@@ -108,7 +108,7 @@ Dynamic attributes passed to a component are also accessed through the built-in 
 
 ## Events
 
-Component events are accessed through the built-in `props` identifier inside a component, just like other non-reference attributes:
+Like other non-reference attributes, component events are accessed inside the component through the built-in `props` identifier:
 
 |js|ts|
 
@@ -142,7 +142,7 @@ Component events are accessed through the built-in `props` identifier inside a c
 ```
 
 <div class="custom-block tip">
-    In terms of passing and usage, component events are no different from other non-reference attributes. The difference is semantic: component events usually represent actions or state changes that happen inside the component, while component attributes are more often used as configuration or data input. For that reason, when designing a component interface, we recommend naming callback-like component attributes as events and marking them with the `@` prefix so that their purpose is clearer.
+    In terms of passing and usage, component events are no different from other non-reference attributes. The only difference is semantic: component events usually represent actions or state changes that happen inside the component, while component attributes are more often used as component configuration or data input. Therefore, when designing a component interface, we recommend naming callback values passed into components as events and marking them with the `@` prefix, so their purpose and semantics are clearer.
 </div>
 <div class="custom-block tip">
     When Qingkuai's language server provides completion suggestions, only attributes whose values are function types are suggested as events.
@@ -197,6 +197,43 @@ Reference attributes are an important capability in components because they allo
 <div class="custom-block warning">
     If a value inside <code>props</code> is itself a complex type such as an object or array, its internal data can still be modified technically. For example, when <code>props.userInfo</code> is an object, <code>props.userInfo.name</code> can still be reassigned. However, this is not recommended, because it makes component state harder to track and maintain.
 </div>
+
+Note that `&handle` on a component tag is a special reference attribute used to get the component instance, so when naming reference attributes, avoid using `handle` as the name:
+
+|js|ts|
+
+```qk
+<lang-js>
+    import { onAfterMount } from "qingkuai"
+
+    let child = null
+
+    onAfterMount(() => {
+        // Inspect component state or access component exports through Child
+    })
+</lang-js>
+
+<Child &handle={child} />
+```
+
+```qk
+<lang-ts>
+    import type { ComponentInstance } from "qingkuai"
+
+    import Child from "./Child.qk"
+    import { onAfterMount } from "qingkuai"
+
+    let child: ComponentInstance<typeof Child> | null = null
+
+    onAfterMount(() => {
+        // Inspect component state or access component exports through Child
+    })
+</lang-ts>
+
+<Child &handle={child} />
+```
+
+<div class="custom-block tip">Like <a href="../basic/reference-attributes.html#获取-dom-元素">getting DOM nodes through `&handle`</a>, when a component is destroyed, reference attributes automatically reset the bound variable to `null` to avoid dangling references.</div>
 
 ---
 

@@ -64,7 +64,7 @@ The choice not to use `script` and `style` as embedded language tags is not simp
 
 ---
 
-## Why Choose Qingkuai?
+## Why Qingkuai?
 
 Compared with today's popular frontend frameworks, Qingkuai has the following core advantages:
 

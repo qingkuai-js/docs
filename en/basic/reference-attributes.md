@@ -1,41 +1,41 @@
 # Reference Attributes
 
-In Qingkuai, reference attributes are a syntax for passing variable references by prefixing attribute names with `&` (for example, `&value`). They allow you to establish reference relationships between attributes and external variables in templates, enabling direct read and write access to attribute values from outside and therefore achieving flexible data linkage and state transfer.
+In Qingkuai, reference attributes are a syntax for passing variable references by prefixing attribute names with `&` (such as `&value`). They let you establish a reference relationship between an attribute and an external variable in templates, so the attribute value can be read and written directly from outside, enabling flexible data linkage and state transfer.
 
-JavaScript itself does not support [pass-by-reference](https://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value), but Qingkuai implements a mechanism similar to passing references, or pointers, in languages such as C, C++, and Go. By using reference attributes, variables can be explicitly "passed by reference" into an element or component, allowing the same state source to be shared and manipulated across multiple contexts. This mechanism is concise yet powerful and improves both expressiveness and control in template state management. The following pseudocode helps illustrate the difference between pass-by-reference and pass-by-value:
+JavaScript itself does not support [pass-by-reference](https://stackoverflow.com/questions/373419/whats-the-difference-between-passing-by-reference-vs-passing-by-value), but Qingkuai implements a mechanism similar to reference (pointer) passing in languages such as C, C++, and Go (its essence is setter invocation). With reference attributes, variables can be explicitly "passed by address" into an element or component, so you can share and operate on the same state source across multiple contexts. This mechanism is concise and powerful, improving both expressiveness and control in template state management. The following pseudocode helps illustrate the difference between pass-by-reference and pass-by-value:
 
 ```js
-let number = 10
+let num = 10
 
 function passByValue(n) {
-    // In pass-by-value, n is a copy of number,
-    // they occupy two separate memory locations,
-    // modifying n won't affect the original number value.
+    // In pass-by-value, n is a copy of num,
+    // and they are two separate locations in memory.
+    // Modifying n does not affect the original num value.
     n = n + 1
 }
 
 function passByReference(n) {
-    // * is the dereference operator, and it is used to:
-    // Reads the value at the memory location pointed to by pointer n,
-    // increments it by 1, then writes the result back to that location.
+    // * is the dereference operator. It is used to:
+    // Read the value at the location pointed to by n,
+    // then add 1 and write the result back to that location.
     *n = *n + 1
 }
 
-passByValue(number)
-console.log(number) // 10
+passByValue(num)
+console.log(num) // 10
 
-// & is the address-of operator, and it is used to:
-// Gets the memory address of variable number,
-// and passes it as an argument to passByReference.
-passByReference(&number)
-console.log(number) // 11
+// & is the address-of operator. It is used to:
+// Get the memory address of variable num,
+// then pass it as an argument to passByReference.
+passByReference(&num)
+console.log(num) // 11
 ```
 
 ---
 
-## Accessing DOM Elements
+## Getting DOM Elements
 
-When you need to access the DOM element corresponding to a regular tag in templates, you can add the `&dom` attribute to that element:
+When you need to get the DOM element corresponding to a regular tag in the template, you can do so by adding the `&handle` attribute to that element:
 
 |js|ts|
 
@@ -44,51 +44,93 @@ When you need to access the DOM element corresponding to a regular tag in templa
     import { onAfterMount } from "qingkuai"
 
     let div = null
+
     onAfterMount(() => {
         console.log(div)
     })
 </lang-js>
 
-<div &dom={div}></div>
+<div &handle={div}></div>
 ```
 
 ```qk
 <lang-ts>
     import { onAfterMount } from "qingkuai"
 
-    let div: HTMLDivElement | null = null
+    let div!: HTMLDivElement | null = null
+
     onAfterMount(() => {
-        console.log(div!)
+        console.log(div)
     })
 </lang-ts>
 
-<div &dom={div}></div>
+<div &handle={div}></div>
 ```
 
 <div class="custom-block tip">
-    <code>onAfterMount</code> is Qingkuai's callback method that runs after a component has finished mounting and rendering. It is part of the <a href="../components/lifecycle.html">component lifecycle</a>.
+    <code>onAfterMount</code> is a Qingkuai callback that runs after a component has finished mounting and rendering. It is part of the <a href="../components/life-cycle.html">component lifecycle</a>.
 </div>
 
 <div class="custom-block tip">
-    If your embedded script language is <a href="https://www.typescriptlang.org/">TypeScript</a>, the value of the <code>&dom</code> attribute is strictly typed. For example, a <code>div</code> tag maps to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLDivElement">HTMLDivElement</a>, and a <code>p</code> element maps to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>. You can also use the base class <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a>.
+    If your embedded script language is <a href="https://www.typescriptlang.org/">TypeScript</a>, the value of <code>&handle</code> is strictly typed. For example, for a <code>div</code> tag, the type is <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement">HTMLDivElement</a>; for a <code>p</code> element, the type is <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>. You can also define the receiver type as the base element class <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement">HTMLElement</a>.
 </div>
 
-Like dynamic attributes, when reference attribute names match variable names, the interpolation block can be omitted, making these two syntaxes equivalent:
+When the element is destroyed, the reference attribute automatically resets the bound variable to `null` to avoid dangling references:
+
+|js|ts|
 
 ```qk
-<div &dom></div>
-<div &dom={dom}></div>
+<lang-js>
+    import { onAfterMount, nextTick } from "qingkuai"
+
+    let div = null
+    let show = true
+
+    function handleDestroyDiv() {
+        show = false
+        nextTick(() => {
+            console.log(div) // null
+        })
+    }
+</lang-js>
+<div #if={show} &handle={div}></div>
+<button @click={handleDestroyDiv}>Destroy Div</button>
+```
+
+```qk
+<lang-ts>
+    import { onAfterMount, nextTick } from "qingkuai"
+
+    let show = true
+    let div: HTMLDivElement | null = null
+
+    function handleDestroyDiv() {
+        show = false
+        nextTick(() => {
+            console.log(div) // null
+        })
+    }
+</lang-ts>
+<div #if={show} &handle={div}></div>
+<button @click={handleDestroyDiv}>Destroy Div</button>
+```
+
+Like dynamic attributes, when a reference attribute and variable share the same name, you can omit the interpolation block. So the following two forms are equivalent:
+
+```qk
+<div &handle></div>
+<div &handle={handle}></div>
 ```
 
 <div class="custom-block warning">
-    This syntax isn't supported if the attribute name is a keyword or reserved word in the embedded scripting language, such as <code>class</code> or <code>for</code> attributes.
+    If the attribute name is a keyword or reserved word in the embedded script language, this syntax is not supported, such as <code>class</code> or <code>for</code>.
 </div>
 
 ---
 
-## Form Input Handling
+## Form Input Processing
 
-For forms, we often need to synchronize input field contents with corresponding variables in embedded scripts. Typically, we might use dynamic `value` attributes in `input` elements and listen for user input to update variables:
+When handling forms, we often need to synchronize input content to variables in the embedded script. In typical usage, we might use a dynamic `value` attribute on an `input` element and listen to user input to update the variable:
 
 |js|ts|
 
@@ -124,7 +166,7 @@ The inputValue is: {inputValue}
 </div>
 ```
 
-Instead of the somewhat cumbersome approach above, we can achieve this more concisely using `&value` reference attributes:
+Compared with the somewhat verbose approach above, we can now implement this more concisely through the `&value` reference attribute:
 
 ```qk
 <lang-js>
@@ -142,14 +184,14 @@ The inputValue is: {inputValue}
 ```
 
 <div class="custom-block tip">
-    This is only a brief introduction to using reference attributes in form input scenarios. More details are covered in the <a href="./forms.html">Form Handling</a> section.
+    Here we only briefly introduced reference attributes in form input scenarios. More usage details will be covered in the <a href="./forms.html">Form Handling</a> section.
 </div>
 
 ---
 
-## Valid Reference Attribute Values
+## Valid Values for Reference Attributes
 
-Like other languages supporting pass-by-reference, reference attribute values must be `addressable` and non-constant. You can roughly understand them as expressions that can appear on the left side of an assignment:
+Like in other languages that support pass-by-reference, the value of a reference attribute must be an assignable (often called an lvalue or addressable target) and non-constant target. You can roughly understand it as an expression that can appear on the left side of `=`:
 
 ```qk
 <!-- Valid values -->

@@ -35,7 +35,7 @@ Looking up messages by code can improve debugging efficiency and help you unders
 | 1016 | Invalid attribute format                                                                                                                   |
 | 1017 | Uses a framework-reserved identifier format, identifiers starting with `__qk__`                                                            |
 | 1018 | Unsupported top-level `await` expression                                                                                                   |
-| 1019 | `export`-related syntax is not supported in embedded script blocks                                                                         |
+| 1019 | Embedded script blocks do not support these export forms: `export =`, default export, re-export, namespace export, or type export         |
 | 1020 | Compiler intrinsic is redeclared in top-level scope                                                                                        |
 | 1021 | Compiler built-in method is used in an invalid position or call form                                                                       |
 | 1022 | Identifier cannot be redeclared because it conflicts with alias or derived value markers                                                   |
@@ -81,6 +81,7 @@ Looking up messages by code can improve debugging efficiency and help you unders
 | 1062 | Reactivity modes conflict; the same tag declares both `reactive` and `shallow`                                                             |
 | 1063 | Generic parameters on a component tag are not closed                                                                                       |
 | 1064 | Generic parameters on a component tag can only be used when the embedded script language is `TypeScript`                                   |
+| 1065 | Hyphens are not allowed when using a member expression as a component tag                                                                   |
 
 ---
 
@@ -99,9 +100,8 @@ Looking up messages by code can improve debugging efficiency and help you unders
 | 9009 | Event flags on a component event listener are invalid and will be ignored                                               |
 | 9010 | Keyboard event flags are invalid on non-keyboard events and will be ignored                                             |
 | 9011 | Duplicate event flags will be ignored                                                                                   |
-| 9012 | Using `&dom` on a component will not produce a DOM element reference and will fall back to a normal reference attribute |
+| 9012 | A `<qk:spread>` tag without required parts (such as dynamic attributes, reference attributes, or event listeners) is unnecessary |
 | 9013 | Duplicate default value definitions; the later one overrides the earlier one                                            |
-| 9014 | Unnecessary `qk:spread` tag that does not serve its intended purpose                                                    |
 | 9016 | Built-in method received more arguments than expected; extra arguments will be ignored                                  |
 
 ---

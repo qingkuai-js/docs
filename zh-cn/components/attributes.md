@@ -198,6 +198,43 @@
     如果 <code>props</code> 中某个属性值本身是复杂类型（如对象或数组），其内部数据在技术上仍可被修改。例如，当 <code>props.userInfo</code> 是对象时，<code>props.userInfo.name</code> 依然可以被改写。但不建议这样做，因为这会让组件状态变得更难追踪和维护。
 </div>
 
+需要注意的是，`&handle` 属性在组件标签上是一个特殊的引用属性，用于获取组件实例，所以命名引用属性时请避免使用 `handle` 这个名称：
+
+|js|ts|
+
+```qk
+<lang-js>
+    import { onAfterMount } from "qingkuai"
+
+    let child = null
+
+    onAfterMount(() => {
+        // 通过 Child 查看组件状态或访问组件导出
+    })
+</lang-js>
+
+<Child &handle={child} />
+```
+
+```qk
+<lang-ts>
+    import type { ComponentInstance } from "qingkuai"
+
+    import Child from "./Child.qk"
+    import { onAfterMount } from "qingkuai"
+
+    let child: ComponentInstance<typeof Child> | null = null
+
+    onAfterMount(() => {
+        // 通过 Child 查看组件状态或访问组件导出
+    })
+</lang-ts>
+
+<Child &handle={child} />
+```
+
+<div class="custom-block tip">同通过 `&handle` <a href="../basic/reference-attributes.html#获取-dom-元素">获取 DOM 节点</a>一样：当组件被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用。</div>
+
 ---
 
 ## 属性解构

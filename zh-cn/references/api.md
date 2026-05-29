@@ -1,6 +1,6 @@
 # API 参考
 
-Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责边界。本文基于源码入口文件整理两类公开 API：运行时包`qingkuai`与编译器包`qingkuai/compiler`。
+Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责边界。本文基于源码入口文件整理两类公开 API：运行时包 `qingkuai` 与编译器包 `qingkuai/compiler` 。
 
 <div class="custom-block tip">
     内部包 <code>qingkuai/internal</code> 主要面向框架内部实现，通常不建议业务代码直接依赖，因此本节不展开说明。
@@ -8,7 +8,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 
 ---
 
-## 运行时
+## 运行时包
 
 运行时包导出组件生命周期、响应式副作用、性能优化及状态转换等 API。
 
@@ -63,11 +63,12 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 
 ### 其他导出
 
+- `version`
 - `DESTRUCT_HTML`
 
 ---
 
-## 编译器（qingkuai/compiler）
+## 编译器包
 
 编译器包用于解析与编译组件源码，主要被构建工具、语言服务和插件生态调用。
 
@@ -113,7 +114,6 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 - `PositionFlag`
 - `isCompileError`
 - `isCompileWarning`
-- `parseComponentTag`
 - `parseDirectiveValue`
 - `parseEventFlag`
 - `parseTemplate`
