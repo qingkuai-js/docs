@@ -31,6 +31,28 @@ import { debounce } from "lodash"
 
 ---
 
+## Style Reuse
+
+When the same shared stylesheet is imported into scoped embedded style blocks of multiple components through `src` or `@import`, compilation can produce multiple copies of equivalent CSS rules (each copy gets a different component scope marker). This increases CSS size and style parsing cost.
+
+```qk
+<!-- A.qk -->
+<lang-css src="./common.css" />
+
+<!-- B.qk -->
+<lang-css>
+    @import "./common.css";
+</lang-css>
+```
+
+In the example above, `common.css` is scoped independently in each component: the same original rule is rewritten multiple times with different component scope markers. As component count grows, these duplicate rules accumulate linearly, increasing CSS payload and browser style-matching cost. For shared cross-component styles, prefer the following practices:
+
+- Load stable shared styles once from a global style entry (for example, app entry CSS or layout-level global styles).
+- For styles declared near components but not requiring scope isolation, maintain them in a global file or a `global` style block.
+- Keep only structure-coupled, component-specific rules inside scoped component styles.
+
+---
+
 ## Code Splitting
 
 Code-splitting is an important frontend optimization technique. It breaks an application into multiple modules that are loaded on demand, speeding up first-screen loading and reducing wasted resources. Build tools such as Vite and Rollup automatically split modules through static dependency analysis and [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import), and they also support manual chunking strategies such as separating third-party libraries for better loading efficiency and cache usage:

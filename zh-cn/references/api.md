@@ -14,57 +14,60 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 
 ### 类型导出
 
+- `ComponentInstance`
 - `HtmlBlockOptions`
+- `QingkuaiComponent`
 
 ### 生命周期
 
+- `onAfterDestroy`
 - `onAfterMount`
-- `onBeforeUpdate`
 - `onAfterUpdate`
 - `onBeforeDestroy`
-- `onAfterDestroy`
+- `onBeforeUpdate`
 
 参考：[生命周期](../components/lifecycle.html)
 
 ### 副作用与监视器
 
-- `watch`
 - `effect`
-- `preEffect`
 - `postEffect`
-- `syncEffect`
-- `preWatch`
 - `postWatch`
+- `preEffect`
+- `preWatch`
+- `syncEffect`
 - `syncWatch`
+- `watch`
 
 参考：[监视器与副作用](../basic/watchers-and-side-effects.html)
 
 ### 响应式优化控制
 
+- `batchAndNoTracking`
+- `batchUpdating`
 - `noTracking`
 - `noUpdating`
 - `pauseTracking`
 - `pauseUpdating`
 - `resumeTracking`
 - `resumeUpdating`
-- `batchUpdating`
-- `stopBatchUpdating`
 - `startBatchUpdating`
-- `batchAndNoTracking`
+- `stopBatchUpdating`
 
 ### 状态与调度
 
+- `createShallowStore`
+- `createStore`
 - `mountApp`
 - `nextTick`
 - `toRaw`
-- `createStore`
 - `toReactive`
 - `toShallowReactive`
 
 ### 其他导出
 
-- `version`
 - `DESTRUCT_HTML`
+- `version`
 
 ---
 
@@ -76,46 +79,55 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 
 - `ASTLocation`
 - `ASTPosition`
-- `TemplateNode`
-- `CompileOptions`
-- `CompileResult`
-- `StyleDescriptor`
-- `TextContentPart`
-- `ScriptDescriptor`
-- `IdentifierStatus`
-- `TemplateAttribute`
 - `ASTPositionWithFlag`
-- `TemplateNodeContext`
 - `CompileIntermediateOptions`
 - `CompileIntermediateResult`
+- `CompileOptions`
+- `CompileResult`
+- `IdentifierStatus`
+- `ScriptDescriptor`
+- `StyleDescriptor`
+- `TemplateAttribute`
+- `TemplateNode`
+- `TemplateNodeContext`
+- `TextContentPart`
 
-### 常量
+### 常量对象
 
-- `SPREAD_TAG`
+编译器包导出的 `constants` 对象包含以下属性：
+
+- `LSC`
 - `PRESERVED_IDPREFIX`
-- `LANGUAGE_SERVICE_UTIL`
-- `GET_TYPE_DELAY_MARKING`
+- `SPREAD_TAG`
 
-### 工具函数
+### 工具对象
+
+编译器包导出的 `util` 对象包含以下属性：
 
 - `camel2Kebab`
-- `kebab2Camel`
-- `toPropertyKey`
 - `findEndBracket`
 - `findOutOfComment`
 - `findOutOfLiteral`
 - `findOutOfLiteralComment`
-- `isSelfClosingTag`
+- `formatSourceCode`
 - `isEmbeddedLanguageTag`
+- `isEmbeddedStyleTag`
 - `isRequiredValueDirective`
+- `isVoidTag`
+- `kebab2Camel`
+- `toPropertyKey`
+- `ts`
 
-### 方法与标志
+### 标志
 
 - `PositionFlag`
+
+### 方法
+
+- `compile`
+- `compileIntermediate`
 - `isCompileError`
 - `isCompileWarning`
 - `parseDirectiveValue`
 - `parseEventFlag`
 - `parseTemplate`
-- `compile`
-- `compileIntermediate`

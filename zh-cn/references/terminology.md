@@ -132,7 +132,7 @@
 
 ## 嵌入样式块
 
-嵌入样式块是指在组件文件中使用 `lang-css`、`lang-scss`、`lang-sass`、`lang-less`、`lang-stylus`、`lang-postcss` 标签包裹的区域，用于编写会被编译器处理的样式内容。
+嵌入样式块是指在组件文件中使用 `lang-css`、`lang-scss`、`lang-sass`、`lang-less`、`lang-stylus`、`lang-postcss` 标签包裹的区域，用于编写会被编译器处理的样式内容。该标签支持静态 `src` 属性引用外部样式文件，也支持布尔 `global` 属性声明全局样式块。
 
 参考：[语法介绍](../getting-started/introduction.html#简介)、[样式表](../components/stylesheets.html)
 
@@ -140,7 +140,7 @@
 
 ## 嵌入语言标签
 
-嵌入语言标签是指 `lang-js`、`lang-ts`、`lang-css`、`lang-scss`、`lang-sass`、`lang-less`、`lang-stylus`、`lang-postcss` 这 8 个标签，用于嵌入需要编译的脚本与样式内容。
+嵌入语言标签是指 `lang-js`、`lang-ts`、`lang-css`、`lang-scss`、`lang-sass`、`lang-less`、`lang-stylus`、`lang-postcss` 这 8 个标签，用于嵌入需要编译的脚本与样式内容。其中样式标签支持 `src`、`global` 等静态属性。
 
 参考：[语法介绍](../getting-started/introduction.html#简介)、[样式表](../components/stylesheets.html)
 

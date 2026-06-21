@@ -132,7 +132,7 @@ See: [Introduction](../getting-started/introduction.html), [Design Philosophy](.
 
 ## Embedded Style Block
 
-An embedded style block is a region wrapped by `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, or `lang-postcss` tags inside a component file, used for writing style content that will be processed by the compiler.
+An embedded style block is a region wrapped by `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, or `lang-postcss` tags inside a component file, used for writing style content that will be processed by the compiler. These tags support a static `src` attribute for external style files and a boolean `global` attribute for global style blocks.
 
 See: [Introduction](../getting-started/introduction.html), [Stylesheets](../components/stylesheets.html)
 
@@ -140,7 +140,7 @@ See: [Introduction](../getting-started/introduction.html), [Stylesheets](../comp
 
 ## Embedded Language Tags
 
-Embedded language tags refer to the eight tags `lang-js`, `lang-ts`, `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, and `lang-postcss`, which are used to embed script and style content that needs compilation.
+Embedded language tags refer to the eight tags `lang-js`, `lang-ts`, `lang-css`, `lang-scss`, `lang-sass`, `lang-less`, `lang-stylus`, and `lang-postcss`, which are used to embed script and style content that needs compilation. Style tags support static attributes such as `src` and `global`.
 
 See: [Introduction](../getting-started/introduction.html), [Stylesheets](../components/stylesheets.html)
 

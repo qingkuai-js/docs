@@ -36,13 +36,65 @@ div[qk-dbb1016b] {
 }
 ```
 
-<div class="custom-block tip">
-    Stylesheets imported via <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@import">@import</a> syntax in component style tags are also affected.
+---
+
+## Style Penetration
+
+Scoped styles ensure component isolation, but there are cases where you may want a parent component's style rules to affect a child component's root element. Qingkuai provides the `#scope` directive for this — see <a href="../basic/compilation-directives.html#scope-directive">Compilation Directives / Scope Directive</a> for details.
+
+---
+
+## External Style Sources
+
+Embedded style blocks support two ways to bring in external style files: a static `src` attribute on the tag, or an `@import` statement inside the style content:
+
+```qk
+<lang-scss src="./styles/theme.scss" />
+```
+
+<div class="custom-block warning">
+    When using the <code>src</code> attribute, the embedded style tag cannot contain tag content.
+</div>
+
+When using `@import`, style rules are written inside the embedded style tag body:
+
+```qk
+<lang-css>
+    @import "./styles/base.css";
+
+    .local-rule {
+        /* ... */
+    }
+</lang-css>
+```
+
+<div class="custom-block warning">
+    If the same shared stylesheet is imported repeatedly by multiple scoped component styles through <code>src</code> or <code>@import</code>, compilation may produce multiple copies of equivalent rules (with different scope markers). Try to avoid this pattern: <a href="../misc/optimization.html#style-reuse">Optimization - Style Reuse</a>.
 </div>
 
 ---
 
-# Scoping Attribute Position
+## Global Styles
+
+By default, embedded styles are scoped with component scope attributes. If you want a style block to be treated as global, add the boolean `global` attribute to the embedded style tag — for example, `.page-title` below will not receive component scope attributes:
+
+```qk
+<lang-css global>
+    .page-title {
+        color: #111;
+    }
+</lang-css>
+```
+
+You can also combine `global` with `src`:
+
+```qk
+<lang-css global src="./index.css" />
+```
+
+---
+
+## Scoping Attribute Position
 
 Normally the scoping attribute gets appended after the last selector:
 

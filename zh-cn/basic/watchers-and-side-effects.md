@@ -256,6 +256,8 @@ syncEffect(() => {})
 
 ## 清理监视器与副作用
 
+### 手动清理
+
 监视器及副作用 API 的注册方法都会返回控制句柄对象，这个句柄对象的类型定义如下：
 
 ```ts
@@ -305,5 +307,81 @@ watchExp(identifier, (pre, cur) => {
     }, 1000)
 
     return () => clearTimeout(timer) // 监视器重新触发前会先执行这个清理函数
+})
+```
+
+### 自动清理
+
+在组件中同步注册的监视器与副作用会自动关联到当前组件的销毁生命周期。当组件被销毁时，这些注册项会被框架自动清理，无需手动调用 `stop()`：
+
+```js
+import { effect, watch } from "qingkuai"
+
+// 组件内同步注册，组件销毁时会自动清理
+effect(() => {
+    // ...
+})
+
+watchExp(someValue, (pre, cur) => {
+    // ...
+})
+```
+
+若监视器或副作用是在异步逻辑中注册的，则不再受组件销毁生命周期的管理，需要在 `onBeforeDestroy` 或 `onAfterDestroy` 中调用返回句柄的 `stop()` 来手动清理：
+
+```js
+import { effect, watch, onBeforeDestroy } from "qingkuai"
+
+let handle
+
+setTimeout(() => {
+    // 异步注册，不在组件销毁生命周期内
+    handle = effect(() => {
+        // ...
+    })
+}, 1000)
+
+// 在组件销毁前手动停止
+onBeforeDestroy(() => {
+    handle?.stop()
+})
+```
+
+### 被动清理
+
+若监视器或副作用回调执行期间未收集到任何响应式依赖，运行时会发出警告并自动销毁该注册项。销毁后其占用的内存等资源都会被释放，因为它将永远不会被再次执行：
+
+```js
+import { effect, watch } from "qingkuai"
+
+effect(() => {
+    // 回调中没有访问任何响应式值
+    console.log("没有依赖，执行完后会被销毁")
+})
+
+watch(
+    () => "constant",
+    (pre, cur) => {
+        // getter 返回常量，未建立响应式关联
+        console.log("同样会被销毁")
+    }
+)
+```
+
+这通常意味着回调中没有读取响应式值，或读取路径被条件分支短路：
+
+```js
+import { effect } from "qingkuai"
+
+let flag = true
+let value = reactive("hello")
+
+effect(() => {
+    // 当 flag 为 true 时仅返回常量，不读取任何响应式值
+    if (flag) {
+        console.log("no reactive deps")
+        return
+    }
+    console.log(value) // 这行不会被执行到
 })
 ```

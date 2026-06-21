@@ -36,9 +36,55 @@ div[qk-dbb1016b] {
 }
 ```
 
-<div class="custom-block tip">
-    在组件嵌入样式标签中，通过 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@import">@import</a> 导入的样式表也会受到这一机制的影响。
+---
+
+## 外部样式源
+
+嵌入样式块支持两种方式引入外部样式文件：通过标签上的静态 `src` 属性，或通过样式内容中的 `@import` 语句：
+
+```qk
+<lang-scss src="./styles/theme.scss" />
+```
+
+<div class="custom-block warning">
+    使用 <code>src</code> 属性时，嵌入样式标签不能包含标签内容。
 </div>
+
+使用 `@import` 时，样式规则在嵌入样式标签的内容体中编写：
+
+```qk
+<lang-css>
+    @import "./styles/base.css";
+
+    .local-rule {
+        /* ... */
+    }
+</lang-css>
+```
+
+<div class="custom-block warning">
+    通过 <code>src</code> 或 <code>@import</code> 被组件作用域样式重复引入同一份共享样式表时，编译结果可能会生成多份等价规则副本（附加不同作用域标识），应尽量避免这种模式：<a href="../misc/optimization.html#style-reuse">优化 - 样式复用</a>。
+</div>
+
+---
+
+## 全局样式
+
+默认情况下，嵌入样式会自动添加组件作用域属性。若希望当前样式块按全局样式处理，可在嵌入样式标签上添加布尔属性 `global`，例如下面的 `.page-title` 不会被附加组件作用域属性：
+
+```qk
+<lang-css global>
+    .page-title {
+        color: #111;
+    }
+</lang-css>
+```
+
+此外 `global` 也可以与 `src` 组合使用：
+
+```qk
+<lang-css global src="./index.css" />
+```
 
 ---
 
@@ -70,3 +116,9 @@ div[qk-dbb1016b] p {
 [qk-dbb1016b] .container .box {
 }
 ```
+
+---
+
+## 样式穿透
+
+作用域样式保证了组件的独立性，但某些场景下你可能希望父组件的样式规则能够影响到子组件的根元素。Qingkuai 提供了 [#scope 指令](../basic/compilation-directives.html#scope-指令) 来实现这一需求。</a>。

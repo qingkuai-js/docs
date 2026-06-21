@@ -142,7 +142,7 @@
 
 ## key 指令
 
-当我们使用 `for` 指令创建列表渲染时，列表数据发生变化，框架需要更新对应的 DOM 元素。默认情况下，框架采用位置匹配的方式来关联新旧元素：即根据列表索引来对应元素。这种做法在列表仅在末尾添加或删除时工作良好。但当列表中间插入、删除或重新排序项目时，就会导致问题——因为节点的 DOM 状态（如表单输入的值）会被错误地关联到其他数据项。下面的动图展示了这一问题：
+当我们使用 `for` 指令创建列表渲染时，列表数据发生变化，框架需要更新对应的 DOM 元素。默认情况下，框架采用位置匹配的方式来关联新旧元素：即根据列表索引来对应元素。这种做法在列表仅在末尾添加或删除时工作良好。但当列表中间插入、删除或重新排序项目时，就会导致问题——因为节点的 DOM 状态（如表单输入的值）会被错误地关联到其他数据项。
 
 为了解决这个问题，可以使用 `#key` 指令为列表中的每个元素指定一个唯一的身份标识，框架就能根据这个 key 准确追踪每个元素，确保即使列表重新排序、插入或删除，元素的状态也能正确跟随其对应的数据项。因此，如果列表渲染的元素带有状态，推荐添加 `#key` 指令：
 
@@ -280,6 +280,73 @@ type HTMLDirectiveValueType = Partial<{
 
 ---
 
+## scope 指令
+
+默认情况下，父组件的作用域属性不会传递到子组件的任何元素上，保证了组件样式的独立性。但某些场景下你可能希望父组件样式能够覆盖子组件的根元素，这时可以使用 `#scope` 指令。它只能用于组件标签，会将父组件的作用域属性附加到子组件的根元素：
+
+```qk
+<Child #scope />
+
+<lang-css>
+    /* 影响子组件根元素 */
+    .child-root {
+        border-color: blue;
+    }
+
+    /* 影响子组件内部元素 */
+    [qk-scope] .child-box {
+        background-color: lightblue;
+    }
+</lang-css>
+```
+
+<div class="custom-block tip">
+    <code>lang-css</code> 中的内容是<a href="../components/basic.html">组件</a>的<a href="../references/terminology.html#嵌入样式块">嵌入样式块</a>，用于定义组件的样式规则。如果你还不了解组件的作用域样式机制，可以先阅读<a href="../components/stylesheets.html">组件样式表</a>再回来看这一节。
+</div>
+
+需要注意的是，当子组件的根节点是 [qk:spread](../misc/builtin-elements.html#qkspread) 或另一个组件这类不创建实际 DOM 元素的标签时，Qingkuai 会继续向内找到第一个实体元素并附加作用域属性：
+
+```qk
+<!-- Parent.qk -->
+<Middle #scope />
+
+<lang-css>
+    /* 影响 Child.qk 中的 div */
+    [qk-scope] {
+        color: blue;
+    }
+</lang-css>
+
+<!-- Middle.qk -->
+<Child />
+
+<!-- Child.qk -->
+<div>...</div>
+```
+
+<div class="custom-block tip">
+    只向子组件的<b>根元素</b>附加作用域属性，而不影响更深的层级是为了保证运行时性能。
+</div>
+
+此外，多个 `#scope` 在祖先链上可以组合使用，每一层都会将当前组件的作用域附加到最终根元素上，实现多层祖先样式的叠加：
+
+```qk
+<!-- Parent.qk -->
+<Middle #scope />
+
+<!-- Middle.qk -->
+<Child #scope />
+
+<!-- Child.qk -->
+<div>...</div>
+```
+
+<div class="custom-block tip">
+    上面示例中的 <code>Child</code> 组件中的 <code>div</code> 元素最终会同时具有 <code>Parent</code> 和 <code>Middle</code> 组件的作用域属性，从而受到两者样式规则的影响。
+</div>
+
+---
+
 ## 指令优先级
 
 当一个元素上存在多个指令时，编译器会按照一定的优先级顺序来处理这些指令，以确保正确的渲染结果。例如，在同一个标签上搭配使用 `if` 和 `for` 指令时，会先处理 `if` 指令来判断是否渲染该元素，如果条件满足才会继续处理 `for` 指令进行列表渲染：
@@ -314,5 +381,5 @@ type HTMLDirectiveValueType = Partial<{
 `slot` > `await/then/catch` > `if/elif/else` > `target` > `for/key` > `html`
 
 <div class="custom-block tip">
-    其他未被列出的指令的优先级与 <code>html</code> 指令相同，均为最低优先级，且在标签中出现的顺序决定了它们的处理顺序（即先出现的先处理）。
+    其他未被列出的指令的优先级均低于 <code>html</code> 指令，当它们同时出现时，顺序决定了它们的处理顺序（即先出现的先处理）。
 </div>

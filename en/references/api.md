@@ -14,57 +14,60 @@ The runtime package exports APIs for component lifecycle hooks, reactive side ef
 
 ### Type Exports
 
+- `ComponentInstance`
 - `HtmlBlockOptions`
+- `QingkuaiComponent`
 
 ### Lifecycle
 
+- `onAfterDestroy`
 - `onAfterMount`
-- `onBeforeUpdate`
 - `onAfterUpdate`
 - `onBeforeDestroy`
-- `onAfterDestroy`
+- `onBeforeUpdate`
 
 See: [Lifecycle](../components/lifecycle.html)
 
 ### Side Effects and Watchers
 
-- `watch`
 - `effect`
-- `preEffect`
 - `postEffect`
-- `syncEffect`
-- `preWatch`
 - `postWatch`
+- `preEffect`
+- `preWatch`
+- `syncEffect`
 - `syncWatch`
+- `watch`
 
 See: [Watchers and Side Effects](../basic/watchers-and-side-effects.html)
 
 ### Reactive Optimization Controls
 
+- `batchAndNoTracking`
+- `batchUpdating`
 - `noTracking`
 - `noUpdating`
 - `pauseTracking`
 - `pauseUpdating`
 - `resumeTracking`
 - `resumeUpdating`
-- `batchUpdating`
-- `stopBatchUpdating`
 - `startBatchUpdating`
-- `batchAndNoTracking`
+- `stopBatchUpdating`
 
 ### State and Scheduling
 
+- `createShallowStore`
+- `createStore`
 - `mountApp`
 - `nextTick`
 - `toRaw`
-- `createStore`
 - `toReactive`
 - `toShallowReactive`
 
 ### Other Exports
 
-- `version`
 - `DESTRUCT_HTML`
+- `version`
 
 ---
 
@@ -76,46 +79,55 @@ The compiler package is used to parse and compile component source code. It is m
 
 - `ASTLocation`
 - `ASTPosition`
-- `TemplateNode`
-- `CompileOptions`
-- `CompileResult`
-- `StyleDescriptor`
-- `TextContentPart`
-- `ScriptDescriptor`
-- `IdentifierStatus`
-- `TemplateAttribute`
 - `ASTPositionWithFlag`
-- `TemplateNodeContext`
 - `CompileIntermediateOptions`
 - `CompileIntermediateResult`
+- `CompileOptions`
+- `CompileResult`
+- `IdentifierStatus`
+- `ScriptDescriptor`
+- `StyleDescriptor`
+- `TemplateAttribute`
+- `TemplateNode`
+- `TemplateNodeContext`
+- `TextContentPart`
 
-### Constants
+### Constants Object
 
-- `SPREAD_TAG`
+The `constants` object contains the following properties:
+
+- `LSC`
 - `PRESERVED_IDPREFIX`
-- `LANGUAGE_SERVICE_UTIL`
-- `GET_TYPE_DELAY_MARKING`
+- `SPREAD_TAG`
 
-### Utility Functions
+### Utility Object
+
+The `util` object contains the following properties:
 
 - `camel2Kebab`
-- `kebab2Camel`
-- `toPropertyKey`
 - `findEndBracket`
 - `findOutOfComment`
 - `findOutOfLiteral`
 - `findOutOfLiteralComment`
-- `isSelfClosingTag`
+- `formatSourceCode`
 - `isEmbeddedLanguageTag`
+- `isEmbeddedStyleTag`
 - `isRequiredValueDirective`
+- `isVoidTag`
+- `kebab2Camel`
+- `toPropertyKey`
+- `ts`
 
-### Methods and Flags
+### Flags
 
 - `PositionFlag`
+
+### Methods
+
+- `compile`
+- `compileIntermediate`
 - `isCompileError`
 - `isCompileWarning`
 - `parseDirectiveValue`
 - `parseEventFlag`
 - `parseTemplate`
-- `compile`
-- `compileIntermediate`
