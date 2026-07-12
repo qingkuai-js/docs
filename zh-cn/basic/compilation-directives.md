@@ -328,7 +328,7 @@ type HTMLDirectiveValueType = Partial<{
     只向子组件的<b>根元素</b>附加作用域属性，而不影响更深的层级是为了保证运行时性能。
 </div>
 
-此外，多个 `#scope` 在祖先链上可以组合使用，每一层都会将当前组件的作用域附加到最终根元素上，实现多层祖先样式的叠加：
+此外，多个 `#scope` 在祖先链上可以组合使用，每一层都会将当前组件的作用域附加到最终根元素上，实现多层祖先样式的叠加。例如下面示例中 `Child` 组件中的 `div` 元素最终会同时具有 `Parent` 和 `Middle` 组件的作用域属性，从而受到两者样式规则的影响：
 
 ```qk
 <!-- Parent.qk -->
@@ -340,10 +340,6 @@ type HTMLDirectiveValueType = Partial<{
 <!-- Child.qk -->
 <div>...</div>
 ```
-
-<div class="custom-block tip">
-    上面示例中的 <code>Child</code> 组件中的 <code>div</code> 元素最终会同时具有 <code>Parent</code> 和 <code>Middle</code> 组件的作用域属性，从而受到两者样式规则的影响。
-</div>
 
 ---
 
