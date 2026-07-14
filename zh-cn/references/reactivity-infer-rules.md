@@ -126,10 +126,22 @@
 
 ## 推导提示
 
-如果安装了 Qingkuai [VS Code 扩展](../misc/language-features.html#ide-扩展)，将鼠标指针悬停在顶层作用域的标识符上时，语言服务器会在提示中显示编译器推导出的响应性类型：
+如果安装了 Qingkuai [VS Code 扩展](../misc/language-features.html#ide-扩展)，嵌入脚本顶部作用域中的标识符会嵌入提示编译器推断出的响应性状态：
 
-<img src="/static/medias/inferred-raw-never-mutated.png" alt="inferred-raw-never-mutated.png" style="width:60%; margin-left:20%;"  />
+<img src="/static/medias/inferred-inlay-hint.png" alt="inferred-inlay-hint.png" style="width:60%; margin-left:20%;"  />
+
+<div class="custom-block tip">
+    可以通过修改 VS Code 扩展的 <code>qingkuai.inlayHintReactiveStatus</code> 配置项来启用或禁用该提示。
+</div>
+
+将鼠标指针悬停在顶层作用域的标识符上时，语言服务器还会在提示中显示编译器推导出的响应性类型：
+
 <img src="/static/medias/inferred-reactive.png" alt="inferred-reactive.png" style="width:60%; margin-left:20%;" />
+<img src="/static/medias/inferred-raw-never-mutated.png" alt="inferred-raw-never-mutated.png" style="width:60%; margin-left:20%;"  />
 <img src="/static/medias/inferred-alias.png" alt="inferred-alias.png" style="width:60%; margin-left:20%;" />
 <img src="/static/medias/inferred-derived.png" alt="inferred-derived.png" style="width:60%; margin-left:20%;" />
 <img src="/static/medias/inferred-downgraded.png" alt="inferred-downgraded.png" style="width:60%; margin-left:20%;" />
+
+<div class="custom-block tip">
+    可以通过修改 VS Code 扩展的 <code>qingkuai.hoverHintReactiveStatus</code> 配置项来启用或禁用该提示。
+</div>
