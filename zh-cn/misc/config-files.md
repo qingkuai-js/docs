@@ -20,27 +20,27 @@ qingkuai-app
 
 ### reactivityMode
 
-该属性用于配置 Qingkuai 默认使用的响应性构造器，字符串，可选值：reactive、shallow，默认值为 reactive：
+该属性用于配置 Qingkuai 默认推导的响应性模式，字符串，可选值：`reactive`、`shallow`，默认值为 `reactive`：
 
 - reactive：使用深层响应性，嵌套的对象和数组也会被自动追踪；
 - shallow：使用浅层响应性，仅追踪顶层值的变化，嵌套值不会被自动追踪。
 
 ### whitespace
 
-该属性用于配置模板中空白字符的处理方式，字符串，可选值：preserve、trim、collapse、trim-collapse，默认值为 trim-collapse：
+该属性用于配置模板中空白字符的处理方式，字符串，可选值：`preserve`、`trim`、`collapse`、`trim-collapse`，默认值为 `trim-collapse`：
 
 - preserve：保留模板中所有空白字符，不做任何处理；
 - trim：裁剪元素边界处多余的空白字符；
 - collapse：将连续的空白字符合并为单个空格；
-- trim-collapse：同时应用 trim 和 collapse 规则（默认行为）。
+- trim-collapse：同时应用 `trim` 和 `collapse` 规则（默认行为）。
 
 ### preserveHtmlComments
 
-该属性用于配置是否保留 HTML 注释节点，字符串，可选值：never、always、development、production，默认值为 development。
+该属性用于配置是否保留 HTML 注释节点，字符串，可选值：`never`、`always`、`development`、`production`，默认值为 `development`。
 
 ### resolveImportExtension
 
-该属性用于配置在组件文件的导入语句中是否可省略 `.qk` 扩展名，布尔值，默认值为 true：
+该属性用于配置在组件文件的导入语句中是否可省略 `.qk` 扩展名，布尔值，默认值为 `true`：
 
 ```js
 // 被解析为 ./Component.qk
@@ -49,16 +49,20 @@ import Component from "./Component"
 
 ### shorthandDerivedDeclaration
 
-该属性用于配置是否启用衍生响应式状态的简写声明，布尔值，默认值为 true。启用后，组件文件嵌入脚本顶层作用域中以 `$` 字符开头的标识符会被自动编译为[衍生响应式状态](../basic/reactivity.html#衍生响应式状态)，修改为 false 可阻止这一行为：
+该属性用于配置是否启用衍生响应式状态的简写声明，布尔值，默认值为 `true`。启用后，组件文件嵌入脚本顶层作用域中以 `$` 字符开头的标识符会被自动编译为[衍生响应式状态](../basic/reactivity.html#衍生响应式状态)，修改为 `false` 可阻止这一行为：
 
 ```js
 // 简写声明衍生响应式状态
 const $double = number * 2
 ```
 
+### allowConstReactive
+
+该属性用于配置是否允许将常量声明标记为响应式，布尔值，默认值为 `true`。改为 `false` 时，常量声明的变量不会被[推导](../references/reactivity-infer-rules.html)为具有响应性，且显式使用 `reactive` 或 `shallow` 标记常量声明会导致编译错误。
+
 ### interpretiveComments
 
-该属性用于配置是否在编译结果中插入解释性注释，布尔值，默认值为 true
+该属性用于配置是否在编译结果中插入解释性注释，布尔值，默认值为 `true`
 
 ---
 
@@ -78,7 +82,7 @@ Qingkuai 语言服务的格式化功能基于 [prettier-plugin-qingkuai](https:/
 
 ### spaceAroundInterpolation
 
-该属性用于配置是否在插值块开始和结束处插入空格，布尔值，默认值为 false，改为 true 时整理风格如下：
+该属性用于配置是否在插值块开始和结束处插入空格，布尔值，默认值为 `false`，改为 `true` 时整理风格如下：
 
 ```qk
 <div #for={ item, index of 3 }>{ index }: { item }</div>
@@ -86,7 +90,7 @@ Qingkuai 语言服务的格式化功能基于 [prettier-plugin-qingkuai](https:/
 
 ### selfCloseEmptySlot
 
-该属性用于配置是否将空 `slot` 标签转换为自闭合格式，布尔值，默认值为 true。改为 true 时，空 `slot` 标签会被转换为自闭合格式，改为 false 时则保留原始格式，不做任何修改：
+该属性用于配置是否将空 `slot` 标签转换为自闭合格式，布尔值，默认值为 `true`。改为 `true` 时，空 `slot` 标签会被转换为自闭合格式，改为 `false` 时则保留原始格式，不做任何修改：
 
 ```qk
 <slot />
@@ -94,8 +98,8 @@ Qingkuai 语言服务的格式化功能基于 [prettier-plugin-qingkuai](https:/
 
 ### componentTagFormatPreference
 
-该属性用于配置组件标签的风格偏好，字符串，可选值为 camel、kebab，默认值为 camel，修改该属性会影响 Qingkuai 语言服务器给出的补全建议中组件标签的格式。
+该属性用于配置组件标签的风格偏好，字符串，可选值为 `camel`、`kebab`，默认值为 `camel`，修改该属性会影响 Qingkuai 语言服务器给出的补全建议中组件标签的格式。
 
 ### componentAttributeFormatPreference
 
-该属性用于配置组件属性的风格偏好，字符串，可选值为 camel、kebab，默认值为 camel，修改该属性会影响 Qingkuai 语言服务器给出的补全建议中组件属性的格式。
+该属性用于配置组件属性的风格偏好，字符串，可选值为 `camel`、`kebab`，默认值为 `camel`，修改该属性会影响 Qingkuai 语言服务器给出的补全建议中组件属性的格式。

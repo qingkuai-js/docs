@@ -122,6 +122,20 @@
 - 这类声明不能使用 `reactive`、`shallow`、`raw` 进行显式标记。
 - 若在模板中使用，则按当前响应性模式参与推导；若未使用，则按原始值处理。
 
+### allowConstReactive 选项
+
+[`allowConstReactive`](../misc/config-files.html#allowconstreactive) 运行配置项控制常量声明是否参与响应性推导，默认值为 `true`。当该选项被设为 `false` 时：
+
+- 在隐式推导阶段，`const` 声明的常量不会被推导为具有响应性，统一按原始值处理；
+- 在显式标记阶段，使用 `reactive` 或 `shallow` 标记初始值为非字面量表达式的常量声明会被禁止并抛出编译错误：
+
+```qk
+<lang-ts>
+    const config = reactive(loadConfig())  // 报错：allowConstReactive 被禁用
+    const list = shallow(getList())        // 报错：allowConstReactive 被禁用
+</lang-ts>
+```
+
 ---
 
 ## 推导提示
