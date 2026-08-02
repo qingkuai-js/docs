@@ -84,6 +84,14 @@ Qingkuai 语言服务的格式化功能基于 [prettier-plugin-qingkuai](https:/
 <div #for={ item, index of 3 }>{ index }: { item }</div>
 ```
 
+### selfCloseEmptySlot
+
+该属性用于配置是否将空 `slot` 标签转换为自闭合格式，布尔值，默认值为 true。改为 true 时，空 `slot` 标签会被转换为自闭合格式，改为 false 时则保留原始格式，不做任何修改：
+
+```qk
+<slot />
+```
+
 ### componentTagFormatPreference
 
 该属性用于配置组件标签的风格偏好，字符串，可选值为 camel、kebab，默认值为 camel，修改该属性会影响 Qingkuai 语言服务器给出的补全建议中组件标签的格式。

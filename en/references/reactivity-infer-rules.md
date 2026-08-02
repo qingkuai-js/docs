@@ -131,7 +131,7 @@ If the Qingkuai [VS Code extension](../misc/language-features.html#ide-extension
 <img src="/static/medias/inferred-inlay-hint.png" alt="inferred-inlay-hint.png" style="width:60%; margin-left:20%;"  />
 
 <div class="custom-block tip">
-    You can enable or disable this hint by modifying the <code>qingkuai.inlayHintReactiveStatus</code> setting in the VS Code extension.
+    You can enable or disable this hint by modifying the <code>inlayHintReactiveStatus</code> setting in the VS Code extension.
 </div>
 
 When hovering over an identifier in the top-level scope, the language server also shows the reactivity type inferred by the compiler in the tooltip:
@@ -143,5 +143,5 @@ When hovering over an identifier in the top-level scope, the language server als
 <img src="/static/medias/inferred-downgraded.png" alt="inferred-downgraded.png" style="width:60%; margin-left:20%;" />
 
 <div class="custom-block tip">
-    You can enable or disable this hint by modifying the <code>qingkuai.hoverHintReactiveStatus</code> setting in the VS Code extension.
+    You can enable or disable this hint by modifying the <code>hoverHintReactiveStatus</code> setting in the VS Code extension.
 </div>

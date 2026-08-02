@@ -131,7 +131,7 @@
 <img src="/static/medias/inferred-inlay-hint.png" alt="inferred-inlay-hint.png" style="width:60%; margin-left:20%;"  />
 
 <div class="custom-block tip">
-    可以通过修改 VS Code 扩展的 <code>qingkuai.inlayHintReactiveStatus</code> 配置项来启用或禁用该提示。
+    可以通过修改 VS Code 扩展的 <code>inlayHintReactiveStatus</code> 配置项来启用或禁用该提示。
 </div>
 
 将鼠标指针悬停在顶层作用域的标识符上时，语言服务器还会在提示中显示编译器推导出的响应性类型：
@@ -143,5 +143,5 @@
 <img src="/static/medias/inferred-downgraded.png" alt="inferred-downgraded.png" style="width:60%; margin-left:20%;" />
 
 <div class="custom-block tip">
-    可以通过修改 VS Code 扩展的 <code>qingkuai.hoverHintReactiveStatus</code> 配置项来启用或禁用该提示。
+    可以通过修改 VS Code 扩展的 <code>hoverHintReactiveStatus</code> 配置项来启用或禁用该提示。
 </div>
