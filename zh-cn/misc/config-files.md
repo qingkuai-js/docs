@@ -88,7 +88,7 @@ Qingkuai 语言服务的格式化功能基于 [prettier-plugin-qingkuai](https:/
 <div #for={ item, index of 3 }>{ index }: { item }</div>
 ```
 
-### selfCloseEmptySlot
+### selfCloseEmptySlotTags
 
 该属性用于配置是否将空 `slot` 标签转换为自闭合格式，布尔值，默认值为 `true`。改为 `true` 时，空 `slot` 标签会被转换为自闭合格式，改为 `false` 时则保留原始格式，不做任何修改：
 
