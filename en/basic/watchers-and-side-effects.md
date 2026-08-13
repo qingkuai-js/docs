@@ -17,8 +17,6 @@ Inside a [component file](../references/terminology.html#component-file), the wa
 
 In the following example, a watcher is registered for the `name` variable. When its value changes, the callback runs. The callback receives two arguments: the previous value and the current value. Because the watcher is registered before the template rendering side effect, the DOM accessed in the callback is still in its pre-update state:
 
-`watch` is a built-in method of component files. It can be called directly without any import, and the compiler binds it to the current component instance automatically.
-
 |js|ts|
 
 ```qk
@@ -253,9 +251,9 @@ Unlike the built-in methods in component files, these runtime-imported methods *
 The value of the first argument determines how the registration is cleaned up:
 
 - **Pass a component instance**: the registration is linked to that component's destruction lifecycle. Whether registered synchronously or asynchronously, it is cleaned up automatically when the component is destroyed.
-- **Pass `null`**: the registration is not linked to any component and is never cleaned up automatically. You must manage its lifecycle manually by calling `stop()` on the returned handle.
+- **Pass `null`**: the registration is not linked to any component and is never cleaned up automatically. You must manage its lifecycle manually by calling `stop` on the returned handle.
 
-It is worth emphasizing that we **strongly discourage** registering global watchers and side effects inside a component; a reasonable design is usually to register such global side effects in an external `js/ts` module. If you really need to register one inside a component, you can import the corresponding API from the runtime package and pass `null` as the first argument to register a watcher or side effect that you manage manually:
+It is worth emphasizing that we **strongly discourage** registering global watchers and side effects inside a component; a reasonable design is usually to register such global side effects in an external `js` / `ts` module. If you really need to register one inside a component, you can import the corresponding API from the runtime package and pass `null` as the first argument to register a watcher or side effect that you manage manually:
 
 ```qk
 <lang-js>
@@ -293,9 +291,9 @@ watchHandle.stop()
 effectHandle.stop()
 ```
 
-If you want the registration to be cleaned up automatically when the component is destroyed, you need to obtain a binding to a component instance. There are two common ways to do so.
+If you want the registration to be cleaned up automatically when the component is destroyed, you need to obtain a binding to a component instance. There are two common ways to do so:
 
-**Accept the component's built-in `effect` / `watch` method as an argument**
+**1. Accept the component's built-in `effect` / `watch` method as an argument**
 
 The built-in `effect`, `watch`, and other methods inside a component file are already bound to the current component instance. You can pass them as arguments to an external module, which calls these methods to create watchers or side effects bound to the corresponding component instance:
 
@@ -332,19 +330,20 @@ export function collectEffects(effect: EffectFunc) {
 }
 ```
 
-**Get the current component instance via `getCurrentInstance`**
+**2. Get the current component instance via `getCurrentInstance`**
 
-You can also import `getCurrentInstance` from the `qingkuai` runtime package and synchronously obtain the current component instance in the component logic:
+You can also import `getCurrentInstance` from the `qingkuai` runtime package, synchronously obtain the current component instance in the component logic, and pass it to the watcher or side effect APIs:
 
 ```qk
 <lang-js>
-    import { getCurrentInstance } from "qingkuai"
+    import { getCurrentInstance, effect } from "qingkuai"
 
     const instance = getCurrentInstance()
+    effect(instance, () => {
+        // ...
+    })
 </lang-js>
 ```
-
-Once you have the instance, pass it as the first argument to a watcher or side effect method imported from the runtime package, and the registration will be cleaned up automatically when the component is destroyed.
 
 ---
 
@@ -352,8 +351,7 @@ Once you have the instance, pass it as the first argument to a watcher or side e
 
 ### Automatic Cleanup
 
-Watchers or side effects created with the [built-in methods](../references/terminology.html#built-in-methods) inside a component file are cleaned up automatically when the component is destroyed — whether registered synchronously or asynchronously, no manual management is needed.
-When external `JavaScript` / `TypeScript` modules import and use these APIs from the `qingkuai` runtime package, the cleanup behavior depends on the first argument passed (see [Importing from the Runtime Package](#importing-from-the-runtime-package) above).
+Watchers or side effects created with the [built-in methods](../references/terminology.html#built-in-methods) inside a component file are cleaned up automatically when the component is destroyed — whether registered synchronously or asynchronously, no manual management is needed. When external modules import and use these APIs from the `qingkuai` runtime package, the cleanup behavior depends on the first argument passed (see [Importing from the Runtime Package](#importing-from-the-runtime-package) above).
 
 ### Manual Cleanup
 

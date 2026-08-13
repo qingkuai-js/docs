@@ -251,9 +251,9 @@ import { watch, effect, preWatch, postWatch, syncWatch } from "qingkuai"
 这些方法的第一个参数的取值决定了注册项的清理方式：
 
 - **传入组件实例**：注册项会关联到该组件的销毁生命周期，无论同步还是异步注册，组件销毁时都会自动清理；
-- **传入 `null`**：注册项不关联任何组件，不会被自动清理，此时必须通过返回句柄的 `stop()` 方法手动管理其生命周期。
+- **传入 `null`**：注册项不关联任何组件，不会被自动清理，此时必须通过返回句柄的 `stop` 方法手动管理其生命周期。
 
-需要特别提醒的是，我们**极不推荐**在组件内注册全局监视器和副作用，合理的设计通常是在组件外部的 `js/ts` 模块中注册这类全局副作用。如果确有必要在组件内注册，可以从运行时包导入相关 API，并将第一个参数传入 `null`，注册一个需要手动管理的监视器或副作用：
+需要特别提醒的是，我们**极不推荐**在组件内注册全局监视器和副作用，合理的设计通常是在组件外部的 `js` / `ts` 模块中注册这类全局副作用。如果确有必要在组件内注册，可以从运行时包导入相关 API，并将第一个参数传入 `null`，注册一个需要手动管理的监视器或副作用：
 
 ```qk
 <lang-js>
@@ -291,9 +291,9 @@ watchHandle.stop()
 effectHandle.stop()
 ```
 
-若希望注册项随组件销毁自动清理，则需要取得与组件实例的绑定关系，常见的方式有以下两种。
+若希望注册项随组件销毁自动清理，则需要取得与组件实例的绑定关系，常见的方式有以下两种：
 
-**接受组件内建的 `effect` / `watch` 方法作为参数**
+**1. 接受组件内建的 `effect` / `watch` 方法作为参数**
 
 组件文件内部内建的 `effect`、`watch` 等方法本身就与当前组件实例绑定，可以把它们作为参数传给外部模块，由外部模块调用这些方法，从而创建与对应组件实例绑定的监视器或副作用：
 
@@ -306,7 +306,7 @@ effectHandle.stop()
 </lang-js>
 ```
 
-外部模块中，`effect` 参数的完整类型为 `EffectFunc`（`watch` 对应 `WatchFunc`）：
+外部模块中，`effect` 和 `watch` 方法的完整类型为 `EffectFunc` 和 `WatchFunc`：
 
 |js|ts|
 
@@ -330,19 +330,20 @@ export function collectEffects(effect: EffectFunc) {
 }
 ```
 
-**通过 `getCurrentInstance` 获取当前组件实例**
+**2. 通过 `getCurrentInstance` 获取当前组件实例**
 
-也可以从 `qingkuai` 运行时包导入 `getCurrentInstance`，在组件逻辑中同步获取当前组件实例：
+也可以从 `qingkuai` 运行时包导入 `getCurrentInstance`，在组件逻辑中同步获取当前组件实例并传递给监视器/副作用 API：
 
 ```qk
 <lang-js>
-    import { getCurrentInstance } from "qingkuai"
+    import { getCurrentInstance, effect } from "qingkuai"
 
     const instance = getCurrentInstance()
+    effect(instance, () => {
+        // ...
+    })
 </lang-js>
 ```
-
-获取到实例后，将其作为第一个参数传给从运行时包导入的监视器或副作用方法，注册项便会随该组件销毁自动清理。
 
 ---
 
@@ -350,8 +351,7 @@ export function collectEffects(effect: EffectFunc) {
 
 ### 自动清理
 
-组件文件中使用[内建方法](../references/terminology.html#内建方法)创建的监视器或副作用，无论同步还是异步注册，都会随组件销毁自动清理，无需手动管理。
-而外部 `JavaScript` / `TypeScript` 模块从 `qingkuai` 运行时包导入使用这些 API 时，则需要根据传入的第一个参数决定其清理方式（见上方的[从运行时包导入](#从运行时包导入)）。
+组件文件中使用[内建方法](../references/terminology.html#内建方法)创建的监视器或副作用，无论同步还是异步注册，都会随组件销毁自动清理，无需手动管理。但外部模块从 `qingkuai` 运行时包导入使用这些 API 时，则需要根据传入的第一个参数决定其清理方式（见上方的[从运行时包导入](#从运行时包导入)）。
 
 ### 手动清理
 
