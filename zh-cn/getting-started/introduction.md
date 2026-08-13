@@ -6,7 +6,7 @@ Qingkuai 取自中文“轻快”的拼音，寓意框架以 `轻` 量级、`快
 
 ```qk
 <lang-js>
-    let count = 1
+    let count = 0
     let name = "World"
 
     setTimeout(() => {

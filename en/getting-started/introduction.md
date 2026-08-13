@@ -6,7 +6,7 @@ When writing components, component scripts can be placed in embedded language ta
 
 ```qk
 <lang-js>
-    let count = 1
+    let count = 0
     let name = "World"
 
     setTimeout(() => {
