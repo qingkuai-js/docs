@@ -16,6 +16,14 @@
 
 ---
 
+## 组件实例
+
+组件实例是组件文件编译后在运行时创建的对象，承载组件导出的成员与内部状态。在父组件中，可通过组件标签上的 `&handle` 引用属性获取子组件的实例，并借此访问其导出的成员；同时，它也是从 `qingkuai` 运行时包导入的监视器与副作用方法的绑定参数。
+
+参考：[组件导出](../components/exports.html)、[组件引用属性](../components/attributes.html#引用属性)
+
+---
+
 ## 事件
 
 事件是指以 `@` 前缀声明的事件属性，用于在模板中绑定交互逻辑，或向组件外部暴露可调用的回调。
@@ -178,6 +186,6 @@
 
 ## 内建方法
 
-内建方法是编译器内建标识符的一部分，指 `reactive`、`shallow`、`alias`、`derived`、`derivedExp`、`watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`、`defaultProps`、`defaultRefs` 这 11 个可直接在组件文件中使用的方法标识符。它们本质是编译标记，会在编译阶段被转换为内部方法调用。
+内建方法是编译器内建标识符的一部分，指可直接在组件文件中使用的方法标识符，包括响应性标记方法 `raw`、`reactive`、`shallow`、`alias`、`derived`、`derivedExp`，默认值声明方法 `defaults`，监视器便捷注册方法 `watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`，以及监视器与副作用方法 `watch`、`preWatch`、`postWatch`、`syncWatch`、`effect`、`preEffect`、`postEffect`、`syncEffect`。它们本质是编译标记，会在编译阶段被转换为内部方法调用。
 
 参考：[响应性声明](../basic/reactivity.html#响应性声明)、[监视器](../basic/watchers-and-side-effects.html#监视器)、[内建标识符](./intrinsics.html)

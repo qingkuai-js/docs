@@ -15,8 +15,13 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 ### 类型导出
 
 - `ComponentInstance`
+- `EffectCallback`
+- `EffectFunc`
+- `EffectHandle`
 - `HtmlBlockOptions`
 - `QingkuaiComponent`
+- `WatcherCallback`
+- `WatchFunc`
 
 ### 生命周期
 
@@ -58,6 +63,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 
 - `createShallowStore`
 - `createStore`
+- `getCurrentInstance`
 - `mountApp`
 - `nextTick`
 - `toRaw`
@@ -121,6 +127,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 ### 标志
 
 - `PositionFlag`
+- `TestingMode`
 
 ### 方法
 

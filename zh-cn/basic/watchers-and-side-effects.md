@@ -2,12 +2,14 @@
 
 监视器与副作用 API 是 Qingkuai 响应性系统的一部分，允许你在更新调度器的不同阶段注册回调，以便在响应式值发生变化时执行相应逻辑。根据触发时机的不同，这些 API 分为以下几类：
 
-- watch、effect：普通注册，不能确定与更新调度器的执行顺序先后，先注册先触发；
-- syncWatch、syncEffect：被依赖的响应式值发生变化后立即触发，优先于更新调度（异步）器执行；
-- preWatch、preEffect：优先于更新调度器执行，适用于需要在状态变更后、更新调度前执行的逻辑；
-- postWatch、postEffect：在更新调度完成后触发，适用于需要等待状态稳定或 DOM 更新之后的处理逻辑；
+- `watch`、`effect`：普通注册，不能确定与更新调度器的执行顺序先后，先注册先触发；
+- `syncWatch`、`syncEffect`：被依赖的响应式值发生变化后立即触发，优先于更新调度（异步）器执行；
+- `preWatch`、`preEffect`：优先于更新调度器执行，适用于需要在状态变更后、更新调度前执行的逻辑；
+- `postWatch`、`postEffect`：在更新调度完成后触发，适用于需要等待状态稳定或 DOM 更新之后的处理逻辑；
 
-<div class="custom-block warning">监视器与副作用 API 主要面向熟悉 <a href="https://cn.vuejs.org">Vue</a> 等框架的开发者，作为迁移阶段的过渡工具，用于降低上手门槛。我们不建议在正式项目中大范围使用这类 API。原因在于，副作用通常以回调形式注册，其触发位置不会直接体现在调用栈中，调用链不够直观、跟踪成本也更高；同时，这种模式也不利于借助 IDE 的跳转、查找引用等语言服务进行高效的代码审查与维护。若项目对可维护性和可读性要求较高，建议优先采用显式数据流与函数组合来组织响应逻辑。</div>
+在[组件文件](../references/terminology.html#组件文件)内部，监视器与副作用 API 都是[内建方法](../references/terminology.html#内建方法)，无需从运行时包导入。编译器会按需为 API 调用生成与[组件](../components/basic.html)绑定的方法，使组件内注册的监视器与副作用都能正确绑定到[组件实例](../references/terminology.html#组件实例)；因此你无需关心内存泄漏问题，它们都会在组件卸载时被自动停止并释放内存，无论是否在异步逻辑中注册。
+
+<div class="custom-block warning">监视器与副作用 API 主要面向熟悉 <a href="https://cn.vuejs.org">Vue</a> 等框架的开发者，作为迁移阶段的过渡工具，用于降低上手门槛。我们不建议在正式项目中大范围使用这类 API。原因在于，副作用通常以回调形式注册，其触发位置不会直接体现在调用栈中，调用链不够直观、跟踪成本也更高；同时，这种模式也不利于借助 <doce>IDE</code> 的跳转、查找引用等语言服务进行高效的代码审查与维护。若项目对可维护性和可读性要求较高，建议优先采用显式数据流与函数组合来组织响应逻辑。</div>
 
 ---
 
@@ -19,8 +21,6 @@
 
 ```qk
 <lang-js>
-    import { watch } from "qingkuai"
-
     let paragraph
     let name = "Javascript"
     watch(
@@ -38,8 +38,6 @@
 
 ```qk
 <lang-ts>
-    import { watch } from "qingkuai"
-
     let name = "Javascript"
     let paragraph!: HTMLParagraphElement
     watch(
@@ -63,8 +61,6 @@
 
 ```qk
 <lang-js>
-    import { preWatch } from "qingkuai"
-
     let paragraph
     let name = "Javascript"
     preWatch(
@@ -82,8 +78,6 @@
 
 ```qk
 <lang-ts>
-    import { preWatch } from "qingkuai"
-
     let name = "Javascript"
     let paragraph!: HTMLParagraphElement
     preWatch(
@@ -107,8 +101,6 @@
 
 ```qk
 <lang-js>
-    import { postWatch } from "qingkuai"
-
     let paragraph
     let name = "Javascript"
     postWatch(
@@ -126,8 +118,6 @@
 
 ```qk
 <lang-ts>
-    import { postWatch } from "qingkuai"
-
     let name = "Javascript"
     let paragraph!: HTMLParagraphElement
     postWatch(
@@ -149,8 +139,6 @@
 
 ```qk
 <lang-js>
-    import { syncWatch } from "qingkuai"
-
     let name = "Javascript"
 
     function handleChangeName() {
@@ -171,7 +159,7 @@
 
 ### 便捷注册
 
-标准监视器注册时，第一个参数必须是返回被监听值的 getter 函数，对于简单表达式而言略显冗长。为此，编译器内建了一组与 [derivedExp](/basic/reactivity.html#衍生响应式状态) 作用类似的便捷注册方法：`watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`。这些方法的第一个参数会被编译器自动转换为 getter 函数，可以直接传入表达式：
+标准监视器注册时，第一个参数必须是返回被监听值的 `getter` 函数，对于简单表达式而言略显冗长。为此，编译器内建了一组与 [derivedExp](/basic/reactivity.html#衍生响应式状态) 作用类似的便捷注册方法：`watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`。这些方法的第一个参数会被编译器自动转换为 `getter` 函数，可以直接传入表达式：
 
 ```js
 // 普通注册
@@ -205,8 +193,6 @@ syncWatchExp(identifier, (pre, cur) => {
 
 ```qk
 <lang-js>
-    import { effect } from "qingkuai"
-
     let userId = 0
     let userInfo = null
     effect(async () => {
@@ -223,8 +209,6 @@ syncWatchExp(identifier, (pre, cur) => {
 
 ```qk
 <lang-ts>
-    import { effect } from "qingkuai"
-
     interface UserInfo {
         id: number
         name: string
@@ -244,7 +228,7 @@ syncWatchExp(identifier, (pre, cur) => {
 </qk:spread>
 ```
 
-副作用 API 同样提供了对应不同触发时机的注册方法：
+`effect` 同样是组件文件的内置方法，无需导入即可直接调用。副作用 API 同样提供了对应不同触发时机的注册方法：
 
 ```js
 preEffect(() => {})
@@ -254,14 +238,127 @@ syncEffect(() => {})
 
 ---
 
+## 从运行时包导入
+
+在[组件文件](../references/terminology.html#组件文件)之外使用监视器与副作用 API 时，需要从 `qingkuai` 运行时包导入对应的方法：
+
+```js
+import { watch, effect, preWatch, postWatch, syncWatch } from "qingkuai"
+```
+
+与组件文件中的内置方法不同，从运行时包导入的这些方法**不会自动绑定当前组件实例**。第一个参数为[组件实例](../references/terminology.html#组件实例)或 `null`，用于指定注册项的绑定关系，其余参数与组件内置方法一致。
+
+这些方法的第一个参数的取值决定了注册项的清理方式：
+
+- **传入组件实例**：注册项会关联到该组件的销毁生命周期，无论同步还是异步注册，组件销毁时都会自动清理；
+- **传入 `null`**：注册项不关联任何组件，不会被自动清理，此时必须通过返回句柄的 `stop()` 方法手动管理其生命周期。
+
+需要特别提醒的是，我们**极不推荐**在组件内注册全局监视器和副作用，合理的设计通常是在组件外部的 `js/ts` 模块中注册这类全局副作用。如果确有必要在组件内注册，可以从运行时包导入相关 API，并将第一个参数传入 `null`，注册一个需要手动管理的监视器或副作用：
+
+```qk
+<lang-js>
+    import { effect as manualEffect } from "qingkuai"
+
+    const handle = manualEffect(null, () => {
+        // ...
+    })
+
+    handle.stop()
+</lang-js>
+```
+
+<div class="custom-block warning">这里必须为导入的 API 取别名（如 <code>manualEffect</code>）。因为组件文件内部已经内建了同名 API，直接导入同名标识符会触发编译错误。这一限制是刻意设计的，我们希望通过这种不顺手的使用方式，让你意识到自己可能正在使用一种不被推荐的反模式。</div>
+
+在组件文件之外，最常见的做法是传入 `null` 并由调用方手动管理生命周期：
+
+```js
+import { watch, effect } from "qingkuai"
+
+const watchHandle = watch(
+    null,
+    () => count,
+    (pre, cur) => {
+        // ...
+    }
+)
+
+const effectHandle = effect(null, () => {
+    // side effect logic ...
+})
+
+// 手动停止并释放资源
+watchHandle.stop()
+effectHandle.stop()
+```
+
+若希望注册项随组件销毁自动清理，则需要取得与组件实例的绑定关系，常见的方式有以下两种。
+
+**接受组件内建的 `effect` / `watch` 方法作为参数**
+
+组件文件内部内建的 `effect`、`watch` 等方法本身就与当前组件实例绑定，可以把它们作为参数传给外部模块，由外部模块调用这些方法，从而创建与对应组件实例绑定的监视器或副作用：
+
+```qk
+<lang-js>
+    import { collectEffects } from "./utils"
+
+    // 把组件内建的 effect 方法作为参数传给外部模块
+    collectEffects(effect)
+</lang-js>
+```
+
+外部模块中，`effect` 参数的完整类型为 `EffectFunc`（`watch` 对应 `WatchFunc`）：
+
+|js|ts|
+
+```js
+// 外部模块：接受组件内建的 effect 方法作为参数
+export function collectEffects(effect) {
+    effect(() => {
+        // ...
+    })
+}
+```
+
+```ts
+import type { EffectFunc } from "qingkuai"
+
+// 外部模块：接受组件内建的 effect 方法作为参数
+export function collectEffects(effect: EffectFunc) {
+    effect(() => {
+        // ...
+    })
+}
+```
+
+**通过 `getCurrentInstance` 获取当前组件实例**
+
+也可以从 `qingkuai` 运行时包导入 `getCurrentInstance`，在组件逻辑中同步获取当前组件实例：
+
+```qk
+<lang-js>
+    import { getCurrentInstance } from "qingkuai"
+
+    const instance = getCurrentInstance()
+</lang-js>
+```
+
+获取到实例后，将其作为第一个参数传给从运行时包导入的监视器或副作用方法，注册项便会随该组件销毁自动清理。
+
+---
+
 ## 清理监视器与副作用
+
+### 自动清理
+
+组件文件中使用[内建方法](../references/terminology.html#内建方法)创建的监视器或副作用，无论同步还是异步注册，都会随组件销毁自动清理，无需手动管理。
+而外部 `JavaScript` / `TypeScript` 模块从 `qingkuai` 运行时包导入使用这些 API 时，则需要根据传入的第一个参数决定其清理方式（见上方的[从运行时包导入](#从运行时包导入)）。
 
 ### 手动清理
 
 监视器及副作用 API 的注册方法都会返回控制句柄对象，这个句柄对象的类型定义如下：
 
 ```ts
-type EffectHandlers = Record<"stop" | "pause" | "resume", () => void>
+type EffectHandle = Record<"stop" | "pause" | "resume", () => void>
 ```
 
 其中的三个方法分别用于停止、暂停和恢复监视器或副作用的触发：
@@ -281,6 +378,8 @@ watchHandlers.stop() // 停止并清理监视器
 watchHandlers.pause() // 暂停监视器
 watchHandlers.resume() // 恢复被暂停的监视器
 ```
+
+### 清理函数
 
 某些情况下，监视器或副作用在重新触发前需要执行清理逻辑。例如，若其中注册了定时器，就需要在下一次触发前将其清除，以避免内存泄漏或逻辑错误。此时可以将清理逻辑封装为函数，并在回调中通过 `return` 语句返回：
 
@@ -310,78 +409,41 @@ watchExp(identifier, (pre, cur) => {
 })
 ```
 
-### 自动清理
-
-在组件中同步注册的监视器与副作用会自动关联到当前组件的销毁生命周期。当组件被销毁时，这些注册项会被框架自动清理，无需手动调用 `stop()`：
-
-```js
-import { effect, watch } from "qingkuai"
-
-// 组件内同步注册，组件销毁时会自动清理
-effect(() => {
-    // ...
-})
-
-watchExp(someValue, (pre, cur) => {
-    // ...
-})
-```
-
-若监视器或副作用是在异步逻辑中注册的，则不再受组件销毁生命周期的管理，需要在 `onBeforeDestroy` 或 `onAfterDestroy` 中调用返回句柄的 `stop()` 来手动清理：
-
-```js
-import { effect, watch, onBeforeDestroy } from "qingkuai"
-
-let handle
-
-setTimeout(() => {
-    // 异步注册，不在组件销毁生命周期内
-    handle = effect(() => {
-        // ...
-    })
-}, 1000)
-
-// 在组件销毁前手动停止
-onBeforeDestroy(() => {
-    handle?.stop()
-})
-```
-
 ### 被动清理
 
 若监视器或副作用回调执行期间未收集到任何响应式依赖，运行时会发出警告并自动销毁该注册项。销毁后其占用的内存等资源都会被释放，因为它将永远不会被再次执行：
 
-```js
-import { effect, watch } from "qingkuai"
+```qk
+<lang-js>
+    effect(() => {
+        // 回调中没有访问任何响应式值
+        console.log("没有依赖，执行完后会被销毁")
+    })
 
-effect(() => {
-    // 回调中没有访问任何响应式值
-    console.log("没有依赖，执行完后会被销毁")
-})
-
-watch(
-    () => "constant",
-    (pre, cur) => {
-        // getter 返回常量，未建立响应式关联
-        console.log("同样会被销毁")
-    }
-)
+    watch(
+        () => "constant",
+        (pre, cur) => {
+            // getter 返回常量，未建立响应式关联
+            console.log("同样会被销毁")
+        }
+    )
+</lang-js>
 ```
 
 这通常意味着回调中没有读取响应式值，或读取路径被条件分支短路：
 
-```js
-import { effect } from "qingkuai"
+```qk
+<lang-js>
+    let flag = true
+    let value = reactive("hello")
 
-let flag = true
-let value = reactive("hello")
-
-effect(() => {
-    // 当 flag 为 true 时仅返回常量，不读取任何响应式值
-    if (flag) {
-        console.log("no reactive deps")
-        return
-    }
-    console.log(value) // 这行不会被执行到
-})
+    effect(() => {
+        // 当 flag 为 true 时仅返回常量，不读取任何响应式值
+        if (flag) {
+            console.log("no reactive deps")
+            return
+        }
+        console.log(value) // 这行不会被执行到
+    })
+</lang-js>
 ```

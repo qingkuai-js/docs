@@ -265,17 +265,18 @@ let { str } = alias(refs)
 
 ## 指定默认值
 
-组件属性支持默认值，当父组件未传递某个属性时，组件内部可以指定默认值来保证组件的正常运行。通过编译器内建的 `defaultProps` 或 `defaultRefs` 方法，我们可以为组件属性指定默认值：
+组件属性支持默认值，当父组件未传递某个属性时，组件内部可以指定默认值来保证组件的正常运行。通过编译器内建的 `defaults` 方法，我们可以为组件属性指定默认值：
 
 ```js
-defaultRefs({
-    checked: false
-})
-
-defaultProps({
-    age: 0,
-    name: "Unknown",
-    description: "This is a default user info."
+defaults({
+    refs: {
+        checked: false
+    },
+    props: {
+        age: 0,
+        name: "Unknown",
+        description: "This is a default user info."
+    }
 })
 ```
 
