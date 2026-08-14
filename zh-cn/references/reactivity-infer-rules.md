@@ -85,22 +85,22 @@
 
 ### 在模板中使用
 
-当标识符在模板中被访问时，对于以 `let` 或 `var` 声明、且初始值为字面量类型的标识符，编译器还会检查其在脚本中是否存在被修改的情况：
+当标识符在模板中被访问时，编译器会检查其在脚本中是否存在被修改的情况。此检查适用于以 `let` 或 `var` 声明、初始值为字面量类型的标识符，也适用于 `shallow` 模式下初始值为非字面量表达式（如 `let x = foo()`）的可变标识符：
 
 - **未被修改**：推导为原始值，避免不必要的依赖收集与更新开销
 - **存在修改**：推导为当前响应性模式对应的响应性类型
 
 ```qk
-<lang-ts>
-    let a = 1    // 在模板中使用，但从未被修改 → 原始值
-    let b = 0    // 在模板中使用，且存在修改 → 当前响应性模式对应的类型
-    function increment() {
-        b++
+<lang-js shallow>
+    let count = 0
+    let state = load()   // 从未赋值 → 保持普通变量（raw）
+    function setCount(v) {
+        count = v        // 源码中存在赋值 → count 推断为 shallow
     }
-</lang-ts>
+</lang-js>
 
-<p>{ a }</p>
-<button @click={increment}>{ b }</button>
+<p>{ state }</p>
+<button @click={setCount}>{ count }</button>
 ```
 
 ### 引用属性
@@ -131,8 +131,8 @@
 
 ```qk
 <lang-ts>
-    const config = reactive(loadConfig())  // 报错：allowConstReactive 被禁用
-    const list = shallow(getList())        // 报错：allowConstReactive 被禁用
+    const list = shallow(getList())        // 编译错误: 1070
+    const config = reactive(loadConfig())  // 编译错误: 1070
 </lang-ts>
 ```
 
