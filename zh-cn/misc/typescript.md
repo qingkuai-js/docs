@@ -136,6 +136,30 @@ interface Props extends ComponentProps<string> {
 
 ---
 
+## 默认值推断
+
+在组件文件中，使用内建的 `defaults` 方法可以为组件的可选属性指定默认值，同时收窄 `props` 与 `refs` 的类型。
+
+```ts
+interface Props {
+    name?: string
+    age?: number
+    fixed: string
+}
+
+interface Refs {
+    checked?: boolean
+}
+```
+
+`defaults` 的参数类型为 `Props` 与 `Refs` 类型中声明为可选的属性：
+<img src="/static/medias/defaults-parameter-type.png" alt="defaults-parameter-type.png" style="width: 80%; margin-left: 10%;" />
+
+调用 `defaults` 后，`props` 与 `refs` 中被设置了默认值的属性，其类型会在后续代码中被收窄为非可选（必填）类型，这与运行时表现一致：
+<img src="/static/medias/prop-type-narrowing.png" alt="prop-type-narrowing.png" style="width: 60%; margin-left: 20%;" />
+
+---
+
 ## 插槽上下文
 
 在组件文件中你无需关心插槽类型声明，Qingkuai 语言服务会根据 `slot` 标签自动推导插槽上下文的类型：
