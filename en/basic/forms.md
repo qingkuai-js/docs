@@ -1,12 +1,12 @@
 # Form Handling
 
-In the earlier [Reference Attributes](./reference-attributes.html) article, we already introduced the basic usage of obtaining variable references through the `&` syntax. In real development, the values of form elements often need to stay synchronized with state variables, so reference attributes are especially important in form handling scenarios. This section focuses on the usage details of reference attributes on form elements, explaining how this mechanism can be used to efficiently access and control form data and achieve reactive data binding and updates.
+In the earlier [Reference Attributes](./reference-attributes.md) article, we already introduced the basic usage of obtaining variable references through the `&` syntax. In real development, the values of form elements often need to stay synchronized with state variables, so reference attributes are especially important in form handling scenarios. This section focuses on the usage details of reference attributes on form elements, explaining how this mechanism can be used to efficiently access and control form data and achieve reactive data binding and updates.
 
 ---
 
 ## Text Input
 
-In the [Form Input Handling](./reference-attributes.html#form-input-handling) section of the reference attributes article, we introduced how to use the `&value` reference attribute on an `input` tag to synchronize the input content with a variable in the embedded script. Similarly, `textarea` supports the same pattern:
+In the [Form Input Handling](./reference-attributes.md#form-input-handling) section of the reference attributes article, we introduced how to use the `&value` reference attribute on an `input` tag to synchronize the input content with a variable in the embedded script. Similarly, `textarea` supports the same pattern:
 
 ```qk
 <lang-js>

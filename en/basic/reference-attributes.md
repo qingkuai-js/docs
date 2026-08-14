@@ -68,7 +68,7 @@ When you need to get the DOM element corresponding to a regular tag in the templ
 ```
 
 <div class="custom-block tip">
-    <code>onAfterMount</code> is a Qingkuai callback that runs after a component has finished mounting and rendering. It is part of the <a href="../components/life-cycle.html">component lifecycle</a>.
+    <code>onAfterMount</code> is a Qingkuai callback that runs after a component has finished mounting and rendering. It is part of the <a href="../components/life-cycle.md">component lifecycle</a>.
 </div>
 
 <div class="custom-block tip">
@@ -184,7 +184,7 @@ The inputValue is: {inputValue}
 ```
 
 <div class="custom-block tip">
-    Here we only briefly introduced reference attributes in form input scenarios. More usage details will be covered in the <a href="./forms.html">Form Handling</a> section.
+    Here we only briefly introduced reference attributes in form input scenarios. More usage details will be covered in the <a href="./forms.md">Form Handling</a> section.
 </div>
 
 ---

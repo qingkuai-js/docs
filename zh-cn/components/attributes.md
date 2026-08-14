@@ -34,7 +34,7 @@
 ```
 
 <div class="custom-block tip">
-    如果你的嵌入脚本语言为 TypeScript，或希望获得组件属性补全建议，可以先阅读 <a href="../misc/typescript.html">TypeScript 支持</a> 再阅读本节内容。
+    如果你的嵌入脚本语言为 TypeScript，或希望获得组件属性补全建议，可以先阅读 <a href="../misc/typescript.md">TypeScript 支持</a> 再阅读本节内容。
 </div>
 
 在组件标签上添加某个属性名称但未给定属性值时，组件内部接收到的是布尔值 `true`：
@@ -233,7 +233,7 @@
 <Child &handle={child} />
 ```
 
-<div class="custom-block tip">同通过 `&handle` <a href="../basic/reference-attributes.html#获取-dom-元素">获取 DOM 节点</a>一样：当组件被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用。</div>
+<div class="custom-block tip">同通过 `&handle` <a href="../basic/reference-attributes.md#获取-dom-元素">获取 DOM 节点</a>一样：当组件被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用。</div>
 
 ---
 

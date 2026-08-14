@@ -6,7 +6,7 @@ Directives are a core part of Qingkuai. They are special attributes prefixed wit
 - Flow control directives: `for`, `if`, `elif`, `else` for structural rendering logic;
 - Async directives: `await`, `then`, `catch` for reacting to asynchronous state;
 
-In addition, there is a `slot` directive for receiving slot context in components. We will introduce it after covering the concepts of [components](../components/basic.html) and [slots](../components/slots.html).
+In addition, there is a `slot` directive for receiving slot context in components. We will introduce it after covering the concepts of [components](../components/basic.md) and [slots](../components/slots.md).
 
 ---
 
@@ -28,7 +28,7 @@ In Qingkuai, you can combine `if`, `elif`, and `else` to implement conditional r
 ```
 
 <div class="custom-block tip">
-    The <code>qk:spread</code> tag above acts as a virtual mounting point for directives. It is not rendered to the page. You can treat it as a container whose directives are applied to all child nodes. This design avoids unnecessary wrapper elements and also makes it possible to apply directives to text nodes. More details are covered in <a href="../misc/builtin-elements.html">Built-in Elements</a>.
+    The <code>qk:spread</code> tag above acts as a virtual mounting point for directives. It is not rendered to the page. You can treat it as a container whose directives are applied to all child nodes. This design avoids unnecessary wrapper elements and also makes it possible to apply directives to text nodes. More details are covered in <a href="../misc/builtin-elements.md">Built-in Elements</a>.
 </div>
 
 You can also insert `elif` branches between `if` and `else`:
@@ -208,7 +208,7 @@ If you do not need intermediate UI during waiting, place `await` and `then`/`cat
 ```
 
 <div class="custom-block tip">
-    Qingkuai <a href="../components/async-components.html">async components</a> are also implemented by combining these async directives.
+    Qingkuai <a href="../components/async-components.md">async components</a> are also implemented by combining these async directives.
 </div>
 
 ---
@@ -299,10 +299,10 @@ By default, a parent component's scope attribute is not passed down to any eleme
 ```
 
 <div class="custom-block tip">
-    The content inside <code>lang-css</code> is an <a href="../references/terminology.html#embedded-style-block">embedded style block</a> of a <a href="../components/basic.html">component</a>, used to define style rules for the component. If you are not yet familiar with component scoped styles, read <a href="../components/stylesheets.html">Stylesheets</a> first before continuing with this section.
+    The content inside <code>lang-css</code> is an <a href="../references/terminology.md#embedded-style-block">embedded style block</a> of a <a href="../components/basic.md">component</a>, used to define style rules for the component. If you are not yet familiar with component scoped styles, read <a href="../components/stylesheets.md">Stylesheets</a> first before continuing with this section.
 </div>
 
-Note that when the child's root node is a [qk:spread](../misc/builtin-elements.html#qkspread) or another component — tags that do not create actual DOM elements — Qingkuai walks in to the first real element and attaches the scope attribute to it:
+Note that when the child's root node is a [qk:spread](../misc/builtin-elements.md#qkspread) or another component — tags that do not create actual DOM elements — Qingkuai walks in to the first real element and attaches the scope attribute to it:
 
 ```qk
 <!-- Parent.qk -->
@@ -366,7 +366,7 @@ If you need different behavior, wrap the inner tag with an outer tag that uses a
 </div>
 ```
 
-The code above introduces a meaningless `div` element. To avoid that, you can use the `qk:spread` [built-in element](../misc/builtin-elements.html) as a virtual mounting point for directives, so no extra wrapper element is created:
+The code above introduces a meaningless `div` element. To avoid that, you can use the `qk:spread` [built-in element](../misc/builtin-elements.md) as a virtual mounting point for directives, so no extra wrapper element is created:
 
 ```qk
 <qk:spread #for={item of items}>

@@ -41,7 +41,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 }
 ```
 
-与[动态属性](../basic/interpolation.html#动态属性)一样，事件与变量名称一致时可省略插值块，所以下面两种写法等效：
+与[动态属性](../basic/interpolation.md#动态属性)一样，事件与变量名称一致时可省略插值块，所以下面两种写法等效：
 
 ```qk
 <button @click></button>
@@ -81,7 +81,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 ```
 
 <div class="custom-block tip">
-    从原生事件的角度来看，将 <code>$arg</code> 命名为 <code>$event</code> 可能更直观；但从语义一致性的角度出发，使用 $arg 更能涵盖我们之后将介绍的<a href="../components/basic.html">组件</a>内联事件处理器所传入的任意参数。因此，在 Qingkuai 中我们统一使用 $arg 作为事件处理器的默认参数名，以体现其在组件与原生事件中的通用性：它既可以表示原生事件对象，也可以表示组件传入的任意参数。
+    从原生事件的角度来看，将 <code>$arg</code> 命名为 <code>$event</code> 可能更直观；但从语义一致性的角度出发，使用 $arg 更能涵盖我们之后将介绍的<a href="../components/basic.md">组件</a>内联事件处理器所传入的任意参数。因此，在 Qingkuai 中我们统一使用 $arg 作为事件处理器的默认参数名，以体现其在组件与原生事件中的通用性：它既可以表示原生事件对象，也可以表示组件传入的任意参数。
 </div>
 
 如果你在内联事件处理器中调用了其他方法，Qingkuai 会自动将这些被调用方法中的 this 绑定为当前元素：

@@ -7,7 +7,7 @@ The watcher and side effect APIs are part of Qingkuai's reactivity system. They 
 - `preWatch`, `preEffect`: triggered before the update scheduler. They are suitable for logic that needs to run after state changes but before scheduled updates.
 - `postWatch`, `postEffect`: triggered after scheduled updates are complete. They are suitable when you need to wait until state and DOM updates have settled.
 
-Inside a [component file](../references/terminology.html#component-file), the watcher and side effect APIs are all [built-in methods](../references/terminology.html#built-in-methods) — there is no need to import them from the runtime package. The compiler generates methods bound to the [component](../components/basic.html) as needed for the API calls, so every watcher and side effect registered inside a component is correctly bound to the [component instance](../references/terminology.html#component-instance). As a result, you do not need to worry about memory leaks: they are all stopped and their memory released when the component unmounts, whether they were registered in synchronous or asynchronous logic.
+Inside a [component file](../references/terminology.md#component-file), the watcher and side effect APIs are all [built-in methods](../references/terminology.md#built-in-methods) — there is no need to import them from the runtime package. The compiler generates methods bound to the [component](../components/basic.md) as needed for the API calls, so every watcher and side effect registered inside a component is correctly bound to the [component instance](../references/terminology.md#component-instance). As a result, you do not need to worry about memory leaks: they are all stopped and their memory released when the component unmounts, whether they were registered in synchronous or asynchronous logic.
 
 <div class="custom-block warning">The watcher and side effect APIs are mainly intended as transition tools for developers coming from frameworks such as <a href="https://cn.vuejs.org">Vue</a>. They help lower the learning curve during migration. However, we do not recommend using these APIs heavily in production projects. Side effects are usually registered as callbacks, and their trigger locations do not appear directly in the call stack, which makes the call chain less intuitive and harder to trace. This pattern also makes it less convenient to rely on IDE features such as go-to-definition and find references for efficient review and maintenance. If your project values maintainability and readability, prefer explicit data flow and function composition when organizing reactive logic.</div>
 
@@ -159,7 +159,7 @@ The callbacks of `watch`, `preWatch`, and `postWatch` are all triggered asynchro
 
 ### Convenience Registration
 
-In standard watcher registration, the first argument must be a `getter` function that returns the value being observed. This is slightly verbose for simple expressions. To address that, the compiler provides a group of convenience registration methods similar in spirit to [derivedExp](/basic/reactivity.html#derived-reactive-state): `watchExp`, `preWatchExp`, `postWatchExp`, and `syncWatchExp`. The compiler automatically converts the first argument of these methods into a `getter` function, so you can pass an expression directly:
+In standard watcher registration, the first argument must be a `getter` function that returns the value being observed. This is slightly verbose for simple expressions. To address that, the compiler provides a group of convenience registration methods similar in spirit to [derivedExp](/basic/reactivity.md#derived-reactive-state): `watchExp`, `preWatchExp`, `postWatchExp`, and `syncWatchExp`. The compiler automatically converts the first argument of these methods into a `getter` function, so you can pass an expression directly:
 
 ```js
 // Normal watcher registration
@@ -240,13 +240,13 @@ syncEffect(() => {})
 
 ## Importing from the Runtime Package
 
-To use the watcher and side effect APIs outside [component files](../references/terminology.html#component-file), import the corresponding methods from the `qingkuai` runtime package:
+To use the watcher and side effect APIs outside [component files](../references/terminology.md#component-file), import the corresponding methods from the `qingkuai` runtime package:
 
 ```js
 import { watch, effect, preWatch, postWatch, syncWatch } from "qingkuai"
 ```
 
-Unlike the built-in methods in component files, these runtime-imported methods **do not bind the current component instance automatically**. The first argument is a [component instance](../references/terminology.html#component-instance) or `null`, which specifies how the registration is bound; the remaining arguments are the same as the built-in methods of a component.
+Unlike the built-in methods in component files, these runtime-imported methods **do not bind the current component instance automatically**. The first argument is a [component instance](../references/terminology.md#component-instance) or `null`, which specifies how the registration is bound; the remaining arguments are the same as the built-in methods of a component.
 
 The value of the first argument determines how the registration is cleaned up:
 
@@ -351,7 +351,7 @@ You can also import `getCurrentInstance` from the `qingkuai` runtime package, sy
 
 ### Automatic Cleanup
 
-Watchers or side effects created with the [built-in methods](../references/terminology.html#built-in-methods) inside a component file are cleaned up automatically when the component is destroyed — whether registered synchronously or asynchronously, no manual management is needed. When external modules import and use these APIs from the `qingkuai` runtime package, the cleanup behavior depends on the first argument passed (see [Importing from the Runtime Package](#importing-from-the-runtime-package) above).
+Watchers or side effects created with the [built-in methods](../references/terminology.md#built-in-methods) inside a component file are cleaned up automatically when the component is destroyed — whether registered synchronously or asynchronously, no manual management is needed. When external modules import and use these APIs from the `qingkuai` runtime package, the cleanup behavior depends on the first argument passed (see [Importing from the Runtime Package](#importing-from-the-runtime-package) above).
 
 ### Manual Cleanup
 

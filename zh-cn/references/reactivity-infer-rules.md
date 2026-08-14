@@ -124,7 +124,7 @@
 
 ### allowConstReactive 选项
 
-[`allowConstReactive`](../misc/config-files.html#allowconstreactive) 运行配置项控制常量声明是否参与响应性推导，默认值为 `true`。当该选项被设为 `false` 时：
+[`allowConstReactive`](../misc/config-files.md#allowconstreactive) 运行配置项控制常量声明是否参与响应性推导，默认值为 `true`。当该选项被设为 `false` 时：
 
 - 在隐式推导阶段，`const` 声明的常量不会被推导为具有响应性，统一按原始值处理；
 - 在显式标记阶段，使用 `reactive` 或 `shallow` 标记初始值为非字面量表达式的常量声明会被禁止并抛出编译错误：
@@ -140,7 +140,7 @@
 
 ## 推导提示
 
-如果安装了 Qingkuai [VS Code 扩展](../misc/language-features.html#ide-扩展)，嵌入脚本顶部作用域中的标识符会嵌入提示编译器推断出的响应性状态：
+如果安装了 Qingkuai [VS Code 扩展](../misc/language-features.md#ide-扩展)，嵌入脚本顶部作用域中的标识符会嵌入提示编译器推断出的响应性状态：
 
 <img src="/static/medias/inferred-inlay-hint.png" alt="inferred-inlay-hint.png" style="width:60%; margin-left:20%;"  />
 

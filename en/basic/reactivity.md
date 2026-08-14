@@ -6,7 +6,7 @@ In frontend development, <b>Reactivity</b> is a mechanism that keeps data state 
 
 ## Reactivity Declaration
 
-In Qingkuai, you do not need to declare reactive variables manually. The compiler attaches reactive capability to identifiers according to the [reactivity inference rules](/references/reactivity-infer-rules.html). In the following example, `progress` is changed from `"pending"` to `"completed"` inside the script, and the template updates automatically. This is a simple example of reactivity:
+In Qingkuai, you do not need to declare reactive variables manually. The compiler attaches reactive capability to identifiers according to the [reactivity inference rules](/references/reactivity-infer-rules.md). In the following example, `progress` is changed from `"pending"` to `"completed"` inside the script, and the template updates automatically. This is a simple example of reactivity:
 
 ```qk
 <lang-js>
@@ -66,10 +66,10 @@ Alias binding in Qingkuai provides a concise way to read from and write to react
 <p>User name is: {name}</p>
 ```
 
-In behavior, alias binding is very similar to [pass-by-reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing) in some languages, but it is not exactly the same as the traditional notion of passing by reference. Internally, the compiler rewrites reads and writes to the alias identifier into reads and writes to the original target, which provides reactive access. This also has something in common with the [reference attributes](../basic/reference-attributes.html) introduced later.
+In behavior, alias binding is very similar to [pass-by-reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_sharing) in some languages, but it is not exactly the same as the traditional notion of passing by reference. Internally, the compiler rewrites reads and writes to the alias identifier into reads and writes to the original target, which provides reactive access. This also has something in common with the [reference attributes](../basic/reference-attributes.md) introduced later.
 
 <div class="custom-block warning">
-    Alias binding can also be used with non-reactive values, but it should not be overused. It is designed primarily to simplify reactive access to deeply nested properties, so it is best used in that kind of scenario. As a best practice, prefer using it with component <a href="../components/attributes.html">props</a> and <a href="../components/attributes.html#reference-attributes">refs</a>. For other scenarios, evaluate the trade-offs carefully before using it.
+    Alias binding can also be used with non-reactive values, but it should not be overused. It is designed primarily to simplify reactive access to deeply nested properties, so it is best used in that kind of scenario. As a best practice, prefer using it with component <a href="../components/attributes.md">props</a> and <a href="../components/attributes.md#reference-attributes">refs</a>. For other scenarios, evaluate the trade-offs carefully before using it.
 </div>
 
 ---
@@ -235,7 +235,7 @@ Importing it in multiple components lets them share the same reactive state:
 ```
 
 <div class="custom-block tip">
-    The <a href="../basic/compilation-directives.html#conditional-rendering">#if</a> used here is a <a href="../basic/compilation-directives.html">compilation directive</a>. It controls whether an element is rendered based on a condition. In the example above, it is used to render different content based on login status.
+    The <a href="../basic/compilation-directives.md#conditional-rendering">#if</a> used here is a <a href="../basic/compilation-directives.md">compilation directive</a>. It controls whether an element is rendered based on a condition. In the example above, it is used to render different content based on login status.
 </div>
 
 ---

@@ -31,7 +31,7 @@ The runtime package exports APIs for component lifecycle hooks, reactive side ef
 - `onBeforeDestroy`
 - `onBeforeUpdate`
 
-See: [Lifecycle](../components/lifecycle.html)
+See: [Lifecycle](../components/lifecycle.md)
 
 ### Side Effects and Watchers
 
@@ -44,7 +44,7 @@ See: [Lifecycle](../components/lifecycle.html)
 - `syncWatch`
 - `watch`
 
-See: [Watchers and Side Effects](../basic/watchers-and-side-effects.html)
+See: [Watchers and Side Effects](../basic/watchers-and-side-effects.md)
 
 ### Reactive Optimization Controls
 

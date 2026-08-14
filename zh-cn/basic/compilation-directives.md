@@ -6,7 +6,7 @@
 - 流程控制指令：`for`、`if`、`elif`、`else` 用于控制结构性渲染逻辑；
 - 异步处理指令：`await`、`then`、`catch` 用于响应异步数据的变化；
 
-另外还有一个用于接收组件插槽上下文的指令 `slot`，我们会在引出 [组件](../components/basic.html) 和 [插槽](../components/slots.html) 的概念后再介绍。
+另外还有一个用于接收组件插槽上下文的指令 `slot`，我们会在引出 [组件](../components/basic.md) 和 [插槽](../components/slots.md) 的概念后再介绍。
 
 ---
 
@@ -30,7 +30,7 @@
 ```
 
 <div class="custom-block tip">
-    这里使用的 <code>qk:spread</code> 标签是指令的虚拟挂载点，它不会被渲染到页面中。你可以将其理解为：该元素上的指令会依次应用到所有子节点。这样设计既能避免引入无意义的额外元素，也让文本节点使用指令成为可能。关于它的更多用法和细节，我们会在 <a href="../misc/builtin-elements.html">内置元素</a> 中介绍。
+    这里使用的 <code>qk:spread</code> 标签是指令的虚拟挂载点，它不会被渲染到页面中。你可以将其理解为：该元素上的指令会依次应用到所有子节点。这样设计既能避免引入无意义的额外元素，也让文本节点使用指令成为可能。关于它的更多用法和细节，我们会在 <a href="../misc/builtin-elements.md">内置元素</a> 中介绍。
 </div>
 
 当然我们还可以在 `if` 和 `else` 之间插入一些 `elif` 指令作为分支节点：
@@ -210,7 +210,7 @@
 ```
 
 <div class="custom-block tip">
-    Qingkuai 的 <a href="../components/async-components.html">异步组件</a> 也是基于异步处理指令组合实现的。
+    Qingkuai 的 <a href="../components/async-components.md">异步组件</a> 也是基于异步处理指令组合实现的。
 </div>
 
 ---
@@ -223,7 +223,7 @@
 <div class="dynamic-html-content" #html>{htmlStr}</div>
 ```
 
-外部元素不总是必须的。为避免引入无意义的多余元素，可使用 `qk:spread` [内置元素](../misc/builtin-elements.html) 作为指令的虚拟挂载点：
+外部元素不总是必须的。为避免引入无意义的多余元素，可使用 `qk:spread` [内置元素](../misc/builtin-elements.md) 作为指令的虚拟挂载点：
 
 ```qk
 <qk:spread #html>{htmlStr}</qk:spread>
@@ -301,10 +301,10 @@ type HTMLDirectiveValueType = Partial<{
 ```
 
 <div class="custom-block tip">
-    <code>lang-css</code> 中的内容是<a href="../components/basic.html">组件</a>的<a href="../references/terminology.html#嵌入样式块">嵌入样式块</a>，用于定义组件的样式规则。如果你还不了解组件的作用域样式机制，可以先阅读<a href="../components/stylesheets.html">组件样式表</a>再回来看这一节。
+    <code>lang-css</code> 中的内容是<a href="../components/basic.md">组件</a>的<a href="../references/terminology.md#嵌入样式块">嵌入样式块</a>，用于定义组件的样式规则。如果你还不了解组件的作用域样式机制，可以先阅读<a href="../components/stylesheets.md">组件样式表</a>再回来看这一节。
 </div>
 
-需要注意的是，当子组件的根节点是 [qk:spread](../misc/builtin-elements.html#qkspread) 或另一个组件这类不创建实际 DOM 元素的标签时，Qingkuai 会继续向内找到第一个实体元素并附加作用域属性：
+需要注意的是，当子组件的根节点是 [qk:spread](../misc/builtin-elements.md#qkspread) 或另一个组件这类不创建实际 DOM 元素的标签时，Qingkuai 会继续向内找到第一个实体元素并附加作用域属性：
 
 ```qk
 <!-- Parent.qk -->
@@ -364,7 +364,7 @@ type HTMLDirectiveValueType = Partial<{
 </div>
 ```
 
-上面的代码会引入一个无意义的 `div` 元素。要避免这种情况，你可以使用 `qk:spread` [内置元素](../misc/builtin-elements.html) 作为指令的虚拟挂载点，避免创建多余元素：
+上面的代码会引入一个无意义的 `div` 元素。要避免这种情况，你可以使用 `qk:spread` [内置元素](../misc/builtin-elements.md) 作为指令的虚拟挂载点，避免创建多余元素：
 
 ```qk
 <qk:spread #for={item of items}>

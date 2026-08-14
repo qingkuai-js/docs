@@ -40,7 +40,7 @@ Qingkuai 的组件定义采取了与 [Vue](https://cn.vuejs.org) 和 [Svelte](ht
 
 <div class="custom-block tip">使用此配置时，Qingkuai 语言服务器在提供组件标签补全建议时，也会优先提示串型组件标签。</div>
 
-此外，组件标签还支持成员访问语法，这在配合[异步组件](./async-components.html)使用时很常见：
+此外，组件标签还支持成员访问语法，这在配合[异步组件](./async-components.md)使用时很常见：
 
 ```qk
 <Module.default />

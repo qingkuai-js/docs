@@ -77,7 +77,7 @@ If the interpolation block only needs a single identifier with the same name as 
 
 ## Valid Interpolation Expressions
 
-Whether you are writing text interpolation, dynamic attribute interpolation, or interpolation for [directives](./compilation-directives.html), [reference attributes](./reference-attributes.html), or [events](./event-handling.html), only expressions are allowed. Statements are not. A simple rule of thumb is to ask whether the code could appear on the right-hand side of an assignment. If not, it is probably a statement rather than an expression. Each line below is a valid interpolation expression:
+Whether you are writing text interpolation, dynamic attribute interpolation, or interpolation for [directives](./compilation-directives.md), [reference attributes](./reference-attributes.md), or [events](./event-handling.md), only expressions are allowed. Statements are not. A simple rule of thumb is to ask whether the code could appear on the right-hand side of an assignment. If not, it is probably a statement rather than an expression. Each line below is a valid interpolation expression:
 
 ```qk
 {a * b - 5}

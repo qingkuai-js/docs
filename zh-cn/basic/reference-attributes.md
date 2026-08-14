@@ -68,7 +68,7 @@ console.log(num) // 11
 ```
 
 <div class="custom-block tip">
-    <code>onAfterMount</code> 是 Qingkuai 在组件完成挂载与渲染后触发的回调方法，它是 <a href="../components/life-cycle.html">组件生命周期</a>的一部分。
+    <code>onAfterMount</code> 是 Qingkuai 在组件完成挂载与渲染后触发的回调方法，它是 <a href="../components/life-cycle.md">组件生命周期</a>的一部分。
 </div>
 
 <div class="custom-block tip">
@@ -184,7 +184,7 @@ The inputValue is: {inputValue}
 ```
 
 <div class="custom-block tip">
-    这里我们只是简单介绍了引用属性在处理表单输入时的用法，关于引用属性在表单中的更多使用细节我们将在 <a href="./forms.html">表单处理</a> 一节中介绍。
+    这里我们只是简单介绍了引用属性在处理表单输入时的用法，关于引用属性在表单中的更多使用细节我们将在 <a href="./forms.md">表单处理</a> 一节中介绍。
 </div>
 
 ---

@@ -8,7 +8,7 @@
 
 ## 基本用法
 
-在组件内部使用 `slot` 标签声明插槽位置，它被称作 [插槽出口](../references/terminology.html#插槽出口)，后续会统一使用这个术语指代 `slot` 标签所在的位置：
+在组件内部使用 `slot` 标签声明插槽位置，它被称作 [插槽出口](../references/terminology.md#插槽出口)，后续会统一使用这个术语指代 `slot` 标签所在的位置：
 
 ```qk
 <!-- Inner.qk -->
@@ -17,7 +17,7 @@
 </div>
 ```
 
-使用组件时，我们可以为其提供一个子元素来填充这个插槽，这个子元素被称作 [插槽内容](../references/terminology.html#插槽内容)：
+使用组件时，我们可以为其提供一个子元素来填充这个插槽，这个子元素被称作 [插槽内容](../references/terminology.md#插槽内容)：
 
 ```qk
 <!-- Outer.qk -->
@@ -110,7 +110,7 @@
     未添加 <code>name</code> 属性的插槽名称默认为 <code>default</code>。
 </div>
 
-在使用组件时，可以通过 `slot` [指令](../basic/compilation-directives.html) 指定插槽名称：
+在使用组件时，可以通过 `slot` [指令](../basic/compilation-directives.md) 指定插槽名称：
 
 ```qk
 <Article>
@@ -120,7 +120,7 @@
 </Article>
 ```
 
-当 [插槽内容](../references/terminology.html#插槽内容) 仅为一段文本，或希望避免添加额外的无意义标签时，可以使用 `qk:spread` [内置元素](../components/builtin-elements.html) 作为虚拟父元素：
+当 [插槽内容](../references/terminology.md#插槽内容) 仅为一段文本，或希望避免添加额外的无意义标签时，可以使用 `qk:spread` [内置元素](../components/builtin-elements.md) 作为虚拟父元素：
 
 ```qk
 <Article>
@@ -136,7 +136,7 @@
 
 ## 传递上下文
 
-我们在本节的 [作用域](#作用域) 部分介绍过，插槽内容默认只能访问其所在组件的作用域数据。但在实际开发中，我们常常需要访问子组件内部的数据。为此，可以在 `slot` 标签上添加属性，并将这些属性作为上下文传递给 [插槽内容](../references/terminology.html#插槽内容)：
+我们在本节的 [作用域](#作用域) 部分介绍过，插槽内容默认只能访问其所在组件的作用域数据。但在实际开发中，我们常常需要访问子组件内部的数据。为此，可以在 `slot` 标签上添加属性，并将这些属性作为上下文传递给 [插槽内容](../references/terminology.md#插槽内容)：
 
 ```qk
 <!-- Article.qk -->
@@ -152,7 +152,7 @@
     <code>slot</code> 标签上的 <code>name</code> 属性仅用于指定插槽名称，不会被传递给插槽内容。
 </div>
 
-[插槽出口](../references/terminology.html#插槽出口) 处可以通过 `slot` [指令](../basic/compilation-directives.html) 接收这个上下文对象，并为其指定一个标识符以便使用：
+[插槽出口](../references/terminology.md#插槽出口) 处可以通过 `slot` [指令](../basic/compilation-directives.md) 接收这个上下文对象，并为其指定一个标识符以便使用：
 
 ```qk
 <Article>

@@ -124,7 +124,7 @@ For non-variable declarations such as `class` declarations, `function` declarati
 
 ### The allowConstReactive Option
 
-The [`allowConstReactive`](../misc/config-files.html#allowconstreactive) runtime configuration option controls whether constant declarations participate in reactivity inference. Its default value is `true`. When this option is set to `false`:
+The [`allowConstReactive`](../misc/config-files.md#allowconstreactive) runtime configuration option controls whether constant declarations participate in reactivity inference. Its default value is `true`. When this option is set to `false`:
 
 - During implicit inference, constants declared with `const` are not inferred as reactive and are uniformly treated as raw values.
 - During explicit marking, using `reactive` or `shallow` to mark a constant declaration whose initial value is not a literal expression is disallowed and raises a compile error:
@@ -140,7 +140,7 @@ The [`allowConstReactive`](../misc/config-files.html#allowconstreactive) runtime
 
 ## Inference Hints
 
-If the Qingkuai [VS Code extension](../misc/language-features.html#ide-extensions) is installed, identifiers in the top-level scope of embedded scripts display inline hints showing the reactivity status inferred by the compiler:
+If the Qingkuai [VS Code extension](../misc/language-features.md#ide-extensions) is installed, identifiers in the top-level scope of embedded scripts display inline hints showing the reactivity status inferred by the compiler:
 
 <img src="/static/medias/inferred-inlay-hint.png" alt="inferred-inlay-hint.png" style="width:60%; margin-left:20%;"  />
 

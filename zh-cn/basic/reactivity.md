@@ -6,7 +6,7 @@
 
 ## 响应性声明
 
-在 Qingkuai 中，无需手动声明响应性变量。编译器会根据 [响应性推导规则](/references/reactivity-infer-rules.html) 为标识符附加响应式能力。下面代码中，`progress` 在脚本里从 “pending” 被修改为 “completed” 后，模板会自动完成更新，这正是响应性的简单应用：
+在 Qingkuai 中，无需手动声明响应性变量。编译器会根据 [响应性推导规则](/references/reactivity-infer-rules.md) 为标识符附加响应式能力。下面代码中，`progress` 在脚本里从 “pending” 被修改为 “completed” 后，模板会自动完成更新，这正是响应性的简单应用：
 
 ```qk
 <lang-js>
@@ -66,10 +66,10 @@ Qingkuai 的别名绑定提供了一种简洁的响应式访问/写入能力。�
 <p>User name is: {name}</p>
 ```
 
-别名绑定在表现上与其他语言中的[引用传递](https://baike.baidu.com/item/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92?fromModule=lemma_search-box)非常相似，但并不完全等价于传统意义上的引用传递。其实现原理是：编译器会将对别名标识符的访问和写入重写为对原始标识符的访问和写入，从而获得响应式读写能力。这一点与我们后续要介绍的[引用属性](../basic/reference-attributes.html)也有相通之处。
+别名绑定在表现上与其他语言中的[引用传递](https://baike.baidu.com/item/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92?fromModule=lemma_search-box)非常相似，但并不完全等价于传统意义上的引用传递。其实现原理是：编译器会将对别名标识符的访问和写入重写为对原始标识符的访问和写入，从而获得响应式读写能力。这一点与我们后续要介绍的[引用属性](../basic/reference-attributes.md)也有相通之处。
 
 <div class="custom-block warning">
-    别名能力也可以用于非响应式值，但不建议滥用。它的设计初衷是简化深层嵌套属性的响应式访问，因此建议仅在这类场景中使用。最佳实践是优先将此能力用于组件 <a href="../components/attributes.html">props</a> 和 <a href="../components/attributes.html#引用属性">refs</a>，其他场景请谨慎评估后再使用。
+    别名能力也可以用于非响应式值，但不建议滥用。它的设计初衷是简化深层嵌套属性的响应式访问，因此建议仅在这类场景中使用。最佳实践是优先将此能力用于组件 <a href="../components/attributes.md">props</a> 和 <a href="../components/attributes.md#引用属性">refs</a>，其他场景请谨慎评估后再使用。
 </div>
 
 ---
@@ -235,7 +235,7 @@ export const store = createStore({
 ```
 
 <div class="custom-block tip">
-    这里使用到的 <a href="../basic/compilation-directives.html#条件渲染">#if</a> 是一个<a href="../basic/compilation-directives.html">编译指令</a>，我们会在后续章节中进行介绍。它的作用是根据条件控制元素的渲染与否，在上方示例中我们通过它来实现了登录状态的条件渲染。
+    这里使用到的 <a href="../basic/compilation-directives.md#条件渲染">#if</a> 是一个<a href="../basic/compilation-directives.md">编译指令</a>，我们会在后续章节中进行介绍。它的作用是根据条件控制元素的渲染与否，在上方示例中我们通过它来实现了登录状态的条件渲染。
 </div>
 
 ---

@@ -31,7 +31,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 - `onBeforeDestroy`
 - `onBeforeUpdate`
 
-参考：[生命周期](../components/lifecycle.html)
+参考：[生命周期](../components/lifecycle.md)
 
 ### 副作用与监视器
 
@@ -44,7 +44,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 - `syncWatch`
 - `watch`
 
-参考：[监视器与副作用](../basic/watchers-and-side-effects.html)
+参考：[监视器与副作用](../basic/watchers-and-side-effects.md)
 
 ### 响应式优化控制
 

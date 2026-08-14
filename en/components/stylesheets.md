@@ -40,7 +40,7 @@ div[qk-dbb1016b] {
 
 ## Style Penetration
 
-Scoped styles ensure component isolation, but there are cases where you may want a parent component's style rules to affect a child component's root element. Qingkuai provides the `#scope` directive for this — see <a href="../basic/compilation-directives.html#scope-directive">Compilation Directives / Scope Directive</a> for details.
+Scoped styles ensure component isolation, but there are cases where you may want a parent component's style rules to affect a child component's root element. Qingkuai provides the `#scope` directive for this — see <a href="../basic/compilation-directives.md#scope-directive">Compilation Directives / Scope Directive</a> for details.
 
 ---
 
@@ -69,7 +69,7 @@ When using `@import`, style rules are written inside the embedded style tag body
 ```
 
 <div class="custom-block warning">
-    If the same shared stylesheet is imported repeatedly by multiple scoped component styles through <code>src</code> or <code>@import</code>, compilation may produce multiple copies of equivalent rules (with different scope markers). Try to avoid this pattern: <a href="../misc/optimization.html#style-reuse">Optimization - Style Reuse</a>.
+    If the same shared stylesheet is imported repeatedly by multiple scoped component styles through <code>src</code> or <code>@import</code>, compilation may produce multiple copies of equivalent rules (with different scope markers). Try to avoid this pattern: <a href="../misc/optimization.md#style-reuse">Optimization - Style Reuse</a>.
 </div>
 
 ---

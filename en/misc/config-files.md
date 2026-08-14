@@ -49,7 +49,7 @@ import Component from "./Component"
 
 ### shorthandDerivedDeclaration
 
-This property configures whether shorthand declarations for derived reactive state are enabled. It is a boolean value and defaults to `true`. When enabled, identifiers that start with `$` in the top-level scope of an embedded script block are automatically compiled into [derived reactive state](../basic/reactivity.html#derived-reactive-state). Setting it to `false` disables this behavior:
+This property configures whether shorthand declarations for derived reactive state are enabled. It is a boolean value and defaults to `true`. When enabled, identifiers that start with `$` in the top-level scope of an embedded script block are automatically compiled into [derived reactive state](../basic/reactivity.md#derived-reactive-state). Setting it to `false` disables this behavior:
 
 ```js
 // Shorthand declaration of derived reactive state
@@ -58,7 +58,7 @@ const $double = number * 2
 
 ### allowConstReactive
 
-This property configures whether constant declarations may be marked as reactive. It is a boolean value and defaults to `true`. When set to `false`, constant declarations are not [inferred](../references/reactivity-infer-rules.html) as reactive, and explicitly marking a constant declaration with `reactive` or `shallow` causes a compile error.
+This property configures whether constant declarations may be marked as reactive. It is a boolean value and defaults to `true`. When set to `false`, constant declarations are not [inferred](../references/reactivity-infer-rules.md) as reactive, and explicitly marking a constant declaration with `reactive` or `shallow` causes a compile error.
 
 ### interpretiveComments
 

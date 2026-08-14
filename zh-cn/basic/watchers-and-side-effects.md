@@ -7,7 +7,7 @@
 - `preWatch`、`preEffect`：优先于更新调度器执行，适用于需要在状态变更后、更新调度前执行的逻辑；
 - `postWatch`、`postEffect`：在更新调度完成后触发，适用于需要等待状态稳定或 DOM 更新之后的处理逻辑；
 
-在[组件文件](../references/terminology.html#组件文件)内部，监视器与副作用 API 都是[内建方法](../references/terminology.html#内建方法)，无需从运行时包导入。编译器会按需为 API 调用生成与[组件](../components/basic.html)绑定的方法，使组件内注册的监视器与副作用都能正确绑定到[组件实例](../references/terminology.html#组件实例)；因此你无需关心内存泄漏问题，它们都会在组件卸载时被自动停止并释放内存，无论是否在异步逻辑中注册。
+在[组件文件](../references/terminology.md#组件文件)内部，监视器与副作用 API 都是[内建方法](../references/terminology.md#内建方法)，无需从运行时包导入。编译器会按需为 API 调用生成与[组件](../components/basic.md)绑定的方法，使组件内注册的监视器与副作用都能正确绑定到[组件实例](../references/terminology.md#组件实例)；因此你无需关心内存泄漏问题，它们都会在组件卸载时被自动停止并释放内存，无论是否在异步逻辑中注册。
 
 <div class="custom-block warning">监视器与副作用 API 主要面向熟悉 <a href="https://cn.vuejs.org">Vue</a> 等框架的开发者，作为迁移阶段的过渡工具，用于降低上手门槛。我们不建议在正式项目中大范围使用这类 API。原因在于，副作用通常以回调形式注册，其触发位置不会直接体现在调用栈中，调用链不够直观、跟踪成本也更高；同时，这种模式也不利于借助 <doce>IDE</code> 的跳转、查找引用等语言服务进行高效的代码审查与维护。若项目对可维护性和可读性要求较高，建议优先采用显式数据流与函数组合来组织响应逻辑。</div>
 
@@ -159,7 +159,7 @@
 
 ### 便捷注册
 
-标准监视器注册时，第一个参数必须是返回被监听值的 `getter` 函数，对于简单表达式而言略显冗长。为此，编译器内建了一组与 [derivedExp](/basic/reactivity.html#衍生响应式状态) 作用类似的便捷注册方法：`watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`。这些方法的第一个参数会被编译器自动转换为 `getter` 函数，可以直接传入表达式：
+标准监视器注册时，第一个参数必须是返回被监听值的 `getter` 函数，对于简单表达式而言略显冗长。为此，编译器内建了一组与 [derivedExp](/basic/reactivity.md#衍生响应式状态) 作用类似的便捷注册方法：`watchExp`、`preWatchExp`、`postWatchExp`、`syncWatchExp`。这些方法的第一个参数会被编译器自动转换为 `getter` 函数，可以直接传入表达式：
 
 ```js
 // 普通注册
@@ -240,13 +240,13 @@ syncEffect(() => {})
 
 ## 从运行时包导入
 
-在[组件文件](../references/terminology.html#组件文件)之外使用监视器与副作用 API 时，需要从 `qingkuai` 运行时包导入对应的方法：
+在[组件文件](../references/terminology.md#组件文件)之外使用监视器与副作用 API 时，需要从 `qingkuai` 运行时包导入对应的方法：
 
 ```js
 import { watch, effect, preWatch, postWatch, syncWatch } from "qingkuai"
 ```
 
-与组件文件中的内置方法不同，从运行时包导入的这些方法**不会自动绑定当前组件实例**。第一个参数为[组件实例](../references/terminology.html#组件实例)或 `null`，用于指定注册项的绑定关系，其余参数与组件内置方法一致。
+与组件文件中的内置方法不同，从运行时包导入的这些方法**不会自动绑定当前组件实例**。第一个参数为[组件实例](../references/terminology.md#组件实例)或 `null`，用于指定注册项的绑定关系，其余参数与组件内置方法一致。
 
 这些方法的第一个参数的取值决定了注册项的清理方式：
 
@@ -351,7 +351,7 @@ export function collectEffects(effect: EffectFunc) {
 
 ### 自动清理
 
-组件文件中使用[内建方法](../references/terminology.html#内建方法)创建的监视器或副作用，无论同步还是异步注册，都会随组件销毁自动清理，无需手动管理。但外部模块从 `qingkuai` 运行时包导入使用这些 API 时，则需要根据传入的第一个参数决定其清理方式（见上方的[从运行时包导入](#从运行时包导入)）。
+组件文件中使用[内建方法](../references/terminology.md#内建方法)创建的监视器或副作用，无论同步还是异步注册，都会随组件销毁自动清理，无需手动管理。但外部模块从 `qingkuai` 运行时包导入使用这些 API 时，则需要根据传入的第一个参数决定其清理方式（见上方的[从运行时包导入](#从运行时包导入)）。
 
 ### 手动清理
 

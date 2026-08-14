@@ -5,7 +5,7 @@
 在 Qingkuai 中，渲染异步组件有两种方式：
 
 - **直接渲染**：将异步组件直接作为组件标签使用，写法简洁；
-- **指令渲染**：搭配 [异步处理](../basic/compilation-directives.html#异步处理) 指令实现，适合需要加载中状态或加载失败兜底的场景。
+- **指令渲染**：搭配 [异步处理](../basic/compilation-directives.md#异步处理) 指令实现，适合需要加载中状态或加载失败兜底的场景。
 
 直接渲染时，组件标签可以直接绑定**返回组件的 [Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise) 或[动态导入](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/import)的结果**，编译器会把组件标签统一交由运行时处理，在 Promise 解析后取出其中的组件函数进行渲染。
 
@@ -33,7 +33,7 @@
 <AsyncModule />
 ```
 
-若需要展示加载中或加载失败的状态，则需要搭配使用 [异步处理](../basic/compilation-directives.html#异步处理) 指令：
+若需要展示加载中或加载失败的状态，则需要搭配使用 [异步处理](../basic/compilation-directives.md#异步处理) 指令：
 
 ```qk
 <div #await={import("./Component.qk")}>
@@ -142,7 +142,7 @@
 
 ## 实例获取
 
-与普通组件标签一样，异步组件标签同样支持 `&handle` [引用属性](../components/attributes.html#引用属性)，可以正常获取组件实例并访问其导出的成员：
+与普通组件标签一样，异步组件标签同样支持 `&handle` [引用属性](../components/attributes.md#引用属性)，可以正常获取组件实例并访问其导出的成员：
 
 ```qk
 <lang-js>

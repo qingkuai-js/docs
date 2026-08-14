@@ -49,7 +49,7 @@ import Component from "./Component"
 
 ### shorthandDerivedDeclaration
 
-该属性用于配置是否启用衍生响应式状态的简写声明，布尔值，默认值为 `true`。启用后，组件文件嵌入脚本顶层作用域中以 `$` 字符开头的标识符会被自动编译为[衍生响应式状态](../basic/reactivity.html#衍生响应式状态)，修改为 `false` 可阻止这一行为：
+该属性用于配置是否启用衍生响应式状态的简写声明，布尔值，默认值为 `true`。启用后，组件文件嵌入脚本顶层作用域中以 `$` 字符开头的标识符会被自动编译为[衍生响应式状态](../basic/reactivity.md#衍生响应式状态)，修改为 `false` 可阻止这一行为：
 
 ```js
 // 简写声明衍生响应式状态
@@ -58,7 +58,7 @@ const $double = number * 2
 
 ### allowConstReactive
 
-该属性用于配置是否允许将常量声明标记为响应式，布尔值，默认值为 `true`。改为 `false` 时，常量声明的变量不会被[推导](../references/reactivity-infer-rules.html)为具有响应性，且显式使用 `reactive` 或 `shallow` 标记常量声明会导致编译错误。
+该属性用于配置是否允许将常量声明标记为响应式，布尔值，默认值为 `true`。改为 `false` 时，常量声明的变量不会被[推导](../references/reactivity-infer-rules.md)为具有响应性，且显式使用 `reactive` 或 `shallow` 标记常量声明会导致编译错误。
 
 ### interpretiveComments
 

@@ -92,7 +92,7 @@ Qingkuai 的语法设计理念是尽可能少造新语法，优先采用现有�
 
 - TypeScript：框架开箱支持 [TypeScript](https://www.typescriptlang.org/zh/)，无需额外配置。这有助于在开发时规避许多潜在 bug。此外，语言服务器还针对组件文件的类型提示与推导做了大量细节处理，例如自动推导组件和插槽上下文标识符的类型等。
 
-- 调试体验：编译器生成的代码针对调试做了大量适配，以提升调试体验。例如在开发模式下避免响应式声明噪音干扰，并为 [for](/basic/compilation-directives.html#列表渲染) 和 [slot](/components/slots.html#传递上下文) 指令声明的上下文标识符添加对等声明等。
+- 调试体验：编译器生成的代码针对调试做了大量适配，以提升调试体验。例如在开发模式下避免响应式声明噪音干扰，并为 [for](/basic/compilation-directives.md#列表渲染) 和 [slot](/components/slots.md#传递上下文) 指令声明的上下文标识符添加对等声明等。
 
 - 更新粒度：Qingkuai 不使用 `虚拟 DOM`，响应性变量的变更会直接映射为原生 `DOM API` 调用。这种机制去除了虚拟 DOM 的 `diff` 开销，观察下面的代码：
 

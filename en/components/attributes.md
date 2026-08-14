@@ -34,7 +34,7 @@ Static attributes are passed to components as strings. Inside the component, ext
 ```
 
 <div class="custom-block tip">
-    If your embedded script language is TypeScript, or if you want component attribute completion suggestions, it is recommended to read <a href="../misc/typescript.html">TypeScript Support</a> before continuing with this section.
+    If your embedded script language is TypeScript, or if you want component attribute completion suggestions, it is recommended to read <a href="../misc/typescript.md">TypeScript Support</a> before continuing with this section.
 </div>
 
 If you add an attribute name to a component tag without giving it a value, the component receives the boolean value `true` internally:
@@ -233,7 +233,7 @@ Note that `&handle` on a component tag is a special reference attribute used to 
 <Child &handle={child} />
 ```
 
-<div class="custom-block tip">Like <a href="../basic/reference-attributes.html#获取-dom-元素">getting DOM nodes through `&handle`</a>, when a component is destroyed, reference attributes automatically reset the bound variable to `null` to avoid dangling references.</div>
+<div class="custom-block tip">Like <a href="../basic/reference-attributes.md#获取-dom-元素">getting DOM nodes through `&handle`</a>, when a component is destroyed, reference attributes automatically reset the bound variable to `null` to avoid dangling references.</div>
 
 ---
 

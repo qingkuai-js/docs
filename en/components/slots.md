@@ -8,7 +8,7 @@ Component slots are used to pass structured UI content, that is, template fragme
 
 ## Basic Usage
 
-Inside a component, use the `slot` tag to declare where slot content should be inserted. This location is called a [slot outlet](../references/terminology.html#slot-outlet):
+Inside a component, use the `slot` tag to declare where slot content should be inserted. This location is called a [slot outlet](../references/terminology.md#slot-outlet):
 
 ```qk
 <!-- Inner.qk -->
@@ -17,7 +17,7 @@ Inside a component, use the `slot` tag to declare where slot content should be i
 </div>
 ```
 
-When using the component, you can provide a child element to fill this slot. That child element is called [slot content](../references/terminology.html#slot-content):
+When using the component, you can provide a child element to fill this slot. That child element is called [slot content](../references/terminology.md#slot-content):
 
 ```qk
 <!-- Outer.qk -->
@@ -110,7 +110,7 @@ Many components need more than one slot. When a component has multiple slots, us
     A slot without a <code>name</code> attribute is named <code>default</code> by default.
 </div>
 
-When using the component, you can specify the slot name through the `slot` [directive](../basic/compilation-directives.html):
+When using the component, you can specify the slot name through the `slot` [directive](../basic/compilation-directives.md):
 
 ```qk
 <Article>
@@ -120,7 +120,7 @@ When using the component, you can specify the slot name through the `slot` [dire
 </Article>
 ```
 
-When [slot content](../references/terminology.html#slot-content) consists only of text, or when you want to avoid adding meaningless extra wrapper tags, you can use the `qk:spread` [built-in element](../misc/builtin-elements.html) as a virtual parent element:
+When [slot content](../references/terminology.md#slot-content) consists only of text, or when you want to avoid adding meaningless extra wrapper tags, you can use the `qk:spread` [built-in element](../misc/builtin-elements.md) as a virtual parent element:
 
 ```qk
 <Article>
@@ -136,7 +136,7 @@ When [slot content](../references/terminology.html#slot-content) consists only o
 
 ## Passing Context
 
-As described in [Scope](#scope), slot content can normally access only the data in the scope where it is written. In real development, however, you often need access to data from inside the child component. To do that, add attributes to the `slot` tag and pass them as context to the [slot content](../references/terminology.html#slot-content):
+As described in [Scope](#scope), slot content can normally access only the data in the scope where it is written. In real development, however, you often need access to data from inside the child component. To do that, add attributes to the `slot` tag and pass them as context to the [slot content](../references/terminology.md#slot-content):
 
 ```qk
 <!-- Article.qk -->
@@ -152,7 +152,7 @@ As described in [Scope](#scope), slot content can normally access only the data 
     The <code>name</code> attribute on a <code>slot</code> tag is used only to identify the slot itself. It is not passed into slot content.
 </div>
 
-At the [slot outlet](../references/terminology.html#slot-outlet), you can receive this context object through the `slot` [directive](../basic/compilation-directives.html) and assign it to an identifier:
+At the [slot outlet](../references/terminology.md#slot-outlet), you can receive this context object through the `slot` [directive](../basic/compilation-directives.md) and assign it to an identifier:
 
 ```qk
 <Article>

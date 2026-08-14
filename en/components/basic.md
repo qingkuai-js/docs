@@ -42,7 +42,7 @@ By default, when formatting component files, all component names will be transfo
 
 <div class="custom-block tip">When using this configuration, the Qingkuai language server also prioritizes kebab-case component tags in auto-completion.</div>
 
-Component tags also support member access syntax, which is commonly seen when working with [async components](./async-components.html):
+Component tags also support member access syntax, which is commonly seen when working with [async components](./async-components.md):
 
 ```qk
 <Module.default />

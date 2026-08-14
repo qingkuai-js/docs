@@ -65,7 +65,7 @@ function loadModule() {
 }
 ```
 
-In applications with multiple routes, you should not bundle all route components into the main application. Instead, rely on code-splitting to lazy-load route components so that loading efficiency and user experience are improved significantly. This is exactly the core use case of the [async components](../components/async-components.html) introduced earlier:
+In applications with multiple routes, you should not bundle all route components into the main application. Instead, rely on code-splitting to lazy-load route components so that loading efficiency and user experience are improved significantly. This is exactly the core use case of the [async components](../components/async-components.md) introduced earlier:
 
 ```qk
 <qk:spread

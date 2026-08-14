@@ -5,7 +5,7 @@ In modern frontend applications, on-demand loading is an important way to improv
 In Qingkuai, there are two ways to render async components:
 
 - **Direct rendering**: use an async component directly as a component tag. It is simple and concise;
-- **Directive rendering**: combined with the [async processing](../basic/compilation-directives.html#async-processing) directives, suitable for scenarios that need a loading state or a failure fallback.
+- **Directive rendering**: combined with the [async processing](../basic/compilation-directives.md#async-processing) directives, suitable for scenarios that need a loading state or a failure fallback.
 
 When rendering directly, a component tag can directly bind the **result of a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to a component or of a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import)**. The compiler hands every component tag to the runtime uniformly, which extracts the component function from the resolved Promise for rendering.
 
@@ -33,7 +33,7 @@ Many build tools optimize modules loaded through [dynamic import](https://develo
 <AsyncModule />
 ```
 
-If you need to show a loading state or a failure fallback, combine it with the [async processing](../basic/compilation-directives.html#async-processing) directives:
+If you need to show a loading state or a failure fallback, combine it with the [async processing](../basic/compilation-directives.md#async-processing) directives:
 
 ```qk
 <div #await={import("./Component.qk")}>
@@ -141,7 +141,7 @@ Combined with async processing directives:
 
 ## Getting an Instance
 
-Like a normal component tag, an async component tag also supports the `&handle` [reference attribute](../components/attributes.html#reference-attributes), so you can obtain the component instance and access its exported members:
+Like a normal component tag, an async component tag also supports the `&handle` [reference attribute](../components/attributes.md#reference-attributes), so you can obtain the component instance and access its exported members:
 
 ```qk
 <lang-js>

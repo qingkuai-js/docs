@@ -41,7 +41,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 }
 ```
 
-Just like [dynamic attributes](../basic/interpolation.html#dynamic-attributes), when the event name is the same as the variable name, the interpolation block can be omitted. The following two forms are equivalent:
+Just like [dynamic attributes](../basic/interpolation.md#dynamic-attributes), when the event name is the same as the variable name, the interpolation block can be omitted. The following two forms are equivalent:
 
 ```qk
 <button @click></button>
@@ -81,7 +81,7 @@ So you can also access the native event object through `$arg` in an inline event
 ```
 
 <div class="custom-block tip">
-    From the perspective of native events, naming <code>$arg</code> as <code>$event</code> might feel more intuitive. However, to keep the semantics consistent, Qingkuai uses <code>$arg</code> as the default parameter name because it also covers arbitrary parameters passed into <a href="../components/basic.html">component</a> inline event handlers. In other words, <code>$arg</code> can represent either a native event object or any parameter passed from a component.
+    From the perspective of native events, naming <code>$arg</code> as <code>$event</code> might feel more intuitive. However, to keep the semantics consistent, Qingkuai uses <code>$arg</code> as the default parameter name because it also covers arbitrary parameters passed into <a href="../components/basic.md">component</a> inline event handlers. In other words, <code>$arg</code> can represent either a native event object or any parameter passed from a component.
 </div>
 
 If you call other methods inside an inline event handler, Qingkuai automatically binds `this` in the called methods to the current element:
