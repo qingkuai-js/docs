@@ -6,7 +6,7 @@
 
 ## 响应性声明
 
-在 Qingkuai 中，无需手动声明响应性变量。编译器会根据 [响应性推导规则](/references/reactivity-infer-rules.md) 为标识符附加响应式能力。下面代码中，`progress` 在脚本里从 “pending” 被修改为 “completed” 后，模板会自动完成更新，这正是响应性的简单应用：
+在 Qingkuai 中，无需手动声明响应性变量。编译器会根据 [响应性推导规则](../references/reactivity-infer-rules.md) 为标识符附加响应式能力。下面代码中，`progress` 在脚本里从 `pending` 被修改为 `completed` 后，模板会自动完成更新，这正是响应性的简单应用：
 
 ```qk
 <lang-js>
@@ -20,7 +20,7 @@
 <h1>Task status: {progress}</h1>
 ```
 
-不过在某些情况下，你可能希望阻止这一默认行为。这时，可以使用编译器内建的 `raw` 方法将标识符标记为静态，从而避免为其添加响应式能力。例如下面这段代码中的 `progress` 变更后不会导致页面发生变化：
+不过在某些情况下，你可能希望阻止这一默认行为。这时，可以使用内建的 `raw` 方法标记标识符无需响应性，从而避免为其添加响应式能力。例如下面这段代码中的 `progress` 变更后不会导致页面发生变化：
 
 ```qk
 <lang-js>
@@ -34,21 +34,23 @@
 <h1>Task status: {progress}</h1>
 ```
 
-对于未在模板中访问的标识符，还可以使用编译器内建的 `reactive` 或 `shallow` 方法手动标记其需要具有响应性：
+> [!TIP]
+> 此处的 `raw` 仅用于显式标记声明的标识符本身不具有响应性，若初始值本身具有响应性，则该值的响应性能力不会被移除；要移除初始值的响应性，可以使用 `toRaw` 方法来[获取原始值](#获取原始值)。
+
+当然，你也可以使用内建的 `reactive` 或 `shallow` 方法主动标记其需要响应性（二者的区别见[响应性模式](#响应性模式)）：
 
 ```js
 let progress = reactive("pending") // 具有响应性
 ```
 
-<div class="custom-block warning">
-    如果你只是想在脚本中单独使用响应性能力，我们并不推荐这样做。Qingkuai 的设计理念是：响应性系统主要用于需要自动更新页面的场景。在脚本中，我们应尽量使用函数组合等方式组织逻辑，而不是过度依赖响应性机制。另一方面，响应式数据的操作本身也有一定开销。使用过多时，变更流程往往不够直观，既难以清晰表达执行逻辑，也不便于通过代码跳转等方式进行代码审查。
-</div>
+> [!WARNING]
+> 如果你只是想在脚本中单独使用响应性能力，我们并不推荐这样做。响应性系统的定位是驱动视图随数据变化自动更新，而非充当脚本内部的通用状态管理工具。在脚本中组织逻辑时，应优先采用函数组合等常规编程手段，避免过度依赖响应性机制。另一方面，响应式数据的操作本身存在一定的运行时开销，过度使用会使变更链路趋于隐式：数据流向不再直观，既不利于清晰表达执行逻辑，也会降低代码跳转与审查的效率。
 
 ---
 
 ## 响应性别名
 
-Qingkuai 的别名绑定提供了一种简洁的响应式访问/写入能力。对于嵌套较深的属性，可以通过编译器内建的 `alias` 方法创建一个更短的标识符别名，从而简化响应式访问代码：
+Qingkuai 的别名绑定提供了一种简洁的响应式访问/写入能力。对于嵌套较深的属性，可以通过内建的 `alias` 方法创建一个更短的标识符别名，从而简化响应式访问代码：
 
 ```qk
 <lang-js>
@@ -68,9 +70,8 @@ Qingkuai 的别名绑定提供了一种简洁的响应式访问/写入能力。�
 
 别名绑定在表现上与其他语言中的[引用传递](https://baike.baidu.com/item/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92?fromModule=lemma_search-box)非常相似，但并不完全等价于传统意义上的引用传递。其实现原理是：编译器会将对别名标识符的访问和写入重写为对原始标识符的访问和写入，从而获得响应式读写能力。这一点与我们后续要介绍的[引用属性](../basic/reference-attributes.md)也有相通之处。
 
-<div class="custom-block warning">
-    别名能力也可以用于非响应式值，但不建议滥用。它的设计初衷是简化深层嵌套属性的响应式访问，因此建议仅在这类场景中使用。最佳实践是优先将此能力用于组件 <a href="../components/attributes.md">props</a> 和 <a href="../components/attributes.md#引用属性">refs</a>，其他场景请谨慎评估后再使用。
-</div>
+> [!WARNING]
+> 别名能力也可以用于非响应式值，但不建议滥用。它的设计初衷是简化深层嵌套属性的响应式访问，因此建议仅在这类场景中使用。最佳实践是优先将此能力用于组件 [props](../components/attributes.md) 和 [refs](../components/attributes.md#引用属性)，其他场景请谨慎评估后再使用。
 
 ---
 
@@ -98,6 +99,80 @@ Qingkuai 支持两种响应性模式：深度响应性和浅层响应性。默�
 </lang-js>
 ```
 
+这两种响应性模式的核心区别在于响应性是否会沿着嵌套结构逐层传播：使用 `reactive` 标记的值，其自身及其任意层级的属性都会被递归地添加响应性能力，任何层级上的修改都能触发更新；而使用 `shallow` 标记的值只在浅层维护响应性，更深层级上的修改只是一次普通的 JS 操作，不会触发任何更新：
+
+```js
+const target = {
+    count: 0,
+    user: {
+        name: "Alice"
+    }
+}
+let deepState = reactive(target)
+let shallowState = shallow(target)
+
+// 重新赋值在两种模式下都具有响应性，均会触发更新
+deepState = {
+    count: 1,
+    user: {
+        name: "Bob"
+    }
+}
+shallowState = {
+    count: 1,
+    user: {
+        name: "Bob"
+    }
+}
+
+// 深度响应性：嵌套属性的修改会触发更新
+deepState.user.name = "Charlie"
+
+// 浅层响应性：嵌套属性的修改不会触发更新
+shallowState.user.name = "Charlie"
+```
+
+对于使用 `const` 声明的标识符，由于其绑定不可被重新赋值，`shallow` 会转而为第一层属性添加响应性能力；而 `reactive` 依然会递归地处理所有嵌套属性：
+
+```js
+const config = {
+    api: {
+        baseURL: "/api",
+        timeout: 1000
+    }
+}
+const deepConfig = reactive(config)
+const shallowConfig = shallow(config)
+
+// 两者都会触发更新：api 是第一层属性
+deepConfig.api = {
+    baseURL: "/api",
+    timeout: 2000
+}
+shallowConfig.api = {
+    baseURL: "/api",
+    timeout: 2000
+}
+
+// 只有深度响应性会触发更新：timeout 位于第二层
+deepConfig.api.timeout = 3000
+shallowConfig.api.timeout = 3000
+```
+
+除了更新行为，二者在读取属性时返回的值也不同：深度响应性下读取到的属性会被包装为响应式代理对象，而浅层响应性下读取到的就是原始值本身：
+
+```js
+const target = { inner: {} }
+const deepState = reactive(target)
+const shallowState = shallow(target)
+
+console.log(deepState.inner === target.inner) // logs: false
+console.log(shallowState.inner === target.inner) // logs: true
+```
+
+> [!TIP]
+> 深度响应性更符合直觉，但每次属性访问都需要递归地包装嵌套值，对于体量庞大或层级很深的数据结构存在一定开销。如果数据总是以整体替换的方式更新（如重新赋值整个列表），或其中包含不需要被代理的第三方对象（如类实例、DOM 对象等），可以使用 `shallow` 标记来避免不必要的深度包装；反之，如果需要监听嵌套属性的变化，就应使用 `reactive`。
+
 ---
 
 ## 获取原始值
@@ -109,16 +184,16 @@ import { toRaw } from "qingkuai"
 
 const inner = {}
 const outer = reactive({ inner })
-console.log(outer.inner === inner) // false
-console.log(toRaw(outer.inner) === inner) // true
-console.log(toRaw(outer).inner === inner) // true
+console.log(outer.inner === inner) // logs: false
+console.log(toRaw(outer.inner) === inner) // logs: true
+console.log(toRaw(outer).inner === inner) // logs: true
 ```
 
 ---
 
 ## 获取响应式值
 
-Qingkuai 还提供了 `toReactive` 和 `toShallowReactive` 方法，用于获取某个值对应的响应式代理对象：
+Qingkuai 还提供了 `toReactive` 和 `toShallow` 方法，用于获取某个值对应的响应式代理对象：
 
 ```js
 import { toReactive } from "qingkuai"
@@ -127,35 +202,21 @@ const obj = { count: 0 }
 const reactiveObj = toReactive(obj)
 ```
 
-<div class="custom-block warning">
-    需要注意，<code>toReactive</code> 并不会为传入值新增响应式能力，它只负责返回该值的响应式代理对象。因此，如果传入值本身未被编译器推导或明确标记为响应式，那么通过 <code>toReactive</code> 获取到的代理对象同样不具备响应式能力。
-</div>
+> [!WARNING]
+> 需要注意，`toReactive` 并不会为传入值新增响应式能力，它只负责返回该值的响应式代理对象。因此，如果传入值本身未被编译器推导或明确标记为响应式，那么通过 `toReactive` 获取到的代理对象同样不具备响应式能力。
 
 ---
 
 ## 衍生响应式状态
 
-衍生响应式状态是指依赖其他响应性值的运算过程。当这些被依赖的响应性值发生变化时，相关运算会自动重新执行，以生成最新结果。在 Qingkuai 中，我们提供了两种方式来声明衍生响应式状态：
-
-1. 使用以 `$` 开头的变量标识符；
-2. 使用编译器内建方法 `derived` 或 `derivedExp`；
+衍生响应式状态是指依赖其他响应性值的运算过程。当这些被依赖的响应性值发生变化时，相关运算会在下次读取该衍生状态时重新执行，以返回最新结果。在 Qingkuai 中，我们通过内建方法 `derived` 或 `derivedExp` 来声明衍生响应式状态：
 
 ```js
 let number = 10
-const $double = number * 2
 const double = derived(() => number * 2)
 ```
 
-使用简写声明（以 `$` 开头的变量标识符）时，若计算逻辑比较复杂，也可以将标识符的初始值设置为一个函数表达式，这个函数表达式的返回值会被编译器自动推导为衍生响应式状态：
-
-```js
-const $result = () => {
-    const double = number * 2
-    return isSpecial(double) ? Math.abs(double) : double
-}
-```
-
-与 `derived` 方法不同，`derivedExp` 方法允许我们直接传入一个表达式来声明衍生响应式状态（和简写声明且初始值非函数时的行为类似），对于一些简单的计算逻辑，这种方式会更简洁：
+与 `derived` 方法不同，`derivedExp` 方法允许我们直接传入一个表达式来声明衍生响应式状态，对于一些简单的计算逻辑，这种方式会更简洁：
 
 ```js
 const double = derivedExp(number * 2)
@@ -165,22 +226,113 @@ const double = derivedExp(number * 2)
 
 ```qk
 <lang-js>
-    const $result = () => {
+    const result = derived(() => {
         const normalized = number < 0 ? Math.abs(number) : number
         return normalized * 2
-    }
+    })
 </lang-js>
 
-<p>the calculation result is: {$result}</p>
+<p>the calculation result is: {result}</p>
 ```
 
-如果你不需要使用衍生响应式状态的简写声明功能，可以在当前目录或上级目录中添加 `.qingkuairc` 配置文件，并写入以下内容：
+---
 
-```json
-{
-    "convenientDerivedDeclaration": false
-}
+## 非响应式读取
+
+在模板[插值块](./interpolation.md)或[监视器与副作用](./watchers-and-side-effects.md)中读取响应性值时，读取行为默认会建立依赖。如果只想读取当前值，而不希望该值的变化触发重新求值，就需要**非响应式读取**，即在求值期间暂停依赖追踪。这可以借助[运行时 API](../references/api.md#运行时包) `noTracking` 实现，它会在执行传入的函数期间暂停依赖追踪：
+
+```js
+import { noTracking } from "qingkuai"
+
+let count = reactive(0)
+let message = reactive("hello")
+
+// message 更新时不会触发 summary 重新求值
+const summary = derived(() => {
+    return count + noTracking(() => message)
+})
 ```
+
+注意，`noTracking` 只暂停依赖追踪，并不会改变求值结果的类型。如果后续需要访问其返回值的属性，可能还是会建立依赖：
+
+```js
+import { noTracking } from "qingkuai"
+
+let user = reactive({ name: "Qingkuai" })
+
+// user 更新时不会触发 summary 重新求值
+// user.name 更新时会触发 summary 重新求值
+const summary = derived(() => {
+    return noTracking(() => user).name
+})
+```
+
+如果希望在非响应式读取时获取原始值，可以结合 `toRaw` 方法使用：
+
+```js
+import { noTracking, toRaw } from "qingkuai"
+
+let count = reactive(0)
+let user = reactive({ name: "Qingkuai" })
+
+// user 更新时不会触发 summary 重新求值
+// user.name 更新时不会触发 summary 重新求值
+const summary = derived(() => {
+    return count + noTracking(() => toRaw(user)).name
+})
+```
+
+上面示例中的写法虽然可以达到目的，但编写起来还是有些繁琐。此时可以用内建方法`raw` 来达到相同的目的，它除了能够用于标记[响应性声明](#响应性声明)外，还能用于**非响应式读取**：
+
+```js
+import { noTracking, toRaw } from "qingkuai"
+
+let count = reactive(0)
+let user = reactive({ name: "Qingkuai" })
+
+// user 更新时不会触发 summary 重新求值
+// user.name 更新时不会触发 summary 重新求值
+const summary = derivedExp(count + raw(user).name)
+```
+
+非响应式读取并非“冻结”，被 `raw` 包裹的读取不建立依赖，其值的变化不会触发重新求值；但当同一表达式中其他被追踪的依赖发生变化而触发重新求值时，非响应式读取的部分也会被重新执行并得到最新值。观察下面示例中 `result` 的求值结果：
+
+```js
+let count = reactive(0)
+let factor = reactive(1)
+
+// count 的读取建立依赖；factor 通过 raw 读取，不建立依赖
+const result = derivedExp(count + raw(factor))
+
+// 不会导致 result 重新运算
+factor = 100
+
+// 下次读取 result 时会重新运算，得到 110
+// 说明 raw 部分读取的是 factor 的最新值
+count = 10
+```
+
+在渲染层面，`raw` 读取不会创建渲染副作用，仅在初始渲染时求值一次，之后依赖变化不会触发更新：
+
+```qk
+<lang-js>
+    let config = loadConfig()
+    let visible = reactive(true)
+</lang-js>
+
+<!-- 不创建渲染副作用，仅在初始渲染时求值一次 -->
+<p>{raw(config.detail)}</p>
+```
+
+但当其所在的[条件渲染](./compilation-directives.md#条件渲染)或[列表渲染](./compilation-directives.md#列表渲染)重新渲染时，其中的非响应式读取也会以当前值重新求值：
+
+```qk
+<!-- visible 的变化导致重新渲染时 config 会被重新求值 -->
+<p #if={visible}>{raw(config.detail)}</p>
+```
+
+> [!TIP]
+> 这里的 [#if](../basic/compilation-directives.md#条件渲染) 是一个[编译指令](../basic/compilation-directives.md)，我们会在后续章节中进行介绍。它的作用是根据指令值中的条件控制元素的渲染与否。
 
 ---
 
@@ -234,9 +386,8 @@ export const store = createStore({
 </qk:spread>
 ```
 
-<div class="custom-block tip">
-    这里使用到的 <a href="../basic/compilation-directives.md#条件渲染">#if</a> 是一个<a href="../basic/compilation-directives.md">编译指令</a>，我们会在后续章节中进行介绍。它的作用是根据条件控制元素的渲染与否，在上方示例中我们通过它来实现了登录状态的条件渲染。
-</div>
+> [!TIP]
+> 这里使用到的 [#if](../basic/compilation-directives.md#条件渲染) 是一个[编译指令](../basic/compilation-directives.md)，我们会在后续章节中进行介绍。它的作用是根据条件控制元素的渲染与否，在上方示例中我们通过它来实现了登录状态的条件渲染。
 
 ---
 
@@ -258,10 +409,4 @@ const [start, end] = derivedExp(range.map(Math.ceil))
 
 ```js
 const { code, msg } = alias(refs.response)
-```
-
-需要注意的是，衍生响应式状态简写声明不支持解构语法：
-
-```js
-const { $code } = obj
 ```

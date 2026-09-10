@@ -2,7 +2,7 @@
 
 组件插槽用于向组件传递一段结构化的 UI 内容（即模板片段），它与属性（attributes）最大的区别在于传递内容的类型不同：属性用于传递数据，而插槽用于传递界面结构。通过插槽，父组件可以将自定义 DOM 内容插入到子组件的指定位置，从而实现更高的灵活性和复用性。这使得插槽成为构建布局容器、弹窗、列表渲染等通用组件时不可或缺的机制。
 
-<img src="/static/medias/slots.png" />
+<img src="/static/medias/component-slots.png" />
 
 ---
 
@@ -77,7 +77,9 @@
 ```qk
 <!-- Outer.qk -->
 <Inner />
+```
 
+```qk
 <!-- Inner.qk -->
 <div class="inner-box">
     <slot>Default content</slot>
@@ -106,9 +108,8 @@
 </footer>
 ```
 
-<div class="custom-block tip">
-    未添加 <code>name</code> 属性的插槽名称默认为 <code>default</code>。
-</div>
+> [!TIP]
+> 未添加 `name` 属性的插槽名称默认为 `default`。
 
 在使用组件时，可以通过 `slot` [指令](../basic/compilation-directives.md) 指定插槽名称：
 
@@ -120,7 +121,7 @@
 </Article>
 ```
 
-当 [插槽内容](../references/terminology.md#插槽内容) 仅为一段文本，或希望避免添加额外的无意义标签时，可以使用 `qk:spread` [内置元素](../components/builtin-elements.md) 作为虚拟父元素：
+当 [插槽内容](../references/terminology.md#插槽内容) 仅为一段文本，或希望避免添加额外的无意义标签时，可以使用 `qk:spread` [内置元素](../misc/builtin-elements.md) 作为虚拟父元素：
 
 ```qk
 <Article>
@@ -148,9 +149,8 @@
 </article>
 ```
 
-<div class="custom-block tip">
-    <code>slot</code> 标签上的 <code>name</code> 属性仅用于指定插槽名称，不会被传递给插槽内容。
-</div>
+> [!TIP]
+> `slot` 标签上的 `name` 属性仅用于指定插槽名称，不会被传递给插槽内容。
 
 [插槽出口](../references/terminology.md#插槽出口) 处可以通过 `slot` [指令](../basic/compilation-directives.md) 接收这个上下文对象，并为其指定一个标识符以便使用：
 
@@ -174,9 +174,8 @@
 </Article>
 ```
 
-<div class="custom-block warning">
-    解构上下文对象后，解构得到的值通常会失去响应性。但如果其中某个值本身是响应式的复杂结构，那么访问其属性时，响应性仍然会保留。使用解构语法时需要特别注意这一点。
-</div>
+> [!WARNING]
+> 解构上下文对象后，解构得到的值通常会失去响应性。但如果其中某个值本身是响应式的复杂结构，那么访问其属性时，响应性仍然会保留。使用解构语法时需要特别注意这一点。
 
 ---
 

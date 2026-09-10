@@ -2,51 +2,71 @@
 
 Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责边界。本文基于源码入口文件整理两类公开 API：运行时包 `qingkuai` 与编译器包 `qingkuai/compiler` 。
 
-<div class="custom-block tip">
-    内部包 <code>qingkuai/internal</code> 主要面向框架内部实现，通常不建议业务代码直接依赖，因此本节不展开说明。
-</div>
+> [!TIP]
+> 内部包 `qingkuai/internal` 主要面向框架内部实现，通常不建议业务代码直接依赖，因此本节不展开说明。
 
 ---
 
 ## 运行时包
 
-运行时包导出组件生命周期、响应式副作用、性能优化及状态转换等 API。
+运行时包导出组件生命周期、上下文、响应式副作用、性能优化及状态转换等 API。
 
 ### 类型导出
 
+- `BoundEffectFunc`
+- `BoundLifecycleFunc`
+- `BoundSetContextFunc`
+- `BoundSetContextGetterFunc`
+- `BoundWatchFunc`
+- `ComponentContexts`
+- `ComponentExports`
 - `ComponentInstance`
+- `ComponentProps`
+- `ComponentRefs`
+- `ComponentShape`
+- `ComponentSlots`
+- `DeclareComponent`
 - `EffectCallback`
-- `EffectFunc`
 - `EffectHandle`
 - `HtmlBlockOptions`
-- `QingkuaiComponent`
-- `WatcherCallback`
-- `WatchFunc`
+- `WatchCallback`
+
+参考：[工具类型](../misc/typescript.md#工具类型)
 
 ### 生命周期
 
-- `onAfterDestroy`
-- `onAfterMount`
-- `onAfterUpdate`
-- `onBeforeDestroy`
-- `onBeforeUpdate`
+- `onAfterDestroy`{builtin}
+- `onAfterMount`{builtin}
+- `onAfterUpdate`{builtin}
+- `onBeforeDestroy`{builtin}
+- `onBeforeUpdate`{builtin}
 
-参考：[生命周期](../components/lifecycle.md)
+参考：[生命周期](../components/lifecycle.md)。注意：在组件文件内部，这些方法是[内建方法](../references/terminology.md#内建方法)，无需导入即可直接调用；从运行时包导入使用时，第一个参数需要显式传入目标组件实例。
 
 ### 副作用与监视器
 
-- `effect`
-- `postEffect`
-- `postWatch`
-- `preEffect`
-- `preWatch`
-- `syncEffect`
-- `syncWatch`
-- `watch`
+- `effect`{builtin}
+- `postEffect`{builtin}
+- `postWatch`{builtin}
+- `preEffect`{builtin}
+- `preWatch`{builtin}
+- `syncEffect`{builtin}
+- `syncWatch`{builtin}
+- `watch`{builtin}
 
-参考：[监视器与副作用](../basic/watchers-and-side-effects.md)
+参考：[监视器与副作用](../basic/watchers-and-side-effects.md)。与生命周期方法一样，从运行时包导入使用时，第一个参数为组件实例或 `null`。
 
-### 响应式优化控制
+### 上下文
+
+- `getContexts`
+- `setContext`{builtin}
+- `setContextGetter`{builtin}
+
+用于在外部逻辑中操作指定组件实例的上下文：`setContext` 向目标实例的上下文层写入值，`setContextGetter` 写入响应式 `getter`，`getContexts` 返回目标实例的上下文链头对象。在组件文件内部，请直接使用[内建方法](../references/terminology.md#内建方法) `setContext`、`setContextExp`、`setContextGetter` 与[内建标识符](../references/terminology.md#内建标识符) `contexts`。
+
+参考：[上下文](../components/contexts.md)
+
+### 响应性优化控制
 
 - `batchAndNoTracking`
 - `batchUpdating`
@@ -68,7 +88,7 @@ Qingkuai 的 API 按入口包划分，便于按需引入并保持清晰的职责
 - `nextTick`
 - `toRaw`
 - `toReactive`
-- `toShallowReactive`
+- `toShallow`
 
 ### 其他导出
 

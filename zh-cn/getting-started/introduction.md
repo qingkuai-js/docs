@@ -58,9 +58,8 @@ Qingkuai 的语法设计理念是尽可能少造新语法，优先采用现有�
 </style>
 ```
 
-<div class="custom-block tip">
-    如果你使用过 <a href="https://cn.vuejs.org">Vue</a> 或 <a href="https://svelte.dev">Svelte</a>，会发现其模板语法在许多方面与它们相似。这是设计时特意保留的，目的正是降低学习成本。但在语法相似的背后，其设计取舍与工程实现路径仍有一定差异。
-</div>
+> [!TIP]
+> 如果你使用过 [Vue](https://cn.vuejs.org) 或 [Svelte](https://svelte.dev)，会发现其模板语法在许多方面与它们相似。这是设计时特意保留的，目的正是降低学习成本。但在语法相似的背后，其设计取舍与工程实现路径仍有一定差异。
 
 ---
 
@@ -111,4 +110,5 @@ Qingkuai 的语法设计理念是尽可能少造新语法，优先采用现有�
     pElement.textContent = `You clicked ${count} times.`
     ```
 
-<div class="custom-block tip"><code>@click</code> 的作用是为 button 元素添加点击事件监听器，按钮点击后会执行 <code>count++</code> 这条 JavaScript 表达式。关于事件监听器等更多模板语法，我们会在后文详细介绍。</div>
+> [!TIP]
+> `@click` 的作用是为 button 元素添加点击事件监听器，按钮点击后会执行 `count++` 这条 JavaScript 表达式。关于事件监听器等更多模板语法，我们会在后文详细介绍。

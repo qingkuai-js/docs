@@ -1,21 +1,21 @@
 # Optimization
 
-When building modern web applications, performance is always one of the main concerns. Whether it is initial loading speed, the efficiency of reactive updates, or component rendering granularity, the right optimization techniques lead to a smoother user experience. By reducing unnecessary dependency collection, rendering on demand, delaying updates, and operating on raw values, you can lower overhead effectively and improve overall runtime efficiency, keeping the application responsive even when it has complex features.
+When building modern web applications, performance is always one of the main concerns for developers. Whether it is initial loading speed, the efficiency of reactive updates, or component rendering granularity, the right optimization techniques lead to a smoother user experience. By reducing unnecessary dependency tracking, rendering on demand, delaying updates, and operating on raw values, you can lower overhead effectively and improve overall runtime efficiency, keeping the application responsive even when it has complex features.
 
 ---
 
 ## Tree Shaking
 
-Projects created with [create-qingkuai](https://www.npmjs.com/package/create-qingkuai) use [Vite](https://vite.dev) as the default build tool, and Vite is based on [Rollup](https://rollupjs.org) under the hood. This gives it strong [Tree-shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) capabilities, thanks to the static import nature of [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
+Projects created with [create-qingkuai](https://www.npmjs.com/package/create-qingkuai) use [Vite](https://vite.dev) as the default build and bundling tool, and Vite is based on [Rollup](https://rollupjs.org) under the hood. This gives it excellent [Tree-shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) capabilities, thanks to the static import nature of [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 
-Qingkuai was designed with Tree-shaking in mind from the beginning. All APIs and even directives support Tree-shaking. For example, if you do not use the `#for` directive in your code, the related runtime code is not included in the final output. Other directives and features follow the same principle, preventing unused code from entering the bundle and further improving build performance and output size.
+Qingkuai was designed with Tree-shaking in mind from the beginning. All APIs and even directives support Tree-shaking. For example, if you do not use the `#for` directive in your code, the related code is not bundled into the final output. Other directives and features follow the same principle, preventing unused code from entering the bundle and further improving build performance and output size.
 
 ```qk
 <!-- Except for the #if directive, the runtime code of other directives will not be bundled into the final output -->
 <div #if={visible}>...</div>
 ```
 
-For better Tree-shaking results, it is recommended to prefer ESM versions of third-party libraries when possible. Compared with CommonJS, ESM supports static analysis, allowing build tools to identify and remove unused code accurately and reduce bundle size. For example, if a library provides both CommonJS and ESM builds, prefer the ESM one:
+For better Tree-shaking results, it is recommended to use versions in ESM (ES Module) format when importing third-party libraries whenever possible. Compared with CommonJS, ESM supports static analysis, allowing build tools to accurately identify and remove unused module code and reduce bundle size. For example, if a library provides both CommonJS and ESM builds, prefer the ESM one — this import approach significantly improves the leanness and execution performance of the final build output:
 
 ```js
 // Recommended: ESM module, Tree-shaking friendly, smaller bundle size
@@ -25,15 +25,14 @@ import { debounce } from "lodash-es"
 import { debounce } from "lodash"
 ```
 
-<div class="custom-block tip">
-    When choosing third-party libraries, do not focus only on whether the functionality meets your needs. Also consider their effect on bundle size. Large libraries can significantly increase first-load time, especially on mobile devices. Tools such as <a href="https://bundlejs.com">bundlejs</a> can help evaluate the actual size impact of importing a package or a specific export, making it easier to choose lighter alternatives or import only the modules you really need.
-</div>
+> [!TIP]
+> When choosing third-party libraries, besides whether the functionality meets your needs, also consider their impact on bundle size after being introduced. Large libraries can significantly increase the first-load time of pages, especially on mobile devices. You can use tools such as [bundlejs](https://bundlejs.com) to evaluate a library — it intuitively shows the actual size after importing a package or a specific export. With this information, you can make more cost-effective choices between functionality and size, for example by using lighter alternative libraries, or importing only the required modules.
 
 ---
 
 ## Style Reuse
 
-When the same shared stylesheet is imported into scoped embedded style blocks of multiple components through `src` or `@import`, compilation can produce multiple copies of equivalent CSS rules (each copy gets a different component scope marker). This increases CSS size and style parsing cost.
+When the same shared stylesheet is repeatedly imported into the scoped embedded style blocks of multiple components through `src` or `@import`, the compilation output typically generates multiple copies of equivalent style rules (each with a different component's scope marker attached). This increases CSS size and amplifies style parsing overhead.
 
 ```qk
 <!-- A.qk -->
@@ -45,17 +44,17 @@ When the same shared stylesheet is imported into scoped embedded style blocks of
 </lang-css>
 ```
 
-In the example above, `common.css` is scoped independently in each component: the same original rule is rewritten multiple times with different component scope markers. As component count grows, these duplicate rules accumulate linearly, increasing CSS payload and browser style-matching cost. For shared cross-component styles, prefer the following practices:
+In the example above, `common.css` is scoped independently once in each component: the same original rule is attached with different components' scope markers and multiple copies are generated. As the number of components grows, such duplicate rules accumulate linearly, directly driving up CSS size and browser style-matching overhead. For shared styles reused across components, prefer the following practices:
 
-- Load stable shared styles once from a global style entry (for example, app entry CSS or layout-level global styles).
-- For styles declared near components but not requiring scope isolation, maintain them in a global file or a `global` style block.
-- Keep only structure-coupled, component-specific rules inside scoped component styles.
+- Load stable shared styles in a unified way from a global style entry (such as the app entry CSS or the global styles of layout components).
+- For styles that do need to be declared within a component but do not rely on scope isolation, maintain them centrally in a `global` style block or a global file.
+- Keep only rules that are strongly coupled to the component's structure and must rely on scope isolation in the component's scoped styles.
 
 ---
 
 ## Code Splitting
 
-Code-splitting is an important frontend optimization technique. It breaks an application into multiple modules that are loaded on demand, speeding up first-screen loading and reducing wasted resources. Build tools such as Vite and Rollup automatically split modules through static dependency analysis and [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import), and they also support manual chunking strategies such as separating third-party libraries for better loading efficiency and cache usage:
+Code-splitting is an important technique for frontend performance optimization. It breaks an application into multiple modules that are loaded on demand, speeding up first-screen loading and reducing wasted resources. Build tools such as Vite and Rollup automatically split modules through static dependency analysis and [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import), and they also support manual chunking strategies such as separating third-party libraries for better loading efficiency and browser cache utilization:
 
 ```js
 // module.js and its dependencies are split into a separate file,
@@ -65,11 +64,15 @@ function loadModule() {
 }
 ```
 
-In applications with multiple routes, you should not bundle all route components into the main application. Instead, rely on code-splitting to lazy-load route components so that loading efficiency and user experience are improved significantly. This is exactly the core use case of the [async components](../components/async-components.md) introduced earlier:
+In applications with multiple routes, you should not bundle all route components into the main application. Instead, rely on code-splitting to lazy-load route components so that loading efficiency and user experience are improved significantly. This is exactly the core purpose of the [async components](../components/async-components.md) introduced earlier:
 
 ```qk
+<lang-js>
+    const ComponentModule = import("./Component.qk")
+</lang-js>
+
 <qk:spread
-    #await={import("./Component.qk")}
+    #await={ComponentModule}
     #then={{ default: Component }}
 >
     <Component />

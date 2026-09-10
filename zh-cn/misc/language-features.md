@@ -10,9 +10,8 @@ Qingkuai 并不在编译器中内建复杂的语法扩展，而是通过基于 [
 
 <img src="/static/medias/extension.png" alt="VS Code 扩展" />
 
-<div class="custom-block tip">
-    当你在 IDE 中遇到问题时，可以在 Qingkuai 的 <a href="https://github.com/qingkuai-js/language-features">language-features</a> 仓库提交 issue。
-</div>
+> [!TIP]
+> 当你在 IDE 中遇到问题时，可以在 Qingkuai 的 [language-features](https://github.com/qingkuai-js/language-features) 仓库提交 issue。
 
 ---
 

@@ -2,6 +2,8 @@
 
 在 Qingkuai 中，组件是构建用户界面的基本单位。每个组件都代表一个独立、可复用的界面片段，既可以是简单的按钮，也可以是复杂的页面。组件天然具有封装性和组合性，使界面开发更加清晰、高效。
 
+<img src="/static/medias/component-basic.png" />
+
 ---
 
 ## 定义及使用
@@ -12,14 +14,15 @@ Qingkuai 的组件定义采取了与 [Vue](https://cn.vuejs.org) 和 [Svelte](ht
 
 ```qk
 <lang-js>
-    import Component from "./path/to/Component.qk"
+    import Component from "./Component.qk"
 </lang-js>
 
 <Component />
 <Component />
 ```
 
-<div class="custom-block tip">之后我们都用 <code>组件文件</code> 这一术语指代扩展名为 <code>.qk</code> 的文件。</div>
+> [!TIP]
+> 之后我们都用 `组件文件` 这一术语指代扩展名为 `.qk` 的文件。
 
 组件名称支持使用串型（kebab）格式，下面的写法是等效的：
 
@@ -38,7 +41,8 @@ Qingkuai 的组件定义采取了与 [Vue](https://cn.vuejs.org) 和 [Svelte](ht
 }
 ```
 
-<div class="custom-block tip">使用此配置时，Qingkuai 语言服务器在提供组件标签补全建议时，也会优先提示串型组件标签。</div>
+> [!TIP]
+> 使用此配置时，Qingkuai 语言服务器在提供组件标签补全建议时，也会优先提示串型组件标签。
 
 此外，组件标签还支持成员访问语法，这在配合[异步组件](./async-components.md)使用时很常见：
 

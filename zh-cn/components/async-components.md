@@ -142,17 +142,16 @@
 
 ## 实例获取
 
-与普通组件标签一样，异步组件标签同样支持 `&handle` [引用属性](../components/attributes.md#引用属性)，可以正常获取组件实例并访问其导出的成员：
+与普通组件标签一样，异步组件标签同样支持 `&handle` [引用属性](./attributes.md#引用属性)，可以正常获取组件实例并访问其导出的成员：
 
 ```qk
 <lang-js>
-    import { onAfterMount } from "qingkuai"
-
     const AsyncView = import("./AsyncOne.qk")
+
     let asyncView
 
     onAfterMount(() => {
-        console.log(asyncView) // 异步组件实例
+        console.log(asyncView) // logs: 异步组件实例
     })
 </lang-js>
 
@@ -163,12 +162,10 @@
 
 ```qk
 <lang-js>
-    import { onAfterMount } from "qingkuai"
-
     let asyncView
 
     onAfterMount(() => {
-        console.log(asyncView) // 异步组件实例
+        console.log(asyncView) // logs: 异步组件实例
     })
 </lang-js>
 

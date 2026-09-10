@@ -2,7 +2,7 @@
 
 在 Qingkuai 中，引用属性是一种通过在属性名前添加 `&` 字符来传递变量引用的语法（如 `&value`）。它允许你在模板中将某个属性与外部变量建立引用关系，使该属性值可以被外部直接读写，从而实现灵活的数据联动和状态传递。
 
-JavaScript 本身并不支持[引用传递](https://baike.baidu.com/item/%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92?fromModule=lemma_search-box)，但 Qingkuai 实现了一种类似于 C、C++、Go 等语言中的引用（指针）传递机制（其本质是 setter 调用）。借助引用属性，变量可以被显式“传址”到某个元素或组件中，使你能够在多个上下文之间共享和操作同一个状态源。这种机制简洁而强大，提升了模板中状态管理的表达力和控制力。下面这段伪代码可用于理解引用传递与值传递的区别：
+JavaScript 本身并不支持[引用传递](https://baike.baidu.com/item/引用传递)，但经编译器处理后，Qingkuai 的引用属性能模拟出类似 C、C++、Go 等语言中引用（指针）传递的效果，其本质是对 `setter` 的调用。借助引用属性，变量可以被显式“传址”到某个元素或组件中，使你能够在多个上下文之间共享和操作同一个状态源。这种机制简洁而强大，提升了模板中状态管理的表达力和控制力。下面这段伪代码可用于理解引用传递与值传递的区别：
 
 ```js
 let num = 10
@@ -22,13 +22,13 @@ function passByReference(n) {
 }
 
 passByValue(num)
-console.log(num) // 10
+console.log(num) // logs: 10
 
 // & 表示取地址操作符，它用于：
 // 取得 num 变量的内存地址，
 // 并作为参数传给 passByReference。
 passByReference(&num)
-console.log(num) // 11
+console.log(num) // logs: 11
 ```
 
 ---
@@ -41,8 +41,6 @@ console.log(num) // 11
 
 ```qk
 <lang-js>
-    import { onAfterMount } from "qingkuai"
-
     let div = null
 
     onAfterMount(() => {
@@ -55,8 +53,6 @@ console.log(num) // 11
 
 ```qk
 <lang-ts>
-    import { onAfterMount } from "qingkuai"
-
     let div!: HTMLDivElement | null = null
 
     onAfterMount(() => {
@@ -67,13 +63,11 @@ console.log(num) // 11
 <div &handle={div}></div>
 ```
 
-<div class="custom-block tip">
-    <code>onAfterMount</code> 是 Qingkuai 在组件完成挂载与渲染后触发的回调方法，它是 <a href="../components/life-cycle.md">组件生命周期</a>的一部分。
-</div>
+> [!TIP]
+> `onAfterMount` 是 Qingkuai 在组件完成挂载与渲染后触发的回调方法，它是 [组件生命周期](../components/lifecycle.md)的一部分。
 
-<div class="custom-block tip">
-    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org/">TypeScript</a>，<code>&handle</code> 属性值是严格类型的。例如：对于 <code>div</code> 标签，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement">HTMLDivElement</a>；对于 <code>p</code> 元素，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLParagraphElement">HTMLParagraphElement</a>。当然，你也可以将接收者类型定义为元素的基类 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement">HTMLElement</a>。
-</div>
+> [!TIP]
+> 如果你的嵌入脚本语言类型为 [TypeScript](https://www.typescriptlang.org/)，`&handle` 属性值是严格类型的。例如：对于 `div` 标签，它的类型是 [HTMLDivElement](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement)；对于 `p` 元素，它的类型是 [HTMLParagraphElement](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLParagraphElement)。当然，你也可以将接收者类型定义为元素的基类 [HTMLElement](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement)。
 
 当元素被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用：
 
@@ -81,7 +75,7 @@ console.log(num) // 11
 
 ```qk
 <lang-js>
-    import { onAfterMount, nextTick } from "qingkuai"
+    import { nextTick } from "qingkuai"
 
     let div = null
     let show = true
@@ -89,7 +83,7 @@ console.log(num) // 11
     function handleDestroyDiv() {
         show = false
         nextTick(() => {
-            console.log(div) // null
+            console.log(div) // logs: null
         })
     }
 </lang-js>
@@ -99,7 +93,7 @@ console.log(num) // 11
 
 ```qk
 <lang-ts>
-    import { onAfterMount, nextTick } from "qingkuai"
+    import { nextTick } from "qingkuai"
 
     let show = true
     let div: HTMLDivElement | null = null
@@ -107,7 +101,7 @@ console.log(num) // 11
     function handleDestroyDiv() {
         show = false
         nextTick(() => {
-            console.log(div) // null
+            console.log(div) // logs: null
         })
     }
 </lang-ts>
@@ -122,9 +116,8 @@ console.log(num) // 11
 <div &handle={handle}></div>
 ```
 
-<div class="custom-block warning">
-    若属性名称是嵌入脚本语言中的关键字或保留字，则不支持这种语法，如 <code>class</code> 或 <code>for</code> 属性等。
-</div>
+> [!WARNING]
+> 若属性名称是嵌入脚本语言中的关键字或保留字，则不支持这种语法，如 `class` 或 `for` 属性等。
 
 ---
 
@@ -183,9 +176,8 @@ The inputValue is: {inputValue}
 </div>
 ```
 
-<div class="custom-block tip">
-    这里我们只是简单介绍了引用属性在处理表单输入时的用法，关于引用属性在表单中的更多使用细节我们将在 <a href="./forms.md">表单处理</a> 一节中介绍。
-</div>
+> [!TIP]
+> 这里我们只是简单介绍了引用属性在处理表单输入时的用法，关于引用属性在表单中的更多使用细节我们将在 [表单处理](./forms.md) 一节中介绍。
 
 ---
 
@@ -195,13 +187,13 @@ The inputValue is: {inputValue}
 
 ```qk
 <!-- 合法值 -->
-<p &dom={identifier}></p>
-<p &dom={arr[index]}></p>
-<p &dom={obj.property}></p>
+<p &handle={identifier}></p>
+<p &handle={arr[index]}></p>
+<p &handle={obj.property}></p>
 
 <!-- 非法值 -->
-<p &dom={test()}></p>
-<p &dom={arr?.[index]}></p>
-<p &dom={obj?.property}></p>
-<p &dom={condition ? v1: v2}></p>
+<p &handle={test()}></p>
+<p &handle={arr?.[index]}></p>
+<p &handle={obj?.property}></p>
+<p &handle={condition ? v1: v2}></p>
 ```

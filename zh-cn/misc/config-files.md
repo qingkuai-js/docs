@@ -38,6 +38,10 @@ qingkuai-app
 
 该属性用于配置是否保留 HTML 注释节点，字符串，可选值：`never`、`always`、`development`、`production`，默认值为 `development`。
 
+### requireReactivityMark
+
+该属性用于配置是否要求脚本块顶层的变量声明显式使用响应性内建方法（`raw`、`reactive`、`shallow`、`derived`、`alias`）进行标记，布尔值，默认值为 `false`。启用后，未显式标记的顶层变量声明会导致编译错误。
+
 ### resolveImportExtension
 
 该属性用于配置在组件文件的导入语句中是否可省略 `.qk` 扩展名，布尔值，默认值为 `true`：
@@ -45,15 +49,6 @@ qingkuai-app
 ```js
 // 被解析为 ./Component.qk
 import Component from "./Component"
-```
-
-### shorthandDerivedDeclaration
-
-该属性用于配置是否启用衍生响应式状态的简写声明，布尔值，默认值为 `true`。启用后，组件文件嵌入脚本顶层作用域中以 `$` 字符开头的标识符会被自动编译为[衍生响应式状态](../basic/reactivity.md#衍生响应式状态)，修改为 `false` 可阻止这一行为：
-
-```js
-// 简写声明衍生响应式状态
-const $double = number * 2
 ```
 
 ### allowConstReactive

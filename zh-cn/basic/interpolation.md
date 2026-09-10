@@ -33,9 +33,6 @@ Qingkuai 的模板语法与 HTML 语法非常相似，甚至可以说它就是 H
 <div !id={dynamicId}></div>
 ```
 
-<div class="custom-block tip">所有插值块都具备响应性能力，即当嵌入脚本语言中的响应性变量发生变化时，DOM 属性也会同步更新。</div>
-
-<br />
 
 当 `class` 作为动态属性时，还可以接受对象或数组作为值：当值为对象时，属性值为真值（truthy）的键名会被应用到 class 列表；当值为数组时，数组中的每一项都会被应用到 class 列表。也就是说，下面两种语法都允许：
 
@@ -71,7 +68,8 @@ Qingkuai 的模板语法与 HTML 语法非常相似，甚至可以说它就是 H
 <div !id={id}></div>
 ```
 
-<div class="custom-block warning">若属性名是嵌入脚本语言中的关键字或保留字，则不支持这种语法，例如 <code>class</code> 或 <code>for</code>。</div>
+> [!WARNING]
+> 若属性名是嵌入脚本语言中的关键字或保留字，则不支持这种语法，例如 `class` 或 `for`。
 
 ---
 

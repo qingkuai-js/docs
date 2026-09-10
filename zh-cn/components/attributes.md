@@ -11,57 +11,68 @@
 |js|ts|
 
 ```qk
-<!-- Outer.qk -->
-<Inner attr="value" >
-
 <!-- Inner.qk -->
 <lang-js>
-    console.log(props.attr) // logs: value
+    /**
+     * @typedef {Object} Meta
+     * @property {Object} props
+     * @property {string} props.msg
+     */
+    console.log(props.msg) // logs: value
 </lang-js>
 ```
 
 ```qk
-<!-- Outer.qk -->
-<Inner attr="value" >
-
 <!-- Inner.qk -->
 <lang-ts>
-    interface Props {
-        attr: string
+    interface Meta {
+        props: {
+            msg: string
+        }
     }
-    console.log(props.attr) // logs: value
+    console.log(props.msg) // logs: value
 </lang-ts>
 ```
 
-<div class="custom-block tip">
-    如果你的嵌入脚本语言为 TypeScript，或希望获得组件属性补全建议，可以先阅读 <a href="../misc/typescript.md">TypeScript 支持</a> 再阅读本节内容。
-</div>
+```qk
+<!-- Outer.qk -->
+<Inner msg="value" />
+```
+
+> [!TIP]
+> 上方示例中的 [JSDoc](https://jsdoc.app/) 与 `interface` 作用相同：为 `props` 声明类型以提供属性补全，详见 [TypeScript 支持](../misc/typescript.md)。
 
 在组件标签上添加某个属性名称但未给定属性值时，组件内部接收到的是布尔值 `true`：
 
 |js|ts|
 
 ```qk
-<!-- Outer.qk -->
-<Inner attr />
-
 <!-- Inner.qk -->
 <lang-js>
-    console.log(props.attr) // logs: true
+    /**
+     * @typedef {Object} Meta
+     * @property {Object} props
+     * @property {boolean} [props.isOk]
+     */
+    console.log(props.isOk) // logs: true
 </lang-js>
 ```
 
 ```qk
-<!-- Outer.qk -->
-<Inner attr />
-
 <!-- Inner.qk -->
 <lang-ts>
-    interface Props {
-        attr?: boolean
+    interface Meta {
+        props: {
+            isOk?: boolean
+        }
     }
-    console.log(props.attr) // logs: true
+    console.log(props.isOk) // logs: true
 </lang-ts>
+```
+
+```qk
+<!-- Outer.qk -->
+<Inner isOk />
 ```
 
 ---
@@ -73,15 +84,28 @@
 |js|ts|
 
 ```qk
-<!-- Outer.qk -->
-<lang-js>
-    const list = ["js", "ts", "qk"]
-    setTimeout(list.pop, 1000)
-</lang-js>
-
-<Inner !list />
-
 <!-- Inner.qk -->
+<lang-ts>
+    /**
+     * @typedef {Object} Meta
+     * @property {Object} props
+     * @property {string[]} props.list
+     */
+</lang-ts>
+
+<p>The length of list is: {props.list.length}</p>
+```
+
+```qk
+<!-- Inner.qk -->
+<lang-ts>
+    interface Meta {
+        props: {
+            list: string[]
+        }
+    }
+</lang-ts>
+
 <p>The length of list is: {props.list.length}</p>
 ```
 
@@ -93,15 +117,6 @@
 </lang-ts>
 
 <Inner !list />
-
-<!-- Inner.qk -->
-<lang-ts>
-    interface Props {
-        list: string[]
-    }
-</lang-ts>
-
-<p>The length of list is: {props.list.length}</p>
 ```
 
 ---
@@ -113,11 +128,13 @@
 |js|ts|
 
 ```qk
-<!-- Outer.qk -->
-<Inner @someThingHappened={console.log($arg)} />
-
 <!-- Inner.qk -->
 <lang-js>
+    /**
+     * @typedef {Object} Meta
+     * @property {Object} props
+     * @property {(msg: string) => void} props.someThingHappened
+     */
     setTimeout(() => {
         props.someThingHappened("event is triggered.")
         // logs: event is triggered.
@@ -126,13 +143,12 @@
 ```
 
 ```qk
-<!-- Outer.qk -->
-<Inner @someThingHappened={console.log($arg)} />
-
 <!-- Inner.qk -->
 <lang-ts>
-    interface Props {
-        someThingHappened: (msg: string) => void
+    interface Meta {
+        props: {
+            someThingHappened: (msg: string) => void
+        }
     }
     setTimeout(() => {
         props.someThingHappened("event is triggered.")
@@ -141,12 +157,16 @@
 </lang-ts>
 ```
 
-<div class="custom-block tip">
-    组件事件在传递和使用上与其他非引用属性没有区别，唯一的不同在于它们的语义：组件事件通常表示组件内部发生的某些行为或状态变化，而组件属性则更倾向于表示组件的配置或数据输入。因此，在设计组件接口时，我们建议将需要传递给组件的回调函数命名为事件，并使用 @ 前缀来标识它们，以便更清晰地表达它们的用途和语义。
-</div>
-<div class="custom-block tip">
-    Qingkuai 语言服务器在提供补全建议时，只有属性值为函数类型的属性才会被提示为事件。
-</div>
+```qk
+<!-- Outer.qk -->
+<Inner @someThingHappened={console.log($arg)} />
+```
+
+> [!TIP]
+> 组件事件在传递和使用上与其他非引用属性没有区别，唯一的不同在于它们的语义：组件事件通常表示组件内部发生的某些行为或状态变化，而组件属性则更倾向于表示组件的配置或数据输入。因此，在设计组件接口时，我们建议将需要传递给组件的回调函数命名为事件，并使用 @ 前缀来标识它们，以便更清晰地表达它们的用途和语义。
+
+> [!TIP]
+> Qingkuai 语言服务器在提供补全建议时，只有属性值为函数类型的属性才会被提示为事件。
 
 ---
 
@@ -157,6 +177,34 @@
 |js|ts|
 
 ```qk
+<!-- Inner.qk -->
+<lang-js>
+    /**
+     * @typedef {Object} Meta
+     * @property {Object} refs
+     * @property {string} refs.name
+     */
+</lang-js>
+
+<p>Inner name: {refs.name}</p>
+<button @click={refs.name = "Qingkuai"}>Change the name</button>
+```
+
+```qk
+<!-- Inner.qk -->
+<lang-ts>
+    interface Meta {
+        refs: {
+            name: string
+        }
+    }
+</lang-ts>
+
+<p>Inner name: {refs.name}</p>
+<button @click={refs.name = "Qingkuai"}>Change the name</button>
+```
+
+```qk
 <!-- Outer.qk -->
 <lang-js>
     import Inner from "./Inner.qk"
@@ -164,39 +212,28 @@
     let name = "JavaScript"
 </lang-js>
 
-<p>name is: {name}</p>
-<Inner &attr={name} />
-
-<!-- Inner.qk -->
-<p>refs.attr is: {refs.attr}</p>
-<button @click={refs.attr = "Qingkuai"}>Change refs.attr</button>
+<p>Outer name: {name}</p>
+<Inner &name={name} />
 ```
 
-```qk
-<!-- Outer.qk -->
-<lang-ts>
-    import Inner from "./Inner.qk"
+在点击 `Change the name` 按钮前，渲染结果为：
 
-    let name = "JavaScript"
-</lang-ts>
-
-<p>name is: {name}</p>
-<Inner &attr={name} />
-
-<!-- Inner.qk -->
-<lang-ts>
-    interface Refs {
-        attr: string
-    }
-</lang-ts>
-
-<p>refs.attr is: {refs.attr}</p>
-<button @click={refs.attr = "Qingkuai"}>Change refs.attr</button>
+```html
+<p>Outer name: JavaScript</p>
+<p>Inner name: JavaScript</p>
+<button>Change the name</button>
 ```
 
-<div class="custom-block warning">
-    如果 <code>props</code> 中某个属性值本身是复杂类型（如对象或数组），其内部数据在技术上仍可被修改。例如，当 <code>props.userInfo</code> 是对象时，<code>props.userInfo.name</code> 依然可以被改写。但不建议这样做，因为这会让组件状态变得更难追踪和维护。
-</div>
+按钮被点击后，渲染结果变为：
+
+```html
+<p>Outer name: Qingkuai</p>
+<p>Inner name: Qingkuai</p>
+<button>Change the name</button>
+```
+
+> [!WARNING]
+> 如果 `props` 中某个属性值本身是复杂类型（如对象或数组），其内部数据在技术上仍可被修改。例如，当 `props.userInfo` 是对象时，`props.userInfo.name` 依然可以被改写。但不建议这样做，因为这会让组件状态变得更难追踪和维护。
 
 需要注意的是，`&handle` 属性在组件标签上是一个特殊的引用属性，用于获取组件实例，所以命名引用属性时请避免使用 `handle` 这个名称：
 
@@ -204,8 +241,6 @@
 
 ```qk
 <lang-js>
-    import { onAfterMount } from "qingkuai"
-
     let child = null
 
     onAfterMount(() => {
@@ -221,7 +256,6 @@
     import type { ComponentInstance } from "qingkuai"
 
     import Child from "./Child.qk"
-    import { onAfterMount } from "qingkuai"
 
     let child: ComponentInstance<typeof Child> | null = null
 
@@ -233,52 +267,141 @@
 <Child &handle={child} />
 ```
 
-<div class="custom-block tip">同通过 `&handle` <a href="../basic/reference-attributes.md#获取-dom-元素">获取 DOM 节点</a>一样：当组件被销毁时，引用属性会自动将绑定的变量重置为 `null`，以避免悬空引用。</div>
+> [!TIP]
+> `onAfterMount` 时组件内建的[生命周期](./lifecycle.md)回调注册方法。
+
+> [!TIP]
+> 这与通过 `&handle` [获取 DOM 节点](../basic/reference-attributes.md#获取-dom-元素)一样：当组件被销毁时，引用属性会自动将绑定的变量重置为 `null` ，这能有效避免悬空引用造成的内存泄漏。
 
 ---
 
-## 属性解构
+## 响应式解构
 
-直接解构 `props` 或 `refs` 内建对象得到的值本身不具有响应性。如下例所示，访问 `str` 不具有响应性，因为这不会触发对 `props` 属性访问的 `getter`：
+解构 `props` 或 `refs` 内建对象时，解构语句本身会触发一次对应属性的 `getter`，但解构得到的标识符只是一个独立的普通变量，后续对它的访问和修改都不会再经过 `getter`，因此与外部传入的属性值失去了关联。具体影响取决于属性值的类型：
+
+- **原始类型**（如字符串、数字）：解构出的标识符可能会被推导为具有独立的响应性，组件内部依赖它的视图会随之更新；但它与外部传入的属性值已失去关联，外部依赖该属性的内容不会更新：
+
+    ```qk
+    <!-- Inner.qk -->
+    <lang-js>
+        let { name } = refs
+
+        // Outer 视图不更新，Inner 视图更新
+        name = "Qingkuai"
+    </lang-js>
+
+    <p>Inner name: {name}</p>
+    ```
+
+    ```qk
+    <!-- Outer.qk -->
+    <lang-js>
+        let name = "JavaScript"
+    </lang-js>
+
+    <Inner &name={name} />
+    <p>Outer name: {name}</p>
+    ```
+
+- **复杂类型**（如对象、数组）：当属性值本身是响应式对象时，解构出的标识符仍指向该对象，访问其属性依然具有响应性；而对标识符本身的重新赋值则与原始类型的行为一致，只会更新局部视图，不会同步到外部传入的值：
+
+    ```qk
+    <!-- Inner.qk -->
+    <lang-js>
+        let { userInfo } = refs
+
+        // Outer、Inner 视图都会更新
+        userInfo.name = "Qingkuai"
+
+        // Outer 视图不更新，Inner 视图更新
+        userInfo = { name: "Qingkuai" }
+    </lang-js>
+
+    <p>Inner user name: {userInfo.name}</p>
+    ```
+
+    ```qk
+    <!-- Outer.qk -->
+    <lang-js>
+        let userInfo = {
+            name: "JavaScript"
+        }
+    </lang-js>
+
+    <Inner &userInfo={userInfo} />
+    <p>Outer user name: {userInfo.name}</p>
+    ```
+
+> [!TIP]
+> 上述解构行为与普通 JavaScript 中解构普通对象的行为保持一致，Qingkuai 遵循这一语义以避免概念上的混乱。
+
+如果目的是对组件属性进行响应式解构，推荐固定搭配内建的 `alias` 方法使用，这是一个好习惯。这种显式标记的方式能够消除歧义，使代码意图一目了然，便于团队协作中的代码审查与维护：
 
 ```js
-const { str } = props
+// 访问/写入 name 具有响应性
+let { name } = alias(refs)
+
+// 访问 userInfo 具有响应性
+const { userInfo } = alias(props)
 ```
 
-因此，若需要解构组件属性并保持响应性，可以搭配使用编译器内建的 `alias` 方法：
-
-```js
-const { str } = alias(props)
-
-// 访问 str 具有响应性，且等价于访问 props.str
-```
-
-同样地，使用 `alias` 方法解构 `refs` 内建对象得到的值也具有响应性：
-
-```js
-let { str } = alias(refs)
-
-// 访问/写入 str 具有响应性，且等价于访问/写入 refs.str
-```
+> [!TIP]
+> 经编译器处理后，通过 `alias` 创建的别名标识符会被完全转换为对原始属性的访问表达式，运行时不存在额外的包装开销。更多细节参考 [响应性别名](../basic/reactivity.md#响应性别名)。
 
 ---
 
 ## 指定默认值
 
-组件属性支持默认值，当父组件未传递某个属性时，组件内部可以指定默认值来保证组件的正常运行。通过编译器内建的 `defaults` 方法，我们可以为组件属性指定默认值：
+组件属性支持默认值，当父组件未传递某个属性时，组件内部可以指定默认值来保证组件的正常运行。通过内建的 `defaults` 方法，可以为组件的属性指定默认值：
+
+|js|ts|
 
 ```js
+/**
+ * @typedef {Object} Meta
+ * @property {Object} refs
+ * @property {boolean} [refs.checked]
+ *
+ * @property {Object} props
+ * @property {number} [props.age]
+ * @property {string} [props.name]
+ * @property {string} props.description
+ */
 defaults({
     refs: {
         checked: false
     },
     props: {
         age: 0,
-        name: "Unknown",
-        description: "This is a default user info."
+        name: "Unknown"
     }
 })
 ```
+
+```ts
+interface Meta {
+    refs: {
+        checked?: boolean
+    }
+    props: {
+        age?: number
+        name?: string
+        description: string
+    }
+}
+defaults({
+    refs: {
+        checked: false
+    },
+    props: {
+        age: 0,
+        name: "Unknown"
+    }
+})
+```
+
+> [!TIP]
+> 调用 `defaults` 后，被设置了默认值的键会在后续代码中被收窄为非可选，详见 [默认值推断](../misc/typescript.md#默认值推断)。
 
 ---
 
@@ -301,6 +424,5 @@ Qingkuai 组件的属性名称与组件名称一样，支持 kebab 格式和驼�
 }
 ```
 
-<div class="custom-block tip">
-    使用此配置时，Qingkuai 语言服务器在提供组件属性补全建议时，也会优先提示 kebab 格式的属性名称。
-</div>
+> [!TIP]
+> 使用此配置时，Qingkuai 语言服务器在提供组件属性补全建议时，也会优先提示 kebab 格式的属性名称。

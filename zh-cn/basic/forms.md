@@ -28,9 +28,8 @@
 <input type="number" &number={numericValue} />
 ```
 
-<div class="custom-block warning">
-    需要注意的是，<code>&number</code> 引用属性会在输入值无法被转换为有效数字时将目标变量设置为 <code>NaN</code>，因此它通常应该与 <code>input</code> 标签的 <code>type="number"</code> 属性配合使用，以确保输入值的有效性。
-</div>
+> [!WARNING]
+> 需要注意的是，`&number` 引用属性会在输入值无法被转换为有效数字时将目标变量设置为 `NaN`，因此它通常应该与 `input` 标签的 `type="number"` 属性配合使用，以确保输入值的有效性。
 
 ---
 

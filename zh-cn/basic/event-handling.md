@@ -30,14 +30,14 @@
 ```js
 function handleAddCount(e) {
     count++
-    console.log(e.target === this) // true，均指向被点击的button元素
+    console.log(e.target === this) // logs: true
 }
 ```
 
 ```ts
 function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
     count++
-    console.log(e.target === this) // true，均指向被点击的button元素
+    console.log(e.target === this) // logs: true
 }
 ```
 
@@ -48,7 +48,8 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 <button @click={click}></button>
 ```
 
-<div class="custom-block warning">若事件名称是嵌入脚本语言中的关键字或保留字，则不支持这种语法，如 <code>class</code> 或 <code>for</code> 属性等。</div>
+> [!WARNING]
+> 若事件名称是嵌入脚本语言中的关键字或保留字，则不支持这种语法，如 `class` 或 `for` 属性等。
 
 ---
 
@@ -80,9 +81,8 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 <button @click={$arg => console.log($arg.target)}>Add Count</button>
 ```
 
-<div class="custom-block tip">
-    从原生事件的角度来看，将 <code>$arg</code> 命名为 <code>$event</code> 可能更直观；但从语义一致性的角度出发，使用 $arg 更能涵盖我们之后将介绍的<a href="../components/basic.md">组件</a>内联事件处理器所传入的任意参数。因此，在 Qingkuai 中我们统一使用 $arg 作为事件处理器的默认参数名，以体现其在组件与原生事件中的通用性：它既可以表示原生事件对象，也可以表示组件传入的任意参数。
-</div>
+> [!TIP]
+> 从原生事件的角度来看，将 `$arg` 命名为 `$event` 可能更直观；但从语义一致性的角度出发，使用 $arg 更能涵盖我们之后将介绍的[组件](../components/basic.md)内联事件处理器所传入的任意参数。因此，在 Qingkuai 中我们统一使用 $arg 作为事件处理器的默认参数名，以体现其在组件与原生事件中的通用性：它既可以表示原生事件对象，也可以表示组件传入的任意参数。
 
 如果你在内联事件处理器中调用了其他方法，Qingkuai 会自动将这些被调用方法中的 this 绑定为当前元素：
 
@@ -94,7 +94,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 
     function handleAddCount(e) {
         count++
-        console.log(e.target === this) // true，均指向被点击的button元素
+        console.log(e.target === this) // logs: true
     }
 </lang-js>
 
@@ -108,7 +108,7 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 
     function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
         count++
-        console.log(e.target === this) // true，均指向被点击的button元素
+        console.log(e.target === this) // logs: true
     }
 </lang-ts>
 
@@ -116,9 +116,8 @@ function handleAddCount(this: HTMLButtonElement, e: MouseEvent) {
 <button @click={handleAddCount($arg)}>Add Count</button>
 ```
 
-<div class="custom-block tip">
-    如果你的嵌入脚本语言类型为 <a href="https://www.typescriptlang.org">TypeScript</a>，<code>$arg</code> 的类型是严格的。例如：对于 <code>@keydown</code> 事件，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent">KeyboardEvent</a>；对于 <code>@click</code> 事件，它的类型是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent">MouseEvent</a>。
-</div>
+> [!TIP]
+> 如果你的嵌入脚本语言类型为 [TypeScript](https://www.typescriptlang.org)，`$arg` 的类型是严格的。例如：对于 `@keydown` 事件，它的类型是 [KeyboardEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/KeyboardEvent)；对于 `@click` 事件，它的类型是 [MouseEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent)。
 
 ---
 

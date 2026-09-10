@@ -29,9 +29,8 @@
 <p #else>Hello {userInfo.name}!</p>
 ```
 
-<div class="custom-block tip">
-    这里使用的 <code>qk:spread</code> 标签是指令的虚拟挂载点，它不会被渲染到页面中。你可以将其理解为：该元素上的指令会依次应用到所有子节点。这样设计既能避免引入无意义的额外元素，也让文本节点使用指令成为可能。关于它的更多用法和细节，我们会在 <a href="../misc/builtin-elements.md">内置元素</a> 中介绍。
-</div>
+> [!TIP]
+> 这里使用的 `qk:spread` 标签是指令的虚拟挂载点，它不会被渲染到页面中。你可以将其理解为：该元素上的指令会依次应用到所有子节点。这样设计既能避免引入无意义的额外元素，也让文本节点使用指令成为可能。关于它的更多用法和细节，我们会在 [内置元素](../misc/builtin-elements.md) 中介绍。
 
 当然我们还可以在 `if` 和 `else` 之间插入一些 `elif` 指令作为分支节点：
 
@@ -142,7 +141,7 @@
 
 ## key 指令
 
-当我们使用 `for` 指令创建列表渲染时，列表数据发生变化，框架需要更新对应的 DOM 元素。默认情况下，框架采用位置匹配的方式来关联新旧元素：即根据列表索引来对应元素。这种做法在列表仅在末尾添加或删除时工作良好。但当列表中间插入、删除或重新排序项目时，就会导致问题——因为节点的 DOM 状态（如表单输入的值）会被错误地关联到其他数据项。
+当我们使用 `for` 指令创建列表渲染时，列表数据发生变化，框架需要更新对应的 DOM 元素。默认情况下，框架采用位置匹配的方式来关联新旧元素：即根据列表索引来对应元素。这种做法在列表仅在末尾添加或删除时工作良好。但当列表中间插入、删除或重新排序项目时，就会导致问题，因为节点的 DOM 状态（如表单输入的值）会被错误地关联到其他数据项。
 
 为了解决这个问题，可以使用 `#key` 指令为列表中的每个元素指定一个唯一的身份标识，框架就能根据这个 key 准确追踪每个元素，确保即使列表重新排序、插入或删除，元素的状态也能正确跟随其对应的数据项。因此，如果列表渲染的元素带有状态，推荐添加 `#key` 指令：
 
@@ -157,9 +156,8 @@
 </form>
 ```
 
-<div class="custom-block warning">
-    运行时会将 key 指令的值转换为字符串，并检查同一列表中是否存在重复值，重复时将抛出运行时错误。因此，同一列表中每一项的 key 值必须保持唯一。
-</div>
+> [!WARNING]
+> 运行时会将 key 指令的值转换为字符串，并检查同一列表中是否存在重复值，重复时将抛出运行时错误。因此，同一列表中每一项的 key 值必须保持唯一。
 
 ---
 
@@ -209,9 +207,8 @@
 </p>
 ```
 
-<div class="custom-block tip">
-    Qingkuai 的 <a href="../components/async-components.md">异步组件</a> 也是基于异步处理指令组合实现的。
-</div>
+> [!TIP]
+> Qingkuai 的 [异步组件](../components/async-components.md) 也是基于异步处理指令组合实现的。
 
 ---
 
@@ -254,9 +251,8 @@ type HTMLDirectiveValueType = Partial<{
 <p #html={htmlDirectiveConf}>{htmlStr}</p>
 ```
 
-<div class="custom-block warning">
-    若某个标签使用了 html 指令，则只能包含一个文本子节点，否则将导致编译器致命错误。
-</div>
+> [!WARNING]
+> 若某个标签使用了 html 指令，则只能包含一个文本子节点，否则将导致编译器致命错误。
 
 ---
 
@@ -300,11 +296,10 @@ type HTMLDirectiveValueType = Partial<{
 </lang-css>
 ```
 
-<div class="custom-block tip">
-    <code>lang-css</code> 中的内容是<a href="../components/basic.md">组件</a>的<a href="../references/terminology.md#嵌入样式块">嵌入样式块</a>，用于定义组件的样式规则。如果你还不了解组件的作用域样式机制，可以先阅读<a href="../components/stylesheets.md">组件样式表</a>再回来看这一节。
-</div>
+> [!TIP]
+> `lang-css` 中的内容是[组件](../components/basic.md)的[嵌入样式块](../references/terminology.md#嵌入样式块)，用于定义组件的样式规则。如果你还不了解组件的作用域样式机制，可以先阅读[组件样式表](../components/stylesheets.md)再回来看这一节。
 
-需要注意的是，当子组件的根节点是 [qk:spread](../misc/builtin-elements.md#qkspread) 或另一个组件这类不创建实际 DOM 元素的标签时，Qingkuai 会继续向内找到第一个实体元素并附加作用域属性：
+需要注意的是，当子组件的根节点是 [qk:spread](../misc/builtin-elements.md#spread) 或另一个组件这类不创建实际 DOM 元素的标签时，Qingkuai 会继续向内找到第一个实体元素并附加作用域属性：
 
 ```qk
 <!-- Parent.qk -->
@@ -316,27 +311,34 @@ type HTMLDirectiveValueType = Partial<{
         color: blue;
     }
 </lang-css>
+```
 
+```qk
 <!-- Middle.qk -->
 <Child />
+```
 
+```qk
 <!-- Child.qk -->
 <div>...</div>
 ```
 
-<div class="custom-block tip">
-    只向子组件的<b>根元素</b>附加作用域属性，而不影响更深的层级是为了保证运行时性能。
-</div>
+> [!TIP]
+> 只向子组件的**根元素**附加作用域属性，而不影响更深的层级是为了保证运行时性能。
 
 此外，多个 `#scope` 在祖先链上可以组合使用，每一层都会将当前组件的作用域附加到最终根元素上，实现多层祖先样式的叠加。例如下面示例中 `Child` 组件中的 `div` 元素最终会同时具有 `Parent` 和 `Middle` 组件的作用域属性，从而受到两者样式规则的影响：
 
 ```qk
 <!-- Parent.qk -->
 <Middle #scope />
+```
 
+```qk
 <!-- Middle.qk -->
 <Child #scope />
+```
 
+```qk
 <!-- Child.qk -->
 <div>...</div>
 ```
@@ -376,6 +378,5 @@ type HTMLDirectiveValueType = Partial<{
 
 `slot` > `await/then/catch` > `if/elif/else` > `target` > `for/key` > `html`
 
-<div class="custom-block tip">
-    其他未被列出的指令的优先级均低于 <code>html</code> 指令，当它们同时出现时，顺序决定了它们的处理顺序（即先出现的先处理）。
-</div>
+> [!TIP]
+> 其他未被列出的指令的优先级均低于 `html` 指令，当它们同时出现时，顺序决定了它们的处理顺序（即先出现的先处理）。
