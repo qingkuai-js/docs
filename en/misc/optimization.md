@@ -4,6 +4,52 @@ When building modern web applications, performance is always one of the main con
 
 ---
 
+## Signal Mode
+
+By default, identifiers inferred as reactive have [deep reactivity](../basic/reactivity.md#reactivity-mode): reading a property recursively wraps nested values in reactive proxies, and mutations at any level can trigger updates. This provides an intuitive development experience, but the reactivity system itself carries non-negligible runtime overhead. If your application demands the highest runtime performance, you can combine two [runtime configuration](./config-files.md#runtime-configuration) options to minimize the performance impact of reactivity:
+
+```json
+{
+    "reactivityMode": "shallow",
+    "allowConstReactive": false
+}
+```
+
+The two options complement each other: [`allowConstReactive: false`](./config-files.md#allowconstreactive) takes all immutable bindings out of [reactivity inference](../references/reactivity-infer-rules.md), eliminating the overhead of dependency collection and proxy wrapping, while [`reactivityMode: "shallow"`](./config-files.md#reactivitymode) retains only [shallow reactivity](../basic/reactivity.md#reactivity-mode) for mutable state, so property reads return the raw values themselves.
+
+When used together, only `let`/`var` top-level identifiers that are "accessed in the template and mutated in the script" are inferred as reactive, and they only maintain shallow reactivity — all other identifiers are raw values with no extra overhead. The application then enters a `signal`-like reactive mode, very similar to how frameworks such as [Solid](https://www.solidjs.com) and [Preact Signals](https://preactjs.com/guide/v10/signals/) work: each piece of reactive state is a mutable top-level binding, and reassigning it precisely triggers updates to the parts that depend on it. There are no deep proxies and no recursive dependency tracking, so the performance impact of reactivity is very low. As a consequence, reactive updates can only be triggered by assigning to the identifier itself:
+
+```qk
+<lang-js>
+    let user = {
+        stars: 0,
+        name: "Qingkuai"
+    }
+
+    // Triggers an update
+    function addStar() {
+        user = {
+            ...user,
+            stars: user.stars + 1
+        }
+    }
+
+    // Just a plain JS operation, does not trigger an update
+    function addStarSilently() {
+        user.stars++
+    }
+</lang-js>
+
+<p>{ user.name }: { user.stars }</p>
+<button @click={addStar}>add star</button>
+<button @click={addStarSilently}>add star silently</button>
+```
+
+> [!TIP]
+> In framework performance comparisons such as [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark), the results for each framework usually come from versions carefully optimized by the framework authors or core contributors — often requiring deliberate consideration of the reactivity markers used for every single state update. In Qingkuai, however, the two lines of configuration above are all you need to achieve near-ultimate runtime performance without carefully optimizing every reactivity marker.
+
+---
+
 ## Tree Shaking
 
 Projects created with [create-qingkuai](https://www.npmjs.com/package/create-qingkuai) use [Vite](https://vite.dev) as the default build and bundling tool, and Vite is based on [Rollup](https://rollupjs.org) under the hood. This gives it excellent [Tree-shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking) capabilities, thanks to the static import nature of [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).

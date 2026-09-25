@@ -81,13 +81,14 @@ Reference-attribute values must be assignable lvalues: identifiers, `arr[index]`
 1. Two-way form binding uses reference attributes (`&value`), not `!value` plus `@input={...}`.
 2. Obtain DOM elements with `&handle` on the element instead of manual DOM queries; the bound variable resets to `null` on element destruction.
 3. Prefer compiler-inferred reactivity; add `reactive`, `shallow`, or `raw` only when explicit marking is required.
-4. Derived state uses `derived`; prefer `derivedExp` or the `$` prefix shorthand when a plain expression suffices.
-5. Use `qk:spread` as a virtual directive mount point instead of introducing meaningless wrapper elements.
-6. Add `#key` to `#for`-rendered elements that carry local state; keys must be unique within the same list.
-7. Reference-attribute values must be assignable lvalues: no function calls, optional chains, or ternaries.
-8. Watcher/effect calls (`watch`, `effect`, and their variants) need no import; the compiler binds them to the component instance and cleans them up on destroy.
-9. Use plain interpolation for text; use `#html` only when raw HTML insertion is intended, and keep exactly one text child inside it.
-10. Never invent syntax or identifiers; verify every token against the docs in "Task To Docs" before writing it.
+4. When the user cares about runtime performance, combine `"reactivityMode": "shallow"` with `"allowConstReactive": false` in `.qingkuairc` to enter Signal Mode (see [optimization.md](./misc/optimization.md)); in this mode updates are triggered only by reassigning the identifier itself.
+5. Derived state uses `derived`; prefer `derivedExp` or the `$` prefix shorthand when a plain expression suffices.
+6. Use `qk:spread` as a virtual directive mount point instead of introducing meaningless wrapper elements.
+7. Add `#key` to `#for`-rendered elements that carry local state; keys must be unique within the same list.
+8. Reference-attribute values must be assignable lvalues: no function calls, optional chains, or ternaries.
+9. Watcher/effect calls (`watch`, `effect`, and their variants) need no import; the compiler binds them to the component instance and cleans them up on destroy.
+10. Use plain interpolation for text; use `#html` only when raw HTML insertion is intended, and keep exactly one text child inside it.
+11. Never invent syntax or identifiers; verify every token against the docs in "Task To Docs" before writing it.
 
 ## Task To Docs
 

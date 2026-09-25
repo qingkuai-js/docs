@@ -87,6 +87,9 @@ To change the default reactivity mode, add a `.qingkuairc` configuration file in
 }
 ```
 
+> [!TIP]
+> The configuration above can be combined with setting [`allowConstReactive`](../misc/config-files.md#allowconstreactive) to `false`, putting the application into a `signal`-like reactive mode with very low overhead — see [Signal Mode](../misc/optimization.md#signal-mode).
+
 A reactivity mode configured through a file takes effect for the current directory and all of its subdirectories until another configuration file is encountered. If you want to use a different reactivity mode in a single component file, you can override the default by adding a `reactive` or `shallow` attribute to the embedded script tag:
 
 ```qk

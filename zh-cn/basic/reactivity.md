@@ -87,6 +87,9 @@ Qingkuai 支持两种响应性模式：深度响应性和浅层响应性。默�
 }
 ```
 
+> [!TIP]
+> 上述配置可以搭配将 [`allowConstReactive`](../misc/config-files.md#allowconstreactive) 设置为 `false`，让应用进入一种类似于 `signal` 的、开销极低的响应式模式，详见[信号模式](../misc/optimization.md#信号模式)。
+
 通过配置文件设置的响应性模式会对当前目录及其所有子目录生效，直到遇到另一个配置文件为止。如果想要在单一组件文件中使用不同的响应性模式，可以在嵌入脚本标签上添加 `reactive` 或 `shallow` 属性来覆盖默认设置：
 
 ```qk

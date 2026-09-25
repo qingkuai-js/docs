@@ -4,6 +4,52 @@
 
 ---
 
+## 信号模式
+
+默认配置下，被推导为响应式的标识符会具有[深度响应性](../basic/reactivity.md#响应性模式)：读取属性时会递归地将嵌套值包装为响应式代理，任何层级的修改都能触发更新。这带来了符合直觉的开发体验，但响应式系统本身也存在不可忽视的运行时开销。如果应用对运行时性能有极致要求，可以通过组合调整两个[运行配置](./config-files.md#运行配置)项，将响应式带来的性能影响降到最低：
+
+```json
+{
+    "reactivityMode": "shallow",
+    "allowConstReactive": false
+}
+```
+
+这两项配置的效果互为补充：[`allowConstReactive: false`](./config-files.md#allowconstreactive) 让所有不可变绑定退出[响应性推导](../references/reactivity-infer-rules.md)，不再产生依赖收集与代理包装的开销；[`reactivityMode: "shallow"`](./config-files.md#reactivitymode) 让可变状态仅保留[浅层响应性](../basic/reactivity.md#响应性模式)，属性读取时返回的就是原始值本身。
+
+组合使用后，只有“在模板中被访问且在脚本中存在修改”的 `let`/`var` 顶层标识符才会被推导为响应式，且仅维护浅层响应性，其余标识符一律是没有额外开销的原始值。此时应用会进入一种类似于 `signal` 的响应式模式，与 [Solid](https://www.solidjs.com)、[Preact Signals](https://preactjs.com/guide/v10/signals/) 等框架的工作方式非常相似：每个响应式状态就是一个可变的顶层绑定，对它的重新赋值会精确触发依赖它的部分更新，既没有深层代理，也没有递归的依赖追踪，响应式带来的性能影响会非常低。但也因此，响应式更新只能通过对标识符本身赋值来触发：
+
+```qk
+<lang-js>
+    let user = {
+        stars: 0,
+        name: "Qingkuai"
+    }
+
+    // 触发更新
+    function addStar() {
+        user = {
+            ...user,
+            stars: user.stars + 1
+        }
+    }
+
+    // 只是一次普通的 JS 操作，不会触发更新
+    function addStarSilently() {
+        user.stars++
+    }
+</lang-js>
+
+<p>{ user.name }: { user.stars }</p>
+<button @click={addStar}>add star</button>
+<button @click={addStarSilently}>add star silently</button>
+```
+
+> [!TIP]
+> 在 [js-framework-benchmark](https://github.com/krausest/js-framework-benchmark) 等框架性能对比测试中，各框架的成绩通常来自由框架作者或核心贡献者精心优化的版本——往往需要针对每一处状态更新仔细斟酌响应性标记的使用。而在 Qingkuai 中，只需上面两行配置，无需精心优化每一处响应性标记，就能获得接近极致的运行时性能。
+
+---
+
 ## 摇树优化
 
 使用 [create-qingkuai](https://www.npmjs.com/package/create-qingkuai) 创建的项目默认采用 [Vite](https://cn.vite.dev) 作为构建和打包工具，而 Vite 底层基于 [Rollup](https://cn.rollupjs.org)，它具备优秀的摇树优化（[Tree-shaking](https://developer.mozilla.org/zh-CN/docs/Glossary/Tree_shaking)）能力，这得益于 [import](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/import) 语法的静态导入特性。
