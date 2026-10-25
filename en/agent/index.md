@@ -123,6 +123,7 @@ Reference-attribute values must be assignable lvalues: identifiers, `arr[index]`
 | Language features overview | [language-features.md](./misc/language-features.md) |
 | Installation | [install.md](./getting-started/install.md) |
 | Command line tool (init / type checking / formatting / build) | [cli.md](./misc/cli.md) |
+| MCP server integration (AI assistant setup, tools, and working protocol) | [mcp-server.md](./misc/mcp-server.md) |
 | Framework overview and design philosophy | [introduction.md](./getting-started/introduction.md) |
 
 ## Syntax Dependency Route
