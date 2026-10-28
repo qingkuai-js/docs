@@ -15,7 +15,7 @@ keywords:
 
 # MCP 服务器
 
-Qingkuai 官方 MCP 服务器为 `qingkuai-mcp-server`（npm 包名，无需安装），向 AI 助手提供官方文档检索、语法检查、编译与格式化能力。文档语料与编译器内置于包中，运行时不访问网络。
+Qingkuai 的 MCP 服务器为 `qingkuai-mcp-server`（npm 包名，无需安装），向 AI 助手提供官方文档检索、语法检查、编译与格式化能力。文档语料与编译器内置于包中，运行时不访问网络。
 
 ## 接入
 
@@ -46,4 +46,4 @@ stdio 传输；要求 Node.js ≥ 18。Claude Desktop 写入 `claude_desktop_con
 ## 文档资源与工作协议
 
 - 启动时全部文档注册为 `docs://` 资源：英文语料（`docs://basic/forms.md`）、中文语料（`docs://zh-cn/basic/forms.md`）、agent 精简参考层（`docs://agent/index.md`）；检索时中英文语料均在索引内，中文问题主要命中 zh-cn 语料。
-- 服务器经协议 `instructions` 下发工作协议：语法相关问题先调 `search_qingkuai_docs`，回答基于返回章节；双向绑定用 `&value`/`&number`/`&checked`/`&group`/`&handle` 引用属性；优先编译器推导的响应性，`reactive`/`shallow`/`raw` 仅必要时使用，派生状态用 `derived`/`derivedExp`；写码后用 `check_qingkuai_syntax` 验证，存在错误不输出最终结果；建项目先调 `get_qingkuai_project_bootstrap_guide`。
+- 服务器经协议 `instructions` 下发工作协议：语法相关问题先调 `search_qingkuai_docs`，回答基于返回章节；双向绑定用 `&value`/`&number`/`&checked`/`&group`/`&handle` 引用属性；按用户习惯声明响应性（依赖编译器推导或显式标记，并结合 `reactivityMode`/`requireReactivityMark`/`allowConstReactive` 配置确定），派生状态用 `derived`/`derivedExp`；写码后用 `check_qingkuai_syntax` 验证，存在错误不输出最终结果；需类型检查等服务器未覆盖的任务时用项目中或全局安装的 `@qingkuai/cli`；建项目先调 `get_qingkuai_project_bootstrap_guide`。

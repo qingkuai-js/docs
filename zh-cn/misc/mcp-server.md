@@ -1,6 +1,6 @@
 # MCP 服务器
 
-MCP（Model Context Protocol，模型上下文协议）是一个开放协议，用于在 AI 助手与外部工具、数据源之间建立标准化的连接。Qingkuai 提供了官方的 MCP 服务器 [qingkuai-mcp-server](https://www.npmjs.com/package/qingkuai-mcp-server)，它面向[组件文件](../references/terminology.md#组件文件)，将官方语法文档检索、语法检查、编译与格式化能力以 MCP 工具的形式提供给 AI 助手（如 [Claude](https://claude.ai/)、[Copilot](https://github.com/features/copilot)、[Cursor](https://cursor.com/) 等），让 Agent 在编写组件文件代码时依据官方文档而非记忆作答。
+MCP（Model Context Protocol，模型上下文协议）是一个开放协议，用于在 AI 助手与外部工具、数据源之间建立标准化的连接。Qingkuai 提供了 MCP 服务器 [qingkuai-mcp-server](https://www.npmjs.com/package/qingkuai-mcp-server)，它面向[组件文件](../references/terminology.md#组件文件)，将官方语法文档检索、语法检查、编译与格式化能力以 MCP 工具的形式提供给 AI 助手（如 [Claude](https://claude.ai/)、[Copilot](https://github.com/features/copilot)、[Cursor](https://cursor.com/) 等），让 Agent 在编写组件文件代码时依据官方文档而非记忆作答。
 
 > [!TIP]
 > 如果你安装了 [VS Code 扩展](./language-features.md#ai-代理)，在组件文件中使用 AI 功能时会自动连接到 MCP 服务器，无需额外配置。
@@ -48,7 +48,7 @@ VS Code（Copilot Agent Mode）在项目根目录的 `.vscode/mcp.json` 中配�
 
 ## 工具
 
-服务器提供 6 个工具，所需的文档语料与编译器都内置于包中，运行时不依赖对官方站点的网络访问：
+服务器提供 6 个工具，所需的文档语料与编译器都内置于包中，运行时不依赖对文档站点的网络访问：
 
 > [!TIP]
 > 语法检查、编译与格式化三个工具与[命令行工具](./cli.md)中的 `check`、`format` 命令同源。
@@ -156,6 +156,6 @@ VS Code（Copilot Agent Mode）在项目根目录的 `.vscode/mcp.json` 中配�
 1. 任何关于 Qingkuai 语法、指令、属性、事件、响应式或组件的问题，先调用 `search_qingkuai_docs`，不要凭记忆书写组件文件代码
 2. 回答基于检索返回的文档章节，需要完整文档或特定章节时使用 `read_qingkuai_doc`
 3. 双向绑定优先使用引用属性（`&value`、`&number`、`&checked`、`&group`、`&handle`），而不是 `!attr` 搭配事件监听，或 `querySelector`/`getElementById`
-4. 优先使用编译器推导的响应性，仅在必要时使用 `reactive`、`shallow`、`raw`，派生状态使用 `derived`、`derivedExp`
-5. 写入或修改组件文件代码后用 `check_qingkuai_syntax` 验证，问题未消除时用 `compile_qingkuai` 进一步排查，存在错误时不要输出最终结果
+4. 按照用户的编写习惯声明响应性：用户习惯依赖编译器推导时，尽量交由编译器推导；用户习惯显式声明时，尽量使用 `reactive`、`shallow`、`raw` 显式标记，并结合用户在[运行配置](./config-files.md)中设置的 `reactivityMode`、`requireReactivityMark`、`allowConstReactive` 确定具体声明方式。派生状态使用 `derived`、`derivedExp`
+5. 写入或修改组件文件代码后用 `check_qingkuai_syntax` 验证，问题未消除时用 `compile_qingkuai` 进一步排查，存在错误时不要输出最终结果；需要类型检查等服务器未提供工具的任务时，使用项目中或用户全局安装的 `@qingkuai/cli`（如 `qingkuai check --types`）完成
 6. 创建或初始化项目时先调用 `get_qingkuai_project_bootstrap_guide`，不凭空编造安装命令

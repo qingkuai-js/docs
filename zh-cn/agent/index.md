@@ -80,7 +80,7 @@ keywords: ["qingkuai", ".qk", "syntax", "指令", "引用属性", "组件", "响
 
 1. 表单双向绑定使用引用属性（`&value`），而不是 `!value` 加 `@input={...}`。
 2. 用元素上的 `&handle` 获取 DOM 元素，而不是手动 DOM 查询；元素销毁时绑定变量重置为 `null`。
-3. 优先使用编译器推导的响应性；仅在需要显式标记时使用 `reactive`、`shallow` 或 `raw`。
+3. 按用户的编写习惯声明响应性：用户依赖编译器推导时保持推导，用户习惯显式声明时用 `reactive`、`shallow` 或 `raw` 标记；结合 `reactivityMode`、`requireReactivityMark`、`allowConstReactive` 配置确定具体方式。
 4. 用户比较在意运行时性能时，可在 `.qingkuairc` 中搭配 `"reactivityMode": "shallow"` 与 `"allowConstReactive": false` 进入信号模式（详见 [optimization.md](./misc/optimization.md)）；此模式下只能通过为标识符重新赋值来触发更新。
 5. 衍生状态使用 `derived`；普通表达式够用时优先使用 `derivedExp` 或 `$` 前缀简写。
 6. 用 `qk:spread` 作为指令的虚拟挂载点，而不是引入无意义的包装元素。

@@ -1,6 +1,6 @@
 # MCP Server
 
-MCP (Model Context Protocol) is an open protocol that establishes standardized connections between AI assistants and external tools and data sources. Qingkuai ships an official MCP server, [qingkuai-mcp-server](https://www.npmjs.com/package/qingkuai-mcp-server), which exposes official documentation search, syntax checking, compilation, and formatting as MCP tools for AI assistants such as [Claude](https://claude.ai/), [Copilot](https://github.com/features/copilot), and [Cursor](https://cursor.com/), so agents base component-file code on the official documentation instead of memory.
+MCP (Model Context Protocol) is an open protocol that establishes standardized connections between AI assistants and external tools and data sources. Qingkuai provides an MCP server, [qingkuai-mcp-server](https://www.npmjs.com/package/qingkuai-mcp-server), which exposes official documentation search, syntax checking, compilation, and formatting as MCP tools for AI assistants such as [Claude](https://claude.ai/), [Copilot](https://github.com/features/copilot), and [Cursor](https://cursor.com/), so agents base component-file code on the official documentation instead of memory.
 
 > [!TIP]
 > If you have the [VS Code extension](./language-features.md#ai-agents) installed, AI features in component files connect to the MCP server automatically with no extra configuration.
@@ -48,7 +48,7 @@ Other MCP clients that support the stdio transport can follow the same structure
 
 ## Tools
 
-The server provides six tools; the documentation corpus and the compiler they need are bundled in the package, so no network access to the official site is required at runtime:
+The server provides six tools; the documentation corpus and the compiler they need are bundled in the package, so no network access to the documentation site is required at runtime:
 
 > [!TIP]
 > The syntax check, compilation, and formatting tools share the same implementation as the `check` and `format` commands of the [command line tool](./cli.md).
@@ -156,6 +156,6 @@ During the initialization handshake, the server sends a working agreement throug
 1. For any question about Qingkuai syntax, directives, attributes, events, reactivity, or components, call `search_qingkuai_docs` first — never write component-file code from memory
 2. Base answers on the document sections returned by search; use `read_qingkuai_doc` for a full document or a specific section
 3. For two-way binding, prefer reference attributes (`&value`, `&number`, `&checked`, `&group`, `&handle`) instead of `!attr` with event listeners, or `querySelector`/`getElementById`
-4. Prefer compiler-inferred reactivity; use `reactive`, `shallow`, and `raw` only when necessary, and `derived`/`derivedExp` for derived state
-5. After writing or modifying component-file code, verify with `check_qingkuai_syntax`; if problems remain, investigate with `compile_qingkuai` — do not finalize output while errors remain
+4. Declare reactivity according to the user's coding habits: let the compiler infer it when the user relies on inference, and keep explicit declarations with `reactive`, `shallow`, and `raw` when the user prefers them. Check the `reactivityMode`, `requireReactivityMark`, and `allowConstReactive` settings in the [runtime configuration](./config-files.md) to decide the concrete form. Use `derived`/`derivedExp` for derived state
+5. After writing or modifying component-file code, verify with `check_qingkuai_syntax`; if problems remain, investigate with `compile_qingkuai` — do not finalize output while errors remain. For tasks the server provides no tool for, such as type checking, use `@qingkuai/cli` installed in the project or globally (e.g. `qingkuai check --types`)
 6. To create or initialize a project, call `get_qingkuai_project_bootstrap_guide` first and never invent install commands

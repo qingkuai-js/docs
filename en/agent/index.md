@@ -80,7 +80,7 @@ Reference-attribute values must be assignable lvalues: identifiers, `arr[index]`
 
 1. Two-way form binding uses reference attributes (`&value`), not `!value` plus `@input={...}`.
 2. Obtain DOM elements with `&handle` on the element instead of manual DOM queries; the bound variable resets to `null` on element destruction.
-3. Prefer compiler-inferred reactivity; add `reactive`, `shallow`, or `raw` only when explicit marking is required.
+3. Declare reactivity the way the user does: keep compiler inference when the user relies on it, and use `reactive`, `shallow`, or `raw` marks when the user prefers explicit declarations; follow the `reactivityMode`, `requireReactivityMark`, and `allowConstReactive` settings for the concrete form.
 4. When the user cares about runtime performance, combine `"reactivityMode": "shallow"` with `"allowConstReactive": false` in `.qingkuairc` to enter Signal Mode (see [optimization.md](./misc/optimization.md)); in this mode updates are triggered only by reassigning the identifier itself.
 5. Derived state uses `derived`; prefer `derivedExp` or the `$` prefix shorthand when a plain expression suffices.
 6. Use `qk:spread` as a virtual directive mount point instead of introducing meaningless wrapper elements.

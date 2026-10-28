@@ -15,7 +15,7 @@ keywords:
 
 # MCP Server
 
-The official Qingkuai MCP server is `qingkuai-mcp-server` (npm package, no installation needed). It exposes official documentation search, syntax checking, compilation, and formatting to AI assistants. The documentation corpus and compiler are bundled in the package; no network access at runtime.
+The Qingkuai MCP server is `qingkuai-mcp-server` (npm package, no installation needed). It exposes official documentation search, syntax checking, compilation, and formatting to AI assistants. The documentation corpus and compiler are bundled in the package; no network access at runtime.
 
 ## Integration
 
@@ -46,4 +46,4 @@ Remaining options of `check_qingkuai_syntax` and `compile_qingkuai` (`allowConst
 ## Documentation Resources and Working Protocol
 
 - On startup, all documents are registered as `docs://` resources: the English corpus (`docs://basic/forms.md`), the Chinese corpus (`docs://zh-cn/basic/forms.md`), and the condensed agent reference layer (`docs://agent/index.md`). Search indexes both language corpora; Chinese queries mainly match the zh-cn corpus.
-- The server sends a working protocol via the protocol `instructions` field: for syntax-related questions call `search_qingkuai_docs` first and base answers on the returned sections; use reference attributes (`&value`, `&number`, `&checked`, `&group`, `&handle`) for two-way binding; prefer compiler-inferred reactivity, using `reactive`/`shallow`/`raw` only when necessary and `derived`/`derivedExp` for derived state; verify written code with `check_qingkuai_syntax` and do not finalize output while errors remain; call `get_qingkuai_project_bootstrap_guide` first when creating projects.
+- The server sends a working protocol via the protocol `instructions` field: for syntax-related questions call `search_qingkuai_docs` first and base answers on the returned sections; use reference attributes (`&value`, `&number`, `&checked`, `&group`, `&handle`) for two-way binding; declare reactivity the way the user does (compiler inference or explicit marks, per the `reactivityMode`/`requireReactivityMark`/`allowConstReactive` settings), with `derived`/`derivedExp` for derived state; verify written code with `check_qingkuai_syntax` and do not finalize output while errors remain; use the project or global `@qingkuai/cli` for tasks the server does not cover, such as type checking; call `get_qingkuai_project_bootstrap_guide` first when creating projects.
