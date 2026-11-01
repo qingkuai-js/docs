@@ -141,8 +141,7 @@ The server ships two prompts that clients can pull on demand to inject the corre
 
 On startup, the server registers all bundled documents as MCP resources exposed through the `docs://` protocol:
 
-- The English and Chinese tutorial corpora, e.g. `docs://basic/forms.md` and `docs://zh-cn/basic/forms.md`
-- The condensed agent reference layer, e.g. `docs://agent/index.md`
+- The English and Chinese corpora, e.g. `docs://basic/forms.md` and `docs://zh-cn/basic/forms.md`
 
 > [!TIP]
 > Search covers both language corpora, and Chinese queries mainly match the `zh-cn` corpus. Clients that support resource reads can read documents directly by URI, and agents usually access the same content through the `read_qingkuai_doc` tool.

@@ -141,8 +141,7 @@ VS Code（Copilot Agent Mode）在项目根目录的 `.vscode/mcp.json` 中配�
 
 服务器在启动时将内置的全部文档注册为 MCP 资源（Resources），以 `docs://` 协议暴露：
 
-- 英文与中文两套正文语料，如 `docs://basic/forms.md` 与 `docs://zh-cn/basic/forms.md`
-- 面向 Agent 的精简参考层，如 `docs://agent/index.md`
+- 英文与中文两套语料，如 `docs://basic/forms.md` 与 `docs://zh-cn/basic/forms.md`
 
 > [!TIP]
 > 检索时中英文语料都在索引范围内，中文问题主要命中 `zh-cn` 语料。支持资源读取的客户端可以直接按 URI 读取，Agent 通常通过 `read_qingkuai_doc` 工具访问同一批内容。
