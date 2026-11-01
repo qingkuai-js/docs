@@ -59,6 +59,41 @@ import Component from "./Component"
 
 该属性用于配置是否在编译结果中插入解释性注释，布尔值，默认值为 `true`
 
+### extends
+
+该属性用于继承另一个 JSON 配置文件，字符串，值为目标文件路径，相对于当前配置文件所在目录解析。
+
+- 继承链与 `tsconfig.json` 的 `extends` 一致：被继承文件可以继续继承，选项从最远的祖先依次应用到当前文件，越靠近当前文件优先级越高；
+- 链回到已读取过的文件时会在该处截断并给出警告；
+- 某一层目标文件不存在或内容不是合法的 JSON 对象时，链条余下部分被忽略并给出警告。
+
+假设有一份 `.qingkuairc` 配置文件：
+
+```json
+{
+    "extends": "./base.json",
+    "whitespace": "preserve"
+}
+```
+
+其中 `base.json` 内容如下：
+
+```json
+{
+    "reactivityMode": "shallow",
+    "whitespace": "collapse"
+}
+```
+
+那么实际应用的配置如下：
+
+```json
+{
+    "reactivityMode": "shallow",
+    "whitespace": "preserve"
+}
+```
+
 ---
 
 ## 格式化配置
