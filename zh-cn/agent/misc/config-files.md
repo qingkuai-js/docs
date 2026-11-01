@@ -11,6 +11,7 @@ keywords: ["config", ".qingkuairc", "prettierrc", "reactivityMode", "whitespace"
 
 | 属性 | 类型/取值 | 默认值 | 含义 |
 |---|---|---|---|
+| `extends` | string | — | 继承另一个配置文件：相对当前配置文件解析，与 `tsconfig.json` 一样支持继承链（选项从最远的祖先依次应用到当前文件，靠近者优先；链回环、目标缺失或非法时截断并警告） |
 | `reactivityMode` | `"reactive"` \| `"shallow"` | `"reactive"` | 默认推导的响应性模式；`shallow` 仅追踪顶层值的变化，嵌套值不被自动追踪 |
 | `whitespace` | `"preserve"` \| `"trim"` \| `"collapse"` \| `"trim-collapse"` | `"trim-collapse"` | 模板空白处理方式 |
 | `preserveHtmlComments` | `"never"` \| `"always"` \| `"development"` \| `"production"` | `"development"` | 是否保留 HTML 注释 |
@@ -18,7 +19,6 @@ keywords: ["config", ".qingkuairc", "prettierrc", "reactivityMode", "whitespace"
 | `resolveImportExtension` | boolean | `true` | 允许导入语句省略 `.qk`：`import Component from "./Component"` |
 | `allowConstReactive` | boolean | `true` | `false` 时常量声明的变量不会被推导为具有响应性，显式用 `reactive`/`shallow` 标记常量声明会引发编译错误 1070 |
 | `interpretiveComments` | boolean | `true` | 在编译结果中插入解释性注释 |
-| `extends` | string | — | 继承另一个配置文件：相对当前配置文件解析，仅展开一层；当前文件覆盖被继承项，目标缺失或非法时忽略并警告 |
 
 ## 格式化配置（.prettierrc）
 

@@ -11,6 +11,7 @@ The runtime configuration is modified per directory through the `.qingkuairc` fi
 
 | Property | Type / values | Default | Meaning |
 |---|---|---|---|
+| `extends` | string | — | Inherits another configuration file: resolved relative to the current file, following the chain as in `tsconfig.json`; options are applied from the farthest ancestor to the current file, an already visited file cuts the chain with a warning, and an invalid target ends the chain with a warning |
 | `reactivityMode` | `"reactive"` \| `"shallow"` | `"reactive"` | Default inferred reactivity mode; `shallow` tracks changes to top-level values only, nested values are not tracked automatically |
 | `whitespace` | `"preserve"` \| `"trim"` \| `"collapse"` \| `"trim-collapse"` | `"trim-collapse"` | Template whitespace handling |
 | `preserveHtmlComments` | `"never"` \| `"always"` \| `"development"` \| `"production"` | `"development"` | Whether HTML comments are preserved |
@@ -18,7 +19,6 @@ The runtime configuration is modified per directory through the `.qingkuairc` fi
 | `resolveImportExtension` | boolean | `true` | Allows omitting `.qk` in imports: `import Component from "./Component"` |
 | `allowConstReactive` | boolean | `true` | when `false`, variables declared in constant declarations are not inferred as having reactivity, and explicitly marking a constant declaration with `reactive`/`shallow` raises compile error 1070 |
 | `interpretiveComments` | boolean | `true` | Inserts interpretive comments into the compilation result |
-| `extends` | string | — | Inherits another configuration file: resolved relative to the current file, following the chain as in `tsconfig.json`; options are applied from the farthest ancestor to the current file, an already visited file cuts the chain with a warning, and an invalid target ends the chain with a warning |
 
 ## Formatting configuration (.prettierrc)
 

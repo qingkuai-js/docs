@@ -18,6 +18,41 @@ qingkuai-app
 └── .qingkuairc
 ```
 
+### extends
+
+This property configures the configuration to inherit another JSON configuration file. It is a string whose value is the target file path, resolved relative to the directory of the current configuration file.
+
+- The chain is followed as in `tsconfig.json`: the inherited file may extend another file, and options are applied from the farthest ancestor to the current file, so the closer the file, the higher its priority.
+- A chain that points back to a file already visited is cut off with a warning.
+- If a target file is missing or its content is not a valid JSON object, the rest of the chain is ignored and a warning is reported.
+
+Given a `.qingkuairc` file like this:
+
+```json
+{
+    "extends": "./base.json",
+    "whitespace": "preserve"
+}
+```
+
+and a `base.json` with the following content:
+
+```json
+{
+    "reactivityMode": "shallow",
+    "whitespace": "collapse"
+}
+```
+
+the configuration in effect is:
+
+```json
+{
+    "reactivityMode": "shallow",
+    "whitespace": "preserve"
+}
+```
+
 ### reactivityMode
 
 This property configures the reactivity mode that Qingkuai infers by default. It is a string whose allowed values are `reactive` and `shallow`, and its default value is `reactive`:
@@ -58,41 +93,6 @@ This property configures whether constant declarations may be marked as reactive
 ### interpretiveComments
 
 This property configures whether interpretive comments are inserted into compilation output. It is a boolean value and defaults to `true`.
-
-### extends
-
-This property configures the configuration to inherit another JSON configuration file. It is a string whose value is the target file path, resolved relative to the directory of the current configuration file.
-
-- The chain is followed as in `tsconfig.json`: the inherited file may extend another file, and options are applied from the farthest ancestor to the current file, so the closer the file, the higher its priority.
-- A chain that points back to a file already visited is cut off with a warning.
-- If a target file is missing or its content is not a valid JSON object, the rest of the chain is ignored and a warning is reported.
-
-Given a `.qingkuairc` file like this:
-
-```json
-{
-    "extends": "./base.json",
-    "whitespace": "preserve"
-}
-```
-
-and a `base.json` with the following content:
-
-```json
-{
-    "reactivityMode": "shallow",
-    "whitespace": "collapse"
-}
-```
-
-the configuration in effect is:
-
-```json
-{
-    "reactivityMode": "shallow",
-    "whitespace": "preserve"
-}
-```
 
 ---
 
