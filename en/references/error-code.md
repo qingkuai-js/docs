@@ -15,104 +15,105 @@ Looking up messages by code can improve debugging efficiency and help you unders
 
 ## Compilation Errors
 
-| Code | Description                                                                                                                                |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1001 | Empty interpolation block                                                                                                                  |
-| 1002 | Unexpected character                                                                                                                       |
-| 1003 | Unclosed interpolation block                                                                                                               |
-| 1004 | Starts with an end tag, such as `</div>` without a matching opening `<div>` before it                                                      |
-| 1005 | Interpolation attribute is missing a name, for example writing only `!`, `@`, `#`, or `&`                                                  |
-| 1006 | Static attribute value is not wrapped in single or double quotes                                                                           |
-| 1007 | Interpolation attribute value is not wrapped in curly braces                                                                               |
-| 1008 | Static attribute value is not closed                                                                                                       |
-| 1009 | Tag is not closed, including start tags, end tags, or comment tags                                                                         |
-| 1010 | Embedded language tags are not used at template top level                                                                                  |
-| 1011 | Too many embedded script blocks, only one is allowed per component file                                                                    |
-| 1012 | Tag is missing a matching end tag                                                                                                          |
-| 1013 | Tag cannot be used as a self-closing tag, such as `<div />`                                                                                |
-| 1014 | A tag not allowed in component files was used                                                                                              |
-| 1015 | Illegal template structure, such as nesting `<div>` inside `<p>`                                                                           |
-| 1016 | Invalid attribute format                                                                                                                   |
-| 1017 | Uses a framework-reserved identifier format, identifiers starting with `__qk__`                                                            |
-| 1018 | Unsupported top-level `await` expression                                                                                                   |
-| 1019 | Embedded script blocks do not support these export forms: `export =`, default export, re-export, namespace export, or type export          |
-| 1020 | Built-in identifier is redeclared in top-level scope                                                                                       |
-| 1021 | Built-in method is used in an invalid position or call form                                                                                |
-| 1022 | Identifier cannot be redeclared because it conflicts with alias or derived value markers                                                   |
-| 1023 | The `defaults` built-in method can only be called once in the embedded script block                                                        |
-| 1024 | Invalid arguments for the `alias` built-in method; it must receive exactly one writable target                                             |
-| 1025 | Alias destructuring declaration contains a disallowed pattern                                                                              |
-| 1026 | Directive conflict; they cannot coexist on the same tag                                                                                    |
-| 1027 | Directive is missing a required value                                                                                                      |
-| 1028 | Duplicate attributes or attributes that conflict after parsing, including conflicts among static, dynamic, event, and reference attributes |
-| 1029 | Invalid expression                                                                                                                         |
-| 1030 | Tag does not accept the current attribute type, such as an invalid reference attribute or event attribute                                  |
-| 1031 | Missing prerequisite directive, such as `#elif`, `#else`, `#then`, or `#catch`                                                             |
-| 1032 | Invalid context pattern                                                                                                                    |
-| 1033 | Unrecognized directive                                                                                                                     |
-| 1034 | Empty context pattern with no binding identifiers declared                                                                                 |
-| 1035 | A `#html` directive tag must contain exactly one text child node                                                                           |
-| 1036 | `#slot` is used in an invalid position; it is allowed only on first-level child elements of a component node                               |
-| 1037 | Too many directive destructuring binding patterns, such as on `#for` or `#then`                                                            |
-| 1038 | `#slot` is missing a valid slot name; the value after `from` must be a string literal                                                      |
-| 1039 | The `name` attribute of `<slot>` must be a static value                                                                                    |
-| 1040 | `#target` is used in an invalid position; using it on a first-level child of a component causes target ambiguity                           |
-| 1041 | Expected an expression                                                                                                                     |
-| 1042 | Expected a string literal                                                                                                                  |
-| 1043 | `#key` can only be used together with `#for`                                                                                               |
-| 1044 | Expected an event flag name                                                                                                                |
-| 1045 | Unrecognized event flag                                                                                                                    |
-| 1046 | Event flags conflict                                                                                                                       |
-| 1047 | Invalid reference attribute on this tag; it is not in the allowed list                                                                     |
-| 1048 | Invalid reference attribute value; it must be an identifier or member expression                                                           |
-| 1049 | Invalid special attribute name in omitted form; it cannot be converted into a legal identifier                                             |
-| 1050 | Duplicate `name` attribute on `<slot>`                                                                                                     |
-| 1051 | Duplicate assignment to the same slot name within one component                                                                            |
-| 1052 | TypeScript namespace declarations are not supported in embedded script blocks                                                              |
-| 1053 | `alias` cannot be used to alias a standalone identifier                                                                                    |
-| 1054 | Built-in methods cannot be used in `using` or `await using` declarations                                                                   |
-| 1055 | Nested `<slot>` tags are not allowed                                                                                                       |
-| 1056 | Duplicate `#then` or `#catch` directives in a promise block                                                                                |
-| 1057 | Invalid component name; it cannot be converted into a valid JavaScript identifier or member expression                                     |
-| 1058 | `#html` cannot be used on components or `<slot>` tags                                                                                      |
-| 1059 | The specified built-in method does not support spread elements                                                                             |
-| 1060 | Invalid element tag name                                                                                                                   |
-| 1061 | Built-in methods cannot be used in templates                                                                                               |
-| 1062 | Reactivity modes conflict; the same tag declares both `reactive` and `shallow`                                                             |
-| 1063 | Generic parameters on a component tag are not closed                                                                                       |
-| 1064 | Generic parameters on a component tag can only be used when the embedded script language is `TypeScript`                                   |
-| 1065 | Hyphens are not allowed when using a member expression as a component tag                                                                  |
-| 1066 | A self-closing embedded style tag must provide a `src` attribute                                                                           |
-| 1067 | An embedded style tag with a `src` attribute cannot contain inline style content                                                           |
-| 1068 | The `src` attribute on the embedded style tag requires a non-empty value                                                                   |
-| 1069 | The `#scope` directive can only be used on components                                                                                      |
-| 1070 | Marking a `const` declaration with `reactive` or `shallow` is disallowed when the `allowConstReactive` compile option is disabled          |
-| 1071 | `raw` must be passed an argument when used as a non-reactive read                                                                          |
-| 1072 | `raw` can only be passed one argument when used as a non-reactive read                                                                     |
-| 1073 | `raw` must be used as a function call when used as a non-reactive read                                                                     |
+| Code | Description                                                                                                                                           |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1001 | Empty interpolation block                                                                                                                             |
+| 1002 | Unexpected character                                                                                                                                  |
+| 1003 | Unclosed interpolation block                                                                                                                          |
+| 1004 | Starts with an end tag, such as `</div>` without a matching opening `<div>` before it                                                                 |
+| 1005 | Interpolation attribute is missing a name, for example writing only `!`, `@`, `#`, or `&`                                                             |
+| 1006 | Static attribute value is not wrapped in single or double quotes                                                                                      |
+| 1007 | Interpolation attribute value is not wrapped in curly braces                                                                                          |
+| 1008 | Static attribute value is not closed                                                                                                                  |
+| 1009 | Tag is not closed, including start tags, end tags, or comment tags                                                                                    |
+| 1010 | Embedded language tags are not used at template top level                                                                                             |
+| 1011 | Too many embedded script blocks, only one is allowed per component file                                                                               |
+| 1012 | Tag is missing a matching end tag                                                                                                                     |
+| 1013 | Tag cannot be used as a self-closing tag, such as `<div />`                                                                                           |
+| 1014 | A tag not allowed in component files was used                                                                                                         |
+| 1015 | Illegal template structure, such as nesting `<div>` inside `<p>`                                                                                      |
+| 1016 | Invalid attribute format                                                                                                                              |
+| 1017 | Uses a framework-reserved identifier format, identifiers starting with `__qk__`                                                                       |
+| 1018 | Unsupported top-level `await` expression                                                                                                              |
+| 1019 | Embedded script blocks do not support these export forms: `export =`, default export, re-export, namespace export, or type export                     |
+| 1020 | Built-in identifier is redeclared in top-level scope                                                                                                  |
+| 1021 | Built-in method is used in an invalid position or call form                                                                                           |
+| 1022 | Identifier cannot be redeclared because it conflicts with alias or derived value markers                                                              |
+| 1023 | The `defaults` built-in method can only be called once in the embedded script block                                                                   |
+| 1024 | Invalid arguments for the `alias` built-in method; it must receive exactly one writable target                                                        |
+| 1025 | Alias destructuring declaration contains a disallowed pattern                                                                                         |
+| 1026 | Directive conflict; they cannot coexist on the same tag                                                                                               |
+| 1027 | Directive is missing a required value                                                                                                                 |
+| 1028 | Duplicate attributes or attributes that conflict after parsing, including conflicts among static, dynamic, event, and reference attributes            |
+| 1029 | Invalid expression                                                                                                                                    |
+| 1030 | Tag does not accept the current attribute type, such as an invalid reference attribute or event attribute                                             |
+| 1031 | Missing prerequisite directive, such as `#elif`, `#else`, `#then`, or `#catch`                                                                        |
+| 1032 | Invalid context pattern                                                                                                                               |
+| 1033 | Unrecognized directive                                                                                                                                |
+| 1034 | Empty context pattern with no binding identifiers declared                                                                                            |
+| 1035 | A `#html` directive tag must contain exactly one text child node                                                                                      |
+| 1036 | `#slot` is used in an invalid position; it is allowed only on first-level child elements of a component node                                          |
+| 1037 | Too many directive destructuring binding patterns, such as on `#for` or `#then`                                                                       |
+| 1038 | `#slot` is missing a valid slot name; the value after `from` must be a string literal                                                                 |
+| 1039 | The `name` attribute of `<slot>` must be a static value                                                                                               |
+| 1040 | `#target` is used in an invalid position; using it on a first-level child of a component causes target ambiguity                                      |
+| 1041 | Expected an expression                                                                                                                                |
+| 1042 | Expected a string literal                                                                                                                             |
+| 1043 | `#key` can only be used together with `#for`                                                                                                          |
+| 1044 | Expected an event flag name                                                                                                                           |
+| 1045 | Unrecognized event flag                                                                                                                               |
+| 1046 | Event flags conflict                                                                                                                                  |
+| 1047 | Invalid reference attribute on this tag; it is not in the allowed list                                                                                |
+| 1048 | Invalid reference attribute value; it must be an identifier or member expression                                                                      |
+| 1049 | Invalid special attribute name in omitted form; it cannot be converted into a legal identifier                                                        |
+| 1050 | Duplicate `name` attribute on `<slot>`                                                                                                                |
+| 1051 | Duplicate assignment to the same slot name within one component                                                                                       |
+| 1052 | TypeScript namespace declarations are not supported in embedded script blocks                                                                         |
+| 1053 | `alias` cannot be used to alias a standalone identifier                                                                                               |
+| 1054 | Built-in methods cannot be used in `using` or `await using` declarations                                                                              |
+| 1055 | Nested `<slot>` tags are not allowed                                                                                                                  |
+| 1056 | Duplicate `#then` or `#catch` directives in a promise block                                                                                           |
+| 1057 | Invalid component name; it cannot be converted into a valid JavaScript identifier or member expression                                                |
+| 1058 | `#html` cannot be used on components or `<slot>` tags                                                                                                 |
+| 1059 | The specified built-in method does not support spread elements                                                                                        |
+| 1060 | Invalid element tag name                                                                                                                              |
+| 1061 | Built-in methods cannot be used in templates                                                                                                          |
+| 1062 | Reactivity modes conflict; the same tag declares both `reactive` and `shallow`                                                                        |
+| 1063 | Generic parameters on a component tag are not closed                                                                                                  |
+| 1064 | Generic parameters on a component tag can only be used when the embedded script language is `TypeScript`                                              |
+| 1065 | Hyphens are not allowed when using a member expression as a component tag                                                                             |
+| 1066 | A self-closing embedded style tag must provide a `src` attribute                                                                                      |
+| 1067 | An embedded style tag with a `src` attribute cannot contain inline style content                                                                      |
+| 1068 | The `src` attribute on the embedded style tag requires a non-empty value                                                                              |
+| 1069 | The `#scope` directive can only be used on components                                                                                                 |
+| 1070 | Marking a `const` declaration with `reactive` or `shallow` is disallowed when the `allowConstReactive` compile option is disabled                     |
+| 1071 | `raw` must be passed an argument when used as a non-reactive read                                                                                     |
+| 1072 | `raw` can only be passed one argument when used as a non-reactive read                                                                                |
+| 1073 | `raw` must be used as a function call when used as a non-reactive read                                                                                |
 | 1074 | Top-level variable declarations must be explicitly marked with a reactivity built-in method when the `requireReactivityMark` compile option is `true` |
 
 ---
 
 ## Compilation Warnings
 
-| Code | Description                                                                                                                      |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 9001 | Value never changes, so the reactive marker is redundant and the value will be treated as raw                                    |
-| 9002 | A top-level scope identifier may be shadowed in a specific scope                                                                 |
-| 9003 | The `#scope` directive has no effect because the current component has no scoped styles                                          |
-| 9004 | Derived reactive values are read-only, so using a mutable declaration is redundant; `const` is recommended                       |
-| 9005 | Applying `raw` to a literal `const` is redundant                                                                                 |
-| 9006 | The directive does not need a value, so the provided value will be ignored                                                       |
-| 9007 | A boolean attribute is given a redundant value, which will be ignored                                                            |
-| 9008 | `#html` has no practical effect when it has no value and the content is static                                                   |
-| 9009 | Event flags on a component event listener are invalid and will be ignored                                                        |
-| 9010 | Keyboard event flags are invalid on non-keyboard events and will be ignored                                                      |
-| 9011 | Duplicate event flags will be ignored                                                                                            |
+| Code | Description                                                                                                                         |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| 9001 | Value never changes, so the reactive marker is redundant and the value will be treated as raw                                       |
+| 9002 | A top-level scope identifier may be shadowed in a specific scope                                                                    |
+| 9003 | The `#scope` directive has no effect because the current component has no scoped styles                                             |
+| 9004 | Derived reactive values are read-only, so using a mutable declaration is redundant; `const` is recommended                          |
+| 9005 | Applying `raw` to a literal `const` is redundant                                                                                    |
+| 9006 | The directive does not need a value, so the provided value will be ignored                                                          |
+| 9007 | A boolean attribute is given a redundant value, which will be ignored                                                               |
+| 9008 | `#html` has no practical effect when it has no value and the content is static                                                      |
+| 9009 | Event flags on a component event listener are invalid and will be ignored                                                           |
+| 9010 | Keyboard event flags are invalid on non-keyboard events and will be ignored                                                         |
+| 9011 | Duplicate event flags will be ignored                                                                                               |
 | 9012 | A `<qk:spread>` tag without required attributes (such as dynamic attributes, reference attributes, or event listeners) is redundant |
-| 9013 | The `#scope` directive is unnecessary here because this component already has an actual ancestor element                         |
-| 9014 | Nesting `raw` calls is redundant: the argument is already a non-reactive read, so the inner `raw` will be ignored               |
-| 9015 | Unkeyed `#for` list items contain internal state, which may leak between items when the list is updated                           |
+| 9013 | The `#scope` directive is unnecessary here because this component already has an actual ancestor element                            |
+| 9014 | Nesting `raw` calls is redundant: the argument is already a non-reactive read, so the inner `raw` will be ignored                   |
+| 9015 | Unkeyed `#for` list items contain internal state, which may leak between items when the list is updated                             |
+| 9016 | The `native` flag is invalid on non-delegated events and will be ignored                                                            |
 
 ---
 
@@ -132,24 +133,24 @@ Looking up messages by code can improve debugging efficiency and help you unders
 
 ## Runtime Warnings
 
-| Code | Description                                                                                                                                                                                                                                        |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 8001 | No reactive dependencies were collected when executing a side effect or watcher, so the side effect will be destroyed                                                                                                                              |
-| 8002 | An assignment was performed on a read-only or invalid target, and the assignment will be ignored                                                                                                                                                   |
-| 8003 | Attempted to create content after the owning component was destroyed, commonly when an async callback runs after the component is removed and tries to create child components or register watchers or side effects; the creation has been ignored |
+| Code | Description                                                                                                                                                                                                                                         |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 8001 | No reactive dependencies were collected when executing a side effect or watcher, so the side effect will be destroyed                                                                                                                               |
+| 8002 | An assignment was performed on a read-only or invalid target, and the assignment will be ignored                                                                                                                                                    |
+| 8003 | Attempted to create content after the owning component was destroyed, commonly when an async callback runs after the component is removed and tries to create child components or register watchers or side effects; the creation has been ignored  |
 | 8004 | A lifecycle hook was registered after its corresponding phase had already passed (e.g. registering `onAfterMount` in an async callback after the component has mounted), so the callback will never be triggered; the registration has been ignored |
 
 ---
 
 ## Language Service Errors
 
-| Code | Description                                                                                                      |
-| ---- | ---------------------------------------------------------------------------------------------------------------- |
-| 3001 | The component contract type `Meta` declares an unknown member (only `props`, `refs`, and `contexts` are allowed) |
-| 3002 | (TypeScript) The `Meta` type or one of its members is not an object type, such as a primitive or union type      |
-| 3003 | The dependency "qingkuai" cannot be found. Please make sure it is installed and can be resolved                  |
+| Code | Description                                                                                                           |
+| ---- | --------------------------------------------------------------------------------------------------------------------- |
+| 3001 | The component contract type `Meta` declares an unknown member (only `props`, `refs`, and `contexts` are allowed)      |
+| 3002 | (TypeScript) The `Meta` type or one of its members is not an object type, such as a primitive or union type           |
+| 3003 | The dependency "qingkuai" cannot be found. Please make sure it is installed and can be resolved                       |
 | 3004 | The externally imported type contains generic parameters and cannot be used directly as the component contract `Meta` |
-| 3005 | Types cannot be exported from a component. Move the type to an external `.ts` file and import it                 |
+| 3005 | Types cannot be exported from a component. Move the type to an external `.ts` file and import it                      |
 
 ---
 

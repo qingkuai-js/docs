@@ -30,6 +30,7 @@ keywords: ["events", "@click", "@keydown", "$arg", "event handler flags", "event
 | `once` | 处理器运行一次后被移除（`addEventListener` 的 `options.once`） |
 | `capture` | 在捕获阶段触发处理器（`options.capture`） |
 | `passive` | 告知浏览器处理器内绝不会调用 `event.preventDefault`；移动端性能优化（`options.passive`） |
+| `native` | 跳过事件委托，在该元素上直接绑定原生监听器；仅对会启用委托的事件类型有意义 |
 
 按键标志，只在相关按键按住时运行处理器；仅可用于 `keyup`、`keydown` 等键盘相关事件：
 
@@ -48,7 +49,7 @@ keywords: ["events", "@click", "@keydown", "$arg", "event handler flags", "event
 6. `$arg`（不是 `$event`）是编译后的内联事件处理器的固定默认参数名。
 7. 在内联事件处理器中调用其他方法时，Qingkuai 自动把这些方法内的 `this` 绑定到当前元素，因此 `@click={handleAddCount($arg)}` 仍能把 `this` 读作元素。
 8. 标志以 `|` 链接在事件名之后（如 `@click|self|once`）。系统按键标志按 AND 组合：`@click|alt|shift` 只在 alt 和 shift 同时按住时触发。
-9. 编译器自动为以下事件类型启用事件委托（绑定在父元素上的基于冒泡的监听）：`beforeinput` `input` `change`；`keydown` `keypress` `keyup`；`click` `dblclick` `mousedown` `mousemove` `mouseup` `mouseover` `mouseout` `contextmenu`；`copy` `cut` `paste`；`drag` `dragstart` `dragenter` `dragover` `dragleave` `drop` `dragend`；`pointerdown` `pointermove` `pointerover` `pointerout` `pointerup` `pointercancel`；`select` `selectionchange` `selectstart`；`touchstart` `touchmove` `touchend` `touchcancel`。
+9. 编译器自动为以下事件类型启用事件委托（绑定在父元素上的基于冒泡的监听）：`beforeinput` `input` `change`；`keydown` `keypress` `keyup`；`click` `dblclick` `mousedown` `mousemove` `mouseup` `mouseover` `mouseout` `contextmenu`；`copy` `cut` `paste`；`drag` `dragstart` `dragenter` `dragover` `dragleave` `drop` `dragend`；`pointerdown` `pointermove` `pointerover` `pointerout` `pointerup` `pointercancel`；`select` `selectionchange` `selectstart`；`touchstart` `touchmove` `touchend` `touchcancel`。在事件名后附加 `native` 标志可跳过委托，为该元素单独绑定原生监听器。
 
 ## 约束
 
@@ -56,6 +57,7 @@ keywords: ["events", "@click", "@keydown", "$arg", "event handler flags", "event
 - `self` 只控制处理器是否执行，绝不阻止事件触发。
 - `stop` 与 `prevent` 在处理器末尾生效，不在处理器体之前。
 - `passive` 是对"该处理器内绝不调用 preventDefault"的承诺。
+- `native` 只为该元素单独建立监听器，多个元素时失去委托的内存与性能优势；处理器也不再与元素自身其他原生监听器共享注册顺序。
 - 事件名是关键字或保留字（`class`、`for`）时不能使用 `@click` 简写形式。
 
 ## 示例

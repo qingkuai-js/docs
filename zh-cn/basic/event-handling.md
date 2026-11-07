@@ -158,6 +158,7 @@ Qingkuai 允许在事件名称后附加一些标志，用于简化常见交互�
     - once：事件处理器在第一次被触发并执行后会被移除，效果同 [addEventListener options.once](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#options)；
     - capture：是否在捕获阶段触发绑定的事件处理器，效果同 [addEventListener options.capture](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#options)；
     - passive：告知客户端事件处理器中永远不会调用 `event.preventDefault`，多用于移动端性能优化，效果同[addEventListener options.passive](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#options)；
+    - native：跳过[事件委托](#事件委托与原生监听)，直接在该元素上调用 [addEventListener](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener) 绑定原生监听器；只对下方小节中列出的事件类型有意义，其他事件本身就是这样绑定的，在这些事件上使用该标志会触发编译警告；
 
 2.  按键标志，只有相关按键保持按下才会触发绑定的事件处理器，这些标志只能用于键盘相关事件（keyup、keydown 等）：
     - 普通按键标志：enter、tab、del、esc、up、down、left、right、space；
@@ -177,7 +178,7 @@ Qingkuai 允许在事件名称后附加一些标志，用于简化常见交互�
 
 ---
 
-## 事件委托
+## 事件委托与原生监听
 
 Qingkuai 使用了事件委托（Event Delegation）模式。这是一种常见的事件处理方式：利用[事件冒泡](https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting/Event_bubbling)机制，将事件监听器绑定到父元素上，而不是为每个子元素分别绑定监听器。这种方式可以显著减少内存占用并提升性能，尤其适合处理大量动态生成的元素。编译器会对以下事件类型自动启用事件委托：
 
@@ -189,3 +190,17 @@ Qingkuai 使用了事件委托（Event Delegation）模式。这是一种常见�
 - 指针事件：pointerdown、pointermove、pointerover、pointerout、pointerup、pointercancel；
 - 选择事件：select、selectionchange、selectstart；
 - 触摸事件：touchstart、touchmove、touchend、touchcancel。
+
+事件委托由文档级监听器统一完成：处理器拿到的 `currentTarget`、`eventPhase` 由运行时按原生语义填充，`stop`、`prevent`、`capture`、`passive`、`once` 等标志也由运行时处理。
+
+如果希望完全使用浏览器原生的监听器，可以在事件名后附加 `native` 标志跳过委托。典型场景是处理器要与同一个元素上的其他原生监听器保持注册顺序（委托的处理器统一在文档级捕获阶段执行，不参与元素自身监听器的注册顺序），或者需要由浏览器直接实现 `once`、`passive` 等选项的时机：
+
+```qk
+<!-- 监听器绑定在按钮自身，不经过文档级委托 -->
+<button @click|native={console.log("ok")}> Click Me </button>
+```
+
+> [!WARNING]
+> `native` 会为每个元素单独建立一个监听器，不再享有事件委托带来的内存与性能优势。
+
+

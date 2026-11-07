@@ -152,16 +152,17 @@ At this point you may wonder: when is a handler considered inline, and when is i
 Qingkuai allows you to append flags after an event name to simplify common interaction logic. The currently supported flag types are as follows:
 
 1. Functional flags:
-   - `self`: execute the bound event handler only when `event.target` is the element itself, without preventing the event from firing.
-   - `stop`: call [stopPropagation](https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation) at the end of the handler to stop bubbling.
-   - `prevent`: call [preventDefault](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault) at the end of the handler to prevent the default behavior.
-   - `once`: remove the event handler after it runs once, equivalent to [addEventListener options.once](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
-   - `capture`: trigger the bound handler during the capture phase, equivalent to [addEventListener options.capture](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
-   - `passive`: tell the browser that `event.preventDefault` will never be called in the handler, commonly used for mobile performance optimization, equivalent to [addEventListener options.passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
+    - `self`: execute the bound event handler only when `event.target` is the element itself, without preventing the event from firing.
+    - `stop`: call [stopPropagation](https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation) at the end of the handler to stop bubbling.
+    - `prevent`: call [preventDefault](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault) at the end of the handler to prevent the default behavior.
+    - `once`: remove the event handler after it runs once, equivalent to [addEventListener options.once](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
+    - `capture`: trigger the bound handler during the capture phase, equivalent to [addEventListener options.capture](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
+    - `passive`: tell the browser that `event.preventDefault` will never be called in the handler, commonly used for mobile performance optimization, equivalent to [addEventListener options.passive](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
+    - `native`: skip [event delegation](#event-delegation-native) and bind a native listener with [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener) directly on the element; only meaningful for the event types listed in the section below, since other events are bound this way anyway, and using it on those events triggers a compile warning.
 
 2. Key flags: the event handler runs only while the relevant keys are held down. These flags can be used only on keyboard-related events such as `keyup` and `keydown`:
-   - regular key flags: `enter`, `tab`, `del`, `esc`, `up`, `down`, `left`, `right`, `space`
-   - system key flags: `meta`, `alt`, `ctrl`, `shift`
+    - regular key flags: `enter`, `tab`, `del`, `esc`, `up`, `down`, `left`, `right`, `space`
+    - system key flags: `meta`, `alt`, `ctrl`, `shift`
 
 Here are some examples of passing flags to event handlers:
 
@@ -177,7 +178,7 @@ Here are some examples of passing flags to event handlers:
 
 ---
 
-## Event Delegation
+## Event Delegation & Native
 
 Qingkuai uses the Event Delegation pattern. This is a common event handling technique that takes advantage of [event bubbling](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Event_bubbling) by binding listeners to parent elements instead of binding one listener for each child element. This can significantly reduce memory usage and improve performance, especially when handling a large number of dynamically created elements. The compiler automatically enables event delegation for the following event types:
 
@@ -189,3 +190,15 @@ Qingkuai uses the Event Delegation pattern. This is a common event handling tech
 - pointer events: `pointerdown`, `pointermove`, `pointerover`, `pointerout`, `pointerup`, `pointercancel`
 - selection events: `select`, `selectionchange`, `selectstart`
 - touch events: `touchstart`, `touchmove`, `touchend`, `touchcancel`
+
+Event delegation is handled by a single document-level listener: the `currentTarget` and `eventPhase` that handlers see, along with the `stop`, `prevent`, `capture`, `passive`, and `once` flags, are all provided by the runtime.
+
+If you want fully native listeners, append the `native` flag after the event name to skip delegation. Typical cases are keeping registration order with other native listeners on the same element (delegated handlers run in the document-level capture phase and do not participate in the element's own listener order), or relying on the browser to implement the timing of options such as `once` and `passive`:
+
+```qk
+<!-- the listener is bound on the button itself, with no document-level delegation -->
+<button @click|native={console.log("ok")}> Click Me </button>
+```
+
+> [!WARNING]
+> `native` creates a separate listener for each element, so the memory and performance benefits of event delegation no longer apply.

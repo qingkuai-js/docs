@@ -1,6 +1,16 @@
 ---
 description: "Binds DOM and component events via @-attributes: method references, inline handlers with $arg, event handler flags, and compiler-managed event delegation."
-keywords: ["events", "@click", "@keydown", "$arg", "event handler flags", "event delegation", "事件", "事件处理"]
+keywords:
+    [
+        "events",
+        "@click",
+        "@keydown",
+        "$arg",
+        "event handler flags",
+        "event delegation",
+        "事件",
+        "事件处理"
+    ]
 ---
 
 # Event Handling
@@ -9,34 +19,35 @@ keywords: ["events", "@click", "@keydown", "$arg", "event handler flags", "event
 
 Attributes starting with `@` bind event handlers (e.g. `@click` listens for click events):
 
-| Form | Meaning |
-| --- | --- |
-| `@click={handleAddCount}` | Method reference; the handler receives the native event object as first parameter, consistent with native `addEventListener` behavior |
-| `@click` | Shorthand for `@click={click}`; valid only when the event name is the same as the variable name |
-| `@click={() => count++}` | Arrow function used directly as the event handler |
-| `@click={count++}` | Inline event handler: a JS/TS expression written directly in the interpolation block, compiled into a wrapped `$arg => count++` |
-| `@click={handleAddCount($arg)}` | Call expression inside an inline handler; `this` in the called method is auto-bound to the current element |
-| `@click\|self\|once={...}` | Event handler flags appended after the event name with `\|` |
+| Form                            | Meaning                                                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `@click={handleAddCount}`       | Method reference; the handler receives the native event object as first parameter, consistent with native `addEventListener` behavior |
+| `@click`                        | Shorthand for `@click={click}`; valid only when the event name is the same as the variable name                                       |
+| `@click={() => count++}`        | Arrow function used directly as the event handler                                                                                     |
+| `@click={count++}`              | Inline event handler: a JS/TS expression written directly in the interpolation block, compiled into a wrapped `$arg => count++`       |
+| `@click={handleAddCount($arg)}` | Call expression inside an inline handler; `this` in the called method is auto-bound to the current element                            |
+| `@click\|self\|once={...}`      | Event handler flags appended after the event name with `\|`                                                                           |
 
 Event object access: normal handlers declare a parameter (`e.target === this`, both point to the clicked element); inline handlers use `$arg` — the native event object on elements, or any parameter passed from a component inline event handler. With `<lang-ts>`, the type of `$arg` is strictly inferred: `KeyboardEvent` for `@keydown`, `MouseEvent` for `@click`.
 
 Functional flags:
 
-| Flag | Meaning |
-| --- | --- |
-| `self` | Execute the handler only when `event.target` is the element itself, without preventing the event from firing |
-| `stop` | Call `stopPropagation` at the end of the handler to stop bubbling |
-| `prevent` | Call `preventDefault` at the end of the handler to prevent the default behavior |
-| `once` | Remove the handler after it runs once (`addEventListener` `options.once`) |
-| `capture` | Trigger the handler during the capture phase (`options.capture`) |
-| `passive` | Tell the browser `event.preventDefault` will never be called in the handler; mobile performance optimization (`options.passive`) |
+| Flag      | Meaning                                                                                                                                 |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `self`    | Execute the handler only when `event.target` is the element itself, without preventing the event from firing                            |
+| `stop`    | Call `stopPropagation` at the end of the handler to stop bubbling                                                                       |
+| `prevent` | Call `preventDefault` at the end of the handler to prevent the default behavior                                                         |
+| `once`    | Remove the handler after it runs once (`addEventListener` `options.once`)                                                               |
+| `capture` | Trigger the handler during the capture phase (`options.capture`)                                                                        |
+| `passive` | Tell the browser `event.preventDefault` will never be called in the handler; mobile performance optimization (`options.passive`)        |
+| `native`  | Skip event delegation and bind a native listener directly on the element; only meaningful for event types that are delegated by default |
 
 Key flags — the handler runs only while the relevant keys are held down; usable only on keyboard-related events such as `keyup` and `keydown`:
 
-| Flag | Meaning |
-| --- | --- |
+| Flag                                                         | Meaning           |
+| ------------------------------------------------------------ | ----------------- |
 | `enter` `tab` `del` `esc` `up` `down` `left` `right` `space` | Regular key flags |
-| `meta` `alt` `ctrl` `shift` | System key flags |
+| `meta` `alt` `ctrl` `shift`                                  | System key flags  |
 
 ## Rules
 
@@ -48,7 +59,7 @@ Key flags — the handler runs only while the relevant keys are held down; usabl
 6. `$arg` (not `$event`) is the fixed default parameter name of compiled inline event handlers.
 7. If you call other methods inside an inline event handler, Qingkuai automatically binds `this` in those methods to the current element, so `@click={handleAddCount($arg)}` can still read `this` as the element.
 8. Flags chain after the event name with `|` (e.g. `@click|self|once`). System key flags combine with AND semantics: `@click|alt|shift` triggers only when alt and shift are both held down.
-9. The compiler automatically enables event delegation (bubbling-based listeners bound to parent elements) for these event types: `beforeinput` `input` `change`; `keydown` `keypress` `keyup`; `click` `dblclick` `mousedown` `mousemove` `mouseup` `mouseover` `mouseout` `contextmenu`; `copy` `cut` `paste`; `drag` `dragstart` `dragenter` `dragover` `dragleave` `drop` `dragend`; `pointerdown` `pointermove` `pointerover` `pointerout` `pointerup` `pointercancel`; `select` `selectionchange` `selectstart`; `touchstart` `touchmove` `touchend` `touchcancel`.
+9. The compiler automatically enables event delegation (bubbling-based listeners bound to parent elements) for these event types: `beforeinput` `input` `change`; `keydown` `keypress` `keyup`; `click` `dblclick` `mousedown` `mousemove` `mouseup` `mouseover` `mouseout` `contextmenu`; `copy` `cut` `paste`; `drag` `dragstart` `dragenter` `dragover` `dragleave` `drop` `dragend`; `pointerdown` `pointermove` `pointerover` `pointerout` `pointerup` `pointercancel`; `select` `selectionchange` `selectstart`; `touchstart` `touchmove` `touchend` `touchcancel`. Appending the `native` flag after the event name skips delegation and binds a native listener on that element instead.
 
 ## Constraints
 
@@ -56,6 +67,7 @@ Key flags — the handler runs only while the relevant keys are held down; usabl
 - `self` gates only whether the handler executes; it never prevents the event from firing.
 - `stop` and `prevent` take effect at the end of the handler, not before the handler body.
 - `passive` is a commitment that `preventDefault` is never called in that handler.
+- `native` binds a separate listener for that element, giving up the memory and performance benefits of delegation and no longer sharing registration order with the element's other native listeners.
 - The `@click` shorthand form cannot be used when the event name is a keyword or reserved word (`class`, `for`).
 
 ## Examples
