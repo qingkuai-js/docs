@@ -67,17 +67,17 @@ The server provides six tools; the documentation corpus and the compiler they ne
 `search_qingkuai_docs` searches the official Qingkuai reference documentation and is the authoritative source for questions about syntax, directives, attributes, events, reactivity, and components. Results include the full content of matched sections plus cross-reference links to related documents (relatedDocs):
 
 | Parameter | Description                                                                                                                         | Default |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| query     | Search query — keywords, a natural-language question (English or Chinese), or syntax tokens (such as `#for`, `&value`, `qk:spread`) | —       |
-| limit     | Maximum number of result groups, 1 to 8                                                                                             | 4       |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------- | :-----: |
+| query     | Search query — keywords, a natural-language question (English or Chinese), or syntax tokens (such as `#for`, `&value`, `qk:spread`) |    —    |
+| limit     | Maximum number of result groups, 1 to 8                                                                                             |    4    |
 
 ### Document Reading
 
 `read_qingkuai_doc` reads a single document by its `docs://` URI:
 
 | Parameter | Description                                                                                                                                                            | Default |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| uri       | Document URI returned by `search_qingkuai_docs`, e.g. `docs://basic/forms.md`; append an anchor to read a single section, e.g. `docs://basic/forms.md#two-way-binding` | —       |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
+| uri       | Document URI returned by `search_qingkuai_docs`, e.g. `docs://basic/forms.md`; append an anchor to read a single section, e.g. `docs://basic/forms.md#two-way-binding` |    —    |
 
 > [!TIP]
 > For an unknown URI, the result includes the closest valid URIs so the call can be corrected and retried.
@@ -86,18 +86,18 @@ The server provides six tools; the documentation corpus and the compiler they ne
 
 `get_qingkuai_project_bootstrap_guide` is the entry point for creating or initializing a Qingkuai project. It returns officially confirmed installation and scaffolding docs and prevents agents from inventing install commands:
 
-| Parameter | Description                             | Default                               |
-| --------- | --------------------------------------- | ------------------------------------- |
+| Parameter | Description                             |                Default                |
+| --------- | --------------------------------------- | :-----------------------------------: |
 | query     | Optional keywords                       | `getting started installation create` |
-| limit     | Maximum number of result groups, 1 to 8 | 4                                     |
+| limit     | Maximum number of result groups, 1 to 8 |                   4                   |
 
 ### Syntax Check
 
 `check_qingkuai_syntax` runs early-stage compilation checks on component-file source, covering template structure and tag nesting, script syntax errors, and directive usage and attributes. It returns syntax errors, warnings, and type information together with error and warning counts, suitable for quick validation after generating or modifying component-file code:
 
 | Parameter | Description                    | Default |
-| --------- | ------------------------------ | ------- |
-| source    | Component-file source to check | —       |
+| --------- | ------------------------------ | :-----: |
+| source    | Component-file source to check |    —    |
 
 > [!TIP]
 > Other options match the same-named options in the [runtime configuration](./config-files.md).
@@ -106,12 +106,12 @@ The server provides six tools; the documentation corpus and the compiler they ne
 
 `compile_qingkuai` runs the full compilation pipeline on component-file source — syntax validation (parsing and analysis), template compilation into render functions, reactivity detection and optimization, and sourcemap generation — and returns the compiled output (truncated beyond 500 characters), diagnostics, and mapping info:
 
-| Parameter | Description                      | Default        |
-| --------- | -------------------------------- | -------------- |
-| source    | Component-file source to compile | —              |
+| Parameter | Description                      |    Default     |
+| --------- | -------------------------------- | :------------: |
+| source    | Component-file source to compile |       —        |
 | hashId    | Hash ID of the component         | auto-generated |
-| debug     | Enable debug mode                | false          |
-| sourcemap | Generate a sourcemap             | false          |
+| debug     | Enable debug mode                |     false      |
+| sourcemap | Generate a sourcemap             |     false      |
 
 > [!TIP]
 > Other compilation options correspond to the same-named options in the [runtime configuration](./config-files.md); a few defaults may differ from the configuration file.
@@ -121,8 +121,8 @@ The server provides six tools; the documentation corpus and the compiler they ne
 `format_qingkuai_code` formats a component file with [Prettier](https://prettier.io/) and [prettier-plugin-qingkuai](https://npmjs.org/package/prettier-plugin-qingkuai): it reads the file, resolves the Prettier configuration from that path (see [configuration files](./config-files.md)), formats, and writes back to the same file, returning the write result and any formatting errors:
 
 | Parameter | Description                                                           | Default |
-| --------- | --------------------------------------------------------------------- | ------- |
-| filePath  | Path of the component file to format (absolute or workspace-relative) | —       |
+| --------- | --------------------------------------------------------------------- | :-----: |
+| filePath  | Path of the component file to format (absolute or workspace-relative) |    —    |
 
 ---
 
