@@ -133,6 +133,17 @@
 </Article>
 ```
 
+另外，`qk:spread` 还可用于插槽的[条件渲染](../basic/compilation-directives.md#条件渲染)及[异步渲染](../basic/compilation-directives.md#异步处理)：
+
+```qk
+<Article>
+    <qk:spread #slot={"footer"}>
+        <p #if={hasFooter}>Released informations...</p>
+        <p #else>No footer...</p>
+    </qk:spread>
+</Article>
+```
+
 ---
 
 ## 传递上下文

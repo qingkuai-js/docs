@@ -358,6 +358,9 @@ When multiple directives exist on one element, the compiler processes them in a 
 </p>
 ```
 
+> [!TIP]
+> This default order is a deliberate performance trade-off: with the condition first, a false condition skips rendering the entire content, and the list-rendering context is never created; the reversed order would evaluate the condition once for every list item.
+
 When you need to change this behavior, you need to wrap the inner tag with an outer tag that uses a higher-priority directive, for example:
 
 ```qk

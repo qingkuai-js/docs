@@ -133,6 +133,17 @@ When [slot content](../references/terminology.md#slot-content) consists only of 
 </Article>
 ```
 
+In addition, `qk:spread` also enables [conditional rendering](../basic/compilation-directives.md#conditional-rendering) and [async processing](../basic/compilation-directives.md#async-processing) for slot content:
+
+```qk
+<Article>
+    <qk:spread #slot={"footer"}>
+        <p #if={hasFooter}>Released informations...</p>
+        <p #else>No footer...</p>
+    </qk:spread>
+</Article>
+```
+
 ---
 
 ## Passing Context
