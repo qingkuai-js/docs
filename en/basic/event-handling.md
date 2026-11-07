@@ -182,13 +182,15 @@ Here are some examples of passing flags to event handlers:
 
 Qingkuai uses the Event Delegation pattern. This is a common event handling technique that takes advantage of [event bubbling](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Event_bubbling) by binding listeners to parent elements instead of binding one listener for each child element. This can significantly reduce memory usage and improve performance, especially when handling a large number of dynamically created elements. The compiler automatically enables event delegation for the following event types:
 
-- form and input events: `beforeinput`, `input`, `change`
+- form and input events: `beforeinput`, `input`, `change`, `submit`, `reset`
+- focus events: `focusin`, `focusout`
+- composition events: `compositionstart`, `compositionupdate`, `compositionend`
 - keyboard events: `keydown`, `keypress`, `keyup`
-- mouse and menu events: `click`, `dblclick`, `mousedown`, `mousemove`, `mouseup`, `mouseover`, `mouseout`, `contextmenu`
+- mouse and menu events: `click`, `dblclick`, `auxclick`, `mousedown`, `mousemove`, `mouseup`, `mouseover`, `mouseout`, `contextmenu`, `wheel`
 - clipboard events: `copy`, `cut`, `paste`
 - drag events: `drag`, `dragstart`, `dragenter`, `dragover`, `dragleave`, `drop`, `dragend`
 - pointer events: `pointerdown`, `pointermove`, `pointerover`, `pointerout`, `pointerup`, `pointercancel`
-- selection events: `select`, `selectionchange`, `selectstart`
+- selection events: `select`, `selectstart`
 - touch events: `touchstart`, `touchmove`, `touchend`, `touchcancel`
 
 Event delegation is handled by a single document-level listener: the `currentTarget` and `eventPhase` that handlers see, along with the `stop`, `prevent`, `capture`, `passive`, and `once` flags, are all provided by the runtime.

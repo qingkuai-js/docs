@@ -182,13 +182,15 @@ Qingkuai 允许在事件名称后附加一些标志，用于简化常见交互�
 
 Qingkuai 使用了事件委托（Event Delegation）模式。这是一种常见的事件处理方式：利用[事件冒泡](https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting/Event_bubbling)机制，将事件监听器绑定到父元素上，而不是为每个子元素分别绑定监听器。这种方式可以显著减少内存占用并提升性能，尤其适合处理大量动态生成的元素。编译器会对以下事件类型自动启用事件委托：
 
-- 表单与输入事件：beforeinput、input、change；
+- 表单与输入事件：beforeinput、input、change、submit、reset；
+- 焦点事件：focusin、focusout；
+- 组合输入事件：compositionstart、compositionupdate、compositionend；
 - 键盘事件：keydown、keypress、keyup；
-- 鼠标与菜单事件：click、dblclick、mousedown、mousemove、mouseup、mouseover、mouseout、contextmenu；
+- 鼠标与菜单事件：click、dblclick、auxclick、mousedown、mousemove、mouseup、mouseover、mouseout、contextmenu、wheel；
 - 剪贴板事件：copy、cut、paste；
 - 拖拽事件：drag、dragstart、dragenter、dragover、dragleave、drop、dragend；
 - 指针事件：pointerdown、pointermove、pointerover、pointerout、pointerup、pointercancel；
-- 选择事件：select、selectionchange、selectstart；
+- 选择事件：select、selectstart；
 - 触摸事件：touchstart、touchmove、touchend、touchcancel。
 
 事件委托由文档级监听器统一完成：处理器拿到的 `currentTarget`、`eventPhase` 由运行时按原生语义填充，`stop`、`prevent`、`capture`、`passive`、`once` 等标志也由运行时处理。
