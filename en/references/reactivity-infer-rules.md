@@ -100,6 +100,29 @@ Note that not every identifier that appears in the template counts as accessed: 
 <p>{user.name + raw(config.label)}</p>
 ```
 
+“Accessed in the template” means the identifier itself appears in a template expression. An identifier that is only read or written inside a script function called by the template is not considered accessed, even if the function is invoked from the template. The button in the example below does nothing when clicked, because `active` is not reactive:
+
+```qk
+<lang-ts>
+    let active = 0
+
+    function status() {
+        // the read happens inside the function body, so it is not a template access
+        return active ? "on" : "off"
+    }
+
+    function toggle() {
+        // the assignment is a script modification, and likewise not a template access
+        active = active ? 0 : 1
+    }
+</lang-ts>
+
+<button @click={toggle}>{ status() }</button>
+```
+
+> [!TIP]
+> To make it participate in updates, mark the declaration explicitly with `reactive`, or write the read directly in the template expression.
+
 ### Accessed in the Template
 
 When an identifier is accessed in the template, the compiler checks whether it is modified in the script. This check applies to identifiers declared with `let` or `var` whose initial value is a literal type, identifiers declared by `class` and `function` declarations, as well as mutable identifiers in `shallow` mode whose initial value is a non-literal expression:

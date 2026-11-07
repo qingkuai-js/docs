@@ -1,6 +1,18 @@
 ---
 description: "Qingkuai reactivity APIs and declaration forms: compiler-inferred reactivity, explicit raw/reactive/shallow markers, derived state (derived / derivedExp), alias bindings, reactivity modes, non-reactive reads (noTracking / raw), and toRaw/toReactive/createStore utilities."
-keywords: ["reactivity", "reactive", "shallow", "raw", "derived", "derivedExp", "noTracking", "响应性", "衍生", "非响应式读取"]
+keywords:
+    [
+        "reactivity",
+        "reactive",
+        "shallow",
+        "raw",
+        "derived",
+        "derivedExp",
+        "noTracking",
+        "响应性",
+        "衍生",
+        "非响应式读取"
+    ]
 ---
 
 # Reactivity
@@ -9,26 +21,26 @@ keywords: ["reactivity", "reactive", "shallow", "raw", "derived", "derivedExp", 
 
 `raw`, `reactive`, `shallow`, `derived`, `derivedExp`, and `alias` are built-in methods; the conversion and store utilities are imported from `qingkuai`.
 
-| API | Call form | Effect |
-| --- | --- | --- |
-| `raw` | `raw(value)` in a variable initializer | Explicit marker: identifier is static; reactive capability is not added |
-| `reactive` | `reactive(value)` in a variable initializer | Explicit marker: identifier is deeply reactive |
-| `shallow` | `shallow(value)` in a variable initializer | Explicit marker: identifier is shallow reactive; only the identifier itself is reactive, complex-type properties are not made reactive |
-| `derived` | `derived(() => expr)` | Declares derived reactive state from a function |
-| `derivedExp` | `derivedExp(expr)` | Declares derived reactive state from an expression passed directly |
-| `alias` | `alias(target)` | Alias binding: reads and writes of the alias identifier are rewritten into reads and writes of the original target, providing reactive access |
-| `toRaw` | `import { toRaw } from "qingkuai"` then `toRaw(value)` | Returns the raw value behind a reactive proxy object |
-| `toReactive` | `import { toReactive } from "qingkuai"` then `toReactive(value)` | Returns the value's reactive proxy object |
-| `toShallow` | `import { toShallow } from "qingkuai"` then `toShallow(value)` | Returns the value's shallow reactive proxy object |
-| `noTracking` | `import { noTracking } from "qingkuai"` then `noTracking(fn)` | Non-reactive read: pauses dependency tracking while the passed function executes |
-| `createStore` | `import { createStore } from "qingkuai"` then `createStore({ ... })` | Creates a reactive state store, usable outside components and shareable among components |
+| API           | Call form                                                            | Effect                                                                                                                                        |
+| ------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `raw`         | `raw(value)` in a variable initializer                               | Explicit marker: identifier is static; reactive capability is not added                                                                       |
+| `reactive`    | `reactive(value)` in a variable initializer                          | Explicit marker: identifier is deeply reactive                                                                                                |
+| `shallow`     | `shallow(value)` in a variable initializer                           | Explicit marker: identifier is shallow reactive; only the identifier itself is reactive, complex-type properties are not made reactive        |
+| `derived`     | `derived(() => expr)`                                                | Declares derived reactive state from a function                                                                                               |
+| `derivedExp`  | `derivedExp(expr)`                                                   | Declares derived reactive state from an expression passed directly                                                                            |
+| `alias`       | `alias(target)`                                                      | Alias binding: reads and writes of the alias identifier are rewritten into reads and writes of the original target, providing reactive access |
+| `toRaw`       | `import { toRaw } from "qingkuai"` then `toRaw(value)`               | Returns the raw value behind a reactive proxy object                                                                                          |
+| `toReactive`  | `import { toReactive } from "qingkuai"` then `toReactive(value)`     | Returns the value's reactive proxy object                                                                                                     |
+| `toShallow`   | `import { toShallow } from "qingkuai"` then `toShallow(value)`       | Returns the value's shallow reactive proxy object                                                                                             |
+| `noTracking`  | `import { noTracking } from "qingkuai"` then `noTracking(fn)`        | Non-reactive read: pauses dependency tracking while the passed function executes                                                              |
+| `createStore` | `import { createStore } from "qingkuai"` then `createStore({ ... })` | Creates a reactive state store, usable outside components and shareable among components                                                      |
 
 Per-component reactivity mode override: a `reactive` or `shallow` attribute on the embedded script tag — `<lang-js reactive>` (deep) or `<lang-js shallow>`.
 
 ## Rules
 
 1. No manual declaration is needed: the compiler attaches reactive capability to identifiers according to the reactivity inference rules; when reactive data changes, the interface updates automatically without manual DOM operations.
-2. Explicit markers (`raw`, `reactive`, `shallow` in the variable initializer) take priority over implicit inference. Identifiers not accessed in the template are otherwise inferred as raw; mark them with `reactive` or `shallow` if they must keep reactive capability.
+2. Explicit markers (`raw`, `reactive`, `shallow` in the variable initializer) take priority over implicit inference. Identifiers not accessed in the template are otherwise inferred as raw (reads and writes inside a script function called by the template do not count as template access); mark them with `reactive` or `shallow` if they must keep reactive capability.
 3. Default reactivity mode is deep reactivity: properties of complex types are made reactive recursively. With shallow reactivity, only the identifier itself is reactive. Mode is set globally via a `.qingkuairc` file with `"reactivityMode": "shallow"` (effective for the directory and all subdirectories until another configuration file), and overridden per component with the script-tag attribute.
 4. Derived reactive state re-runs the next time it is read after its reactive dependencies change; prefer it over complex expressions inside template interpolation blocks. Declare it with `derived(() => ...)` or `derivedExp(expr)`.
 5. `alias` simplifies reactive access to deeply nested properties (best used with component props and refs): the compiler rewrites reads and writes of the alias identifier into reads and writes of the original target.

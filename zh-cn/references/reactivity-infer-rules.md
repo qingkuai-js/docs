@@ -100,6 +100,29 @@ const shortName = derivedExp(firstName + "-" + lastName)
 <p>{user.name + raw(config.label)}</p>
 ```
 
+“在模板中访问”仅指该标识符自身出现在模板表达式中。若标识符只在模板所调用的脚本函数内部被读写，即使函数是在模板中被调用的，也不视为被访问。下面示例中的按钮点击后，页面不会有变化，因为 `active` 不具有响应性：
+
+```qk
+<lang-ts>
+    let active = 0
+
+    function status() {
+        // 读取发生在函数体内，不计入模板访问
+        return active ? "on" : "off"
+    }
+
+    function toggle() {
+        // 赋值属于脚本中的修改，同样不计入模板访问
+        active = active ? 0 : 1
+    }
+</lang-ts>
+
+<button @click={toggle}>{ status() }</button>
+```
+
+> [!TIP]
+> 需要它参与更新时，可以在声明时用 `reactive` 显式标记，或把读取直接写进模板表达式。
+
 ### 在模板中访问
 
 当标识符在模板中被访问时，编译器会检查其在脚本中是否存在被修改的情况。此检查适用于以 `let` 或 `var` 声明且初始值为字面量类型的标识符、`class` 与 `function` 声明的标识符，以及 `shallow` 模式下初始值为非字面量表达式的可变标识符：
